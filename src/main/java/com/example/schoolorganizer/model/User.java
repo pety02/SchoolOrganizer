@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Table(name = "USERS", schema = "SCHOOL_ORGANIZER")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // cpmment
     private Long id;
     @Column
     private String name;
