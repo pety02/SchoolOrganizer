@@ -10,7 +10,7 @@ import java.util.List;
 public class NotebookSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long notebookSectionId;
     @Column(nullable = false)
     private LocalDate date;
     @Column

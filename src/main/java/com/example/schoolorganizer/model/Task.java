@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long taskId;
     @Column
     private String title;
     @Column(nullable = false)

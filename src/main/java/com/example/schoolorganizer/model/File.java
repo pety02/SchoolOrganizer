@@ -10,7 +10,7 @@ import java.util.List;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long fileId;
     @Column(nullable = false)
     private LocalDate date;
     @Column
