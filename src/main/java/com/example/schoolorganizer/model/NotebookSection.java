@@ -6,19 +6,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "NOTEBOOK_SECTIONS", schema = "SCHOOL_ORGANIZER")
+@Table
 public class NotebookSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notebookSectionId;
     @Column(nullable = false)
     private LocalDate date;
-    @Column
+    @Column(length = 100)
     private String title;
-    @Column
+    @Column(length = 100000)
     private String content;
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "notebookSectionId")
-    @JoinColumn(name="notebookSectionId")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<File> files;
     @ManyToOne
     private Notebook addedInNotebook;

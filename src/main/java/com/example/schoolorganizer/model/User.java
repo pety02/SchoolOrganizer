@@ -4,26 +4,24 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "USERS", schema = "SCHOOL_ORGANIZER")
+@Table
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    @Column
+    @Column(length = 60)
     private String name;
-    @Column
+    @Column(length = 100)
     private String surname;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 300)
     private String email;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 150)
     private String username;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String password;
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "userId")
-    @JoinColumn(name="userId")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Task> tasks;
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "userId")
-    @JoinColumn(name="userId")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Notebook> notebooks;
 
     @ManyToMany(fetch = FetchType.LAZY)

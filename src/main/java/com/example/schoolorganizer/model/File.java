@@ -6,20 +6,20 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "FILES", schema = "SCHOOL_ORGANIZER")
+@Table
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
     @Column(nullable = false)
     private LocalDate date;
-    @Column
+    @Column(length = 100)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String extension;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String artificialName;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String path;
     @ManyToOne
     private Notebook addedInNotebook;

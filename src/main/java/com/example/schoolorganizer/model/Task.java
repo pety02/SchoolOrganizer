@@ -6,18 +6,18 @@ import java.util.List;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "TASKS", schema = "SCHOOL_ORGANIZER")
+@Table
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
-    @Column
+    @Column(length = 200)
     private String title;
     @Column(nullable = false)
     private LocalDate startDate;
     @Column(nullable = false)
     private LocalDate finishDate;
-    @Column
+    @Column(length = 10000)
     private String description;
     @Column(nullable = false)
     private Boolean isFinished;
