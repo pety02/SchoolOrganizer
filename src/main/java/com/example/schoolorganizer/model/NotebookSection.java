@@ -17,8 +17,8 @@ public class NotebookSection {
     private String title;
     @Column
     private String content;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "notebookSectionId")
+    @JoinColumn(name="notebookSectionId")
     private List<File> files;
     @ManyToOne
     private Notebook addedInNotebook;

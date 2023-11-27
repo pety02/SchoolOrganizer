@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Table(name = "USERS", schema = "SCHOOL_ORGANIZER")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // cpmment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String name;
@@ -17,17 +17,16 @@ public class User {
     private String email;
     @Column(nullable = false, unique = true)
     private String username;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "userId")
+    @JoinColumn(name="userId")
     private List<Task> tasks;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "userId")
+    @JoinColumn(name="userId")
     private List<Notebook> notebooks;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<User> friendsList;
     /* TODO: to implement a method that insert definite User (person Y)
         to friendsList of other User (person X) and send him/her request

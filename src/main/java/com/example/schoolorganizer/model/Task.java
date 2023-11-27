@@ -11,18 +11,17 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column
     private String title;
     @Column(nullable = false)
     private LocalDate startDate;
     @Column(nullable = false)
     private LocalDate finishDate;
-    @Column(nullable = false)
+    @Column
     private String description;
     @Column(nullable = false)
     private Boolean isFinished;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<File> files;
     @ManyToOne
     private User createdBy;

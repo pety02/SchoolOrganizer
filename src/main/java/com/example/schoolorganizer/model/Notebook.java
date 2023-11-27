@@ -2,6 +2,7 @@ package com.example.schoolorganizer.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -11,12 +12,14 @@ public class Notebook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    private LocalDate date;
+    @Column
     private String title;
     @Column
     private String subject;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "userId")
+    @JoinColumn(name="userId")
     private List<NotebookSection> sections;
-    @ManyToOne
+    @OneToOne
     private User createdBy;
 }
