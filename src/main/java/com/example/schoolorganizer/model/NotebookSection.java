@@ -44,10 +44,6 @@ public class NotebookSection {
     }
 
     public void setNotebookSectionId(final Long notebookSectionId) {
-        if(notebookSectionId <= 0 ) {
-            throw new IllegalArgumentException("Invalid notebookSectionId!");
-        }
-
         this.notebookSectionId = notebookSectionId;
     }
 
@@ -56,10 +52,6 @@ public class NotebookSection {
     }
 
     public void setDate(final LocalDate date) {
-        if(date == null ||
-                date.isBefore(LocalDate.of(1970, 1, 1))) {
-            throw new IllegalArgumentException("Invalid date!");
-        }
         this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
     }
 
@@ -68,11 +60,6 @@ public class NotebookSection {
     }
 
     public void setTitle(final String title) {
-        if(title.isBlank()
-                || title.charAt(0) < 'A' || 'Z' < title.charAt(0)
-                || title.charAt(0) < 'А' || title.charAt(0) < 'Я') {
-            throw new IllegalArgumentException("Invalid title!");
-        }
         this.title = title;
     }
 

@@ -45,9 +45,6 @@ public class Notebook {
     }
 
     public void setNotebookId(final Long notebookId) {
-        if(notebookId <= 0) {
-            throw new IllegalArgumentException("Invalid notebookId!");
-        }
         this.notebookId = notebookId;
     }
 
@@ -56,10 +53,6 @@ public class Notebook {
     }
 
     public void setDate(final LocalDate date) {
-        if(date == null ||
-                date.isBefore(LocalDate.of(1970, 1, 1))) {
-            throw new IllegalArgumentException("Invalid date!");
-        }
         this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
     }
 

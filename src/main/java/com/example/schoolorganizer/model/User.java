@@ -71,11 +71,6 @@ public class User {
     }
 
     public void setName(final String name) {
-        if(name.isBlank()
-                || name.charAt(0) < 'A' || 'Z' < name.charAt(0)
-                || name.charAt(0) < 'А' || name.charAt(0) < 'Я') {
-            throw new IllegalArgumentException("Invalid name!");
-        }
         this.name = name;
     }
 
@@ -84,11 +79,6 @@ public class User {
     }
 
     public void setSurname(final String surname) {
-        if(surname.isBlank()
-                || surname.charAt(0) < 'A' || 'Z' < surname.charAt(0)
-                || surname.charAt(0) < 'А' || surname.charAt(0) < 'Я') {
-            throw new IllegalArgumentException("Invalid surname!");
-        }
         this.surname = surname;
     }
 
@@ -97,10 +87,6 @@ public class User {
     }
 
     public void setEmail(final String email) {
-        if(email == null || email.isBlank()
-            || !email.matches("^(.+)@(.+)$")) {
-            throw new IllegalArgumentException("Invalid email!");
-        }
         this.email = email;
     }
 
@@ -109,10 +95,6 @@ public class User {
     }
 
     public void setUsername(final String username) {
-        if(username == null || username.isBlank()
-                || !username.matches("^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$\n")) {
-            throw new IllegalArgumentException("Invalid username!");
-        }
         this.username = username;
     }
 
@@ -121,10 +103,6 @@ public class User {
     }
 
     public void setPassword(final String password) {
-        if(password == null || password.isBlank()
-                || !password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")) {
-            throw new IllegalArgumentException("Invalid password!");
-        }
         this.password = password;
     }
 

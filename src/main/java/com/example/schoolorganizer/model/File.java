@@ -52,9 +52,6 @@ public class File {
     }
 
     public void setFileId(final Long fileId) {
-        if(fileId <= 0) {
-            throw new IllegalArgumentException("Invalid notebookId!");
-        }
         this.fileId = fileId;
     }
 
@@ -63,10 +60,6 @@ public class File {
     }
 
     public void setDate(final LocalDate date) {
-        if(date == null ||
-                date.isBefore(LocalDate.of(1970, 1, 1))) {
-            throw new IllegalArgumentException("Invalid date!");
-        }
         this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
     }
 
@@ -83,10 +76,6 @@ public class File {
     }
 
     public void setExtension(final String extension) {
-        if(extension == null || extension.isBlank() || extension.charAt(0) != '.'
-            || (extension.charAt(0) == '.' && extension.substring(1, extension.length() - 1).matches("^[a-z,A-Z]$"))) {
-            throw new IllegalArgumentException("Invalid extension!");
-        }
         this.extension = extension;
     }
 
@@ -95,9 +84,6 @@ public class File {
     }
 
     public void setArtificialName(final String artificialName) {
-        if(artificialName == null || artificialName.isBlank()) {
-            throw new IllegalArgumentException("Invalid artificialName!");
-        }
         this.artificialName = artificialName;
     }
 
@@ -106,11 +92,6 @@ public class File {
     }
 
     public void setPath(final String path) {
-        if(path == null || path.isBlank()
-                || !path.matches("^(?:[a-zA-Z]:\\\\\\\\|\\\\\\\\\\\\\\\\[^\\\\\\\\]+\\\\\\\\[^\\\\\\\\]+)\\\\\\\\(?:[^\\\\\\\\]+\\\\\\\\)*[^\\\\\\\\]+$")
-                || !path.matches("^/[^/]+(/[^/]+)*$")) {
-            throw new IllegalArgumentException("Invalid path!");
-        }
         this.path = path;
     }
 

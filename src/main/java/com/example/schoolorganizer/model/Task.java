@@ -64,11 +64,6 @@ public class Task {
     }
 
     public void setTitle(final String title) {
-        if(title.isBlank()
-                || title.charAt(0) < 'A' || 'Z' < title.charAt(0)
-                || title.charAt(0) < 'А' || title.charAt(0) < 'Я') {
-            throw new IllegalArgumentException("Invalid title!");
-        }
         this.title = title;
     }
 
@@ -77,9 +72,6 @@ public class Task {
     }
 
     public void setStartDate(final LocalDate startDate) {
-        if(startDate == null || startDate.isBefore(LocalDate.of(1970, 1, 1))) {
-            throw new IllegalArgumentException("Invalid startDate!");
-        }
         this.startDate = LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth());
     }
 
@@ -88,9 +80,6 @@ public class Task {
     }
 
     public void setFinishDate(final LocalDate finishDate) {
-        if(finishDate == null || finishDate.isBefore(this.startDate)) {
-            throw new IllegalArgumentException("Invalid finishDate!");
-        }
         this.finishDate = LocalDate.of(finishDate.getYear(), finishDate.getMonth(), finishDate.getDayOfMonth());
     }
 
