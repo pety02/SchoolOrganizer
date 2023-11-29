@@ -3,6 +3,7 @@ package com.example.schoolorganizer.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,4 +22,76 @@ public class Notebook {
     private List<NotebookSection> sections;
     @OneToOne
     private User createdBy;
+
+    public Notebook() {
+    }
+
+    public Notebook(final LocalDate date, final String title, final String subject,
+                    final List<NotebookSection> sections, final User createdBy) {
+        setDate(date);
+        setTitle(title);
+        setSubject(subject);
+        setSections(sections);
+        setCreatedBy(createdBy);
+    }
+    public Notebook(final Notebook that) {
+        this(that.getDate(), that.getTitle(), that.getSubject(),
+                that.getSections(), that.getCreatedBy());
+        setNotebookId(that.getNotebookId());
+    }
+
+    public Long getNotebookId() {
+        return notebookId;
+    }
+
+    public void setNotebookId(final Long notebookId) {
+        if(notebookId <= 0) {
+            throw new IllegalArgumentException("Invalid notebookId!");
+        }
+        this.notebookId = notebookId;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(final LocalDate date) {
+        if(date == null ||
+                date.isBefore(LocalDate.of(1970, 1, 1))) {
+            throw new IllegalArgumentException("Invalid date!");
+        }
+        this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(final String subject) {
+        this.subject = subject;
+    }
+
+    public List<NotebookSection> getSections() {
+        return new ArrayList<>(sections);
+    }
+
+    public void setSections(final List<NotebookSection> sections) {
+        this.sections = new ArrayList<>(sections);
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(final User createdBy) {
+        this.createdBy = new User(createdBy);
+    }
 }
