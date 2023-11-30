@@ -24,7 +24,7 @@ public class FileDTO {
     @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The name should starts with capital letter.")
     @Size(min = 1, max = 100, message = "The name length should be between 1 and 100 letters.")
     private String name;
-    @NonNull//comment
+    @NonNull
     @NotBlank(message = "Extension is required.")
     @Pattern(regexp = "^.+[a-z,A-Z]$", message = "The extension must starts with . and continues with lowercase or uppercase.")
     @Size(min = 1, max = 20, message = "The extension length is between 1 and 20 characters.")
