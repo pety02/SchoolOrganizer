@@ -10,8 +10,15 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserRESTController {
     @GetMapping("/signup")
     public ModelAndView getSignUpPage() {
-        ModelAndView mandV = new ModelAndView();
-        mandV.setViewName("signup");
-        return mandV;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("signup");
+        return modelAndView;
+    }
+
+    @GetMapping("/signin")
+    public ModelAndView getSignInPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("signin");
+        return modelAndView;
     }
 }
