@@ -2,7 +2,6 @@ package com.example.schoolorganizer.dto;
 
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -31,5 +30,5 @@ public class NotebookDTO {
     @Size(min = 1, max = 120, message = "The subject name length should be between 1 and 120 letters.")
     private String subject;
     private List<NotebookSectionDTO> sections;
-    private UserDTO createdBy;
+    private RegisterUserDTO createdBy;
 }

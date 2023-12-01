@@ -34,5 +34,5 @@ public class TaskDTO {
     @BooleanFlag
     private Boolean isFinished;
     private List<FileDTO> files;
-    private UserDTO createdBy;
+    private RegisterUserDTO createdBy;
 }

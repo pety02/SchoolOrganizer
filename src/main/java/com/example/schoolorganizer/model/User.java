@@ -1,7 +1,7 @@
 package com.example.schoolorganizer.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -30,13 +30,16 @@ public class User {
         to friendsList of other User (person X) and send him/her request
         for friendship. If he/she (person Y) disagree it, the first User (person X)
         removes person Y from his/her friendsList or else he/her adds you as friend. */
+    @ManyToMany
+    private Set<UserRole> roles;
     public User() {
 
     }
 
     public User(final String name, final String surname, final String email,
                 final String username, final String password, final List<Task> tasks,
-                final List<Notebook> notebooks, final List<User> friends) {
+                final List<Notebook> notebooks, final List<User> friends,
+                final Set<UserRole> roles) {
         setName(name);
         setSurname(surname);
         setEmail(email);
@@ -50,7 +53,7 @@ public class User {
     public User(final User that) {
         this(that.getName(), that.getSurname(), that.getEmail(),
                 that.getUsername(), that.getPassword(), that.getTasks(),
-                that.getNotebooks(), that.getFriends());
+                that.getNotebooks(), that.getFriends(), that.getRoles());
         setUserId(that.getUserId());
     }
 
@@ -128,5 +131,12 @@ public class User {
 
     public void setFriends(final List<User> friends) {
         this.friends = new ArrayList<>(friends);
+    }
+    public Set<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
     }
 }

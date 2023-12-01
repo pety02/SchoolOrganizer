@@ -1,20 +1,14 @@
 package com.example.schoolorganizer.dto;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class UserDTO {
-    @EqualsAndHashCode.Include
-    @Id
-    @Min(value = 1, message = "The userId should be number bigger or equal to 1.")
-    private Long userId;
+public class RegisterUserDTO {
     @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The name should starts with capital letter.")
     @Size(min = 1, max = 60, message = "The name length should be between 1 and 60 letters.")
     private String name;
@@ -36,7 +30,4 @@ public class UserDTO {
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,150}$", message = "The password should contains lowercase and uppercase.")
     @Size(min = 8, max = 150, message = "The password length should be between 8 and 150 characters.")
     private String password;
-    private List<TaskDTO> tasks;
-    private List<NotebookDTO> notebooks;
-    private List<UserDTO> friendsList;
 }
