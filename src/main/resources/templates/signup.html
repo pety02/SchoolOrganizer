@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns="http://www.w3.org/1999/html">
 <head th:replace="~{fragments/header::header}"></head>
 <body xmlns:th="http://www.thymeleaf.org">
-    <form class="container mt-5">
+    <form class="container mt-5" method="post" action="#" th:action="@{/auth/signup}" th:object="${userDTO}">
         <h2>Sign Up</h2>
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
-                <label for="inputName" class="visually-hidden">Name</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Name">
+                <label for="name" class="visually-hidden">Name</label>
+                <input type="text" class="form-control" name="name" id="name" th:field="*{name}" placeholder="Name">
             </div>
             <div class="form-group col-md-6">
-                <label for="inputSurname" class="visually-hidden">Surname</label>
-                <input type="text" class="form-control" id="inputSurname" placeholder="Surname">
+                <label for="surname" class="visually-hidden">Surname</label>
+                <input type="text" class="form-control" name="surname" id="surname" th:field="*{surname}" placeholder="Surname">
             </div>
             <div class="form-group col-md-6">
-                <label for="inputEmail" class="visually-hidden">Email</label>
-                <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                <label for="email" class="visually-hidden">Email</label>
+                <input type="email" class="form-control" name="email" id="email" th:field="*{email}" placeholder="Email">
             </div>
             <div class="form-group col-md-6">
-                <label for="inputUsername" class="visually-hidden">Username</label>
-                <input type="text" class="form-control" id="inputUsername" placeholder="Username">
+                <label for="username" class="visually-hidden">Username</label>
+                <input type="text" class="form-control" name="username" id="username" th:field="*{username}" placeholder="Username">
             </div>
             <div class="form-group col-md-6 mt-2">
-                <label for="inputPassword" class="visually-hidden">Password</label>
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                <label for="password" class="visually-hidden">Password</label>
+                <input type="password" class="form-control" name="password" id="password" th:field="*{password}" placeholder="Password">
             </div>
             <div class="form-group col-md-6 mt-2">
-                <label for="reInputPassword" class="visually-hidden">Re-Enter Password</label>
-                <input type="password" class="form-control" id="reInputPassword" placeholder="Re-Enter Password">
+                <label for="reEnteredPassword" class="visually-hidden">Re-Enter Password</label>
+                <input type="password" class="form-control" name="reEnteredPassword" id="reEnteredPassword"
+                       th:field="*{reEnteredPassword}" placeholder="Re-Enter Password">
             </div>
         </div>
         <div class="form-group mt-2">
@@ -38,9 +40,15 @@
                 </label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <button type="submit" class="btn btn-primary" id="btn">Sign Up</button>
         <a href="/signin" class="btn btn-light">Sign In</a>
     </form>
+    <script>
+        btn = document.querySelector("#btn")
+        btn.addEventListener("submit",(e)=>{
+            e.preventDefault()
+        })
+    </script>
     <footer th:replace="~{fragments/footer::footer}"></footer>
 </body>
 </html>

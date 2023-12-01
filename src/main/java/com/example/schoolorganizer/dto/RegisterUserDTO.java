@@ -35,4 +35,9 @@ public class RegisterUserDTO {
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,150}$", message = "The password should contains lowercase and uppercase.")
     @Size(min = 8, max = 150, message = "The password length should be between 8 and 150 characters.")
     private String password;
+    @NonNull
+    @NotBlank(message = "The re-entered password is required.")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,150}$", message = "The re-entered password should contains lowercase and uppercase.")
+    @Size(min = 8, max = 150, message = "The re-entered password length should be between 8 and 150 characters.")
+    private String reEnteredPassword;
 }

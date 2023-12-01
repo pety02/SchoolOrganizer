@@ -21,6 +21,7 @@ public class RegisterUserDAOImpl implements IDAO<RegisterUserDTO, User> {
         RegisterUserDTO dto = new RegisterUserDTO(
                 user.getEmail(),
                 user.getUsername(),
+                user.getPassword(),
                 user.getPassword());
         return dto;
     }

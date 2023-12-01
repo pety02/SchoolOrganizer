@@ -15,10 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,10 +35,10 @@ public class AuthRESTController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private RegisterUserDAOImpl registeredUserDAOImpl;
+    private RegisterUserDAOImpl registeredUserDAOImpl=new RegisterUserDAOImpl();
 
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginUserDTO loginDto){
+    public ResponseEntity<String> authenticateUser(@RequestBody @ModelAttribute("userDTO") LoginUserDTO loginDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword()));
 
@@ -50,7 +47,7 @@ public class AuthRESTController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterUserDTO signUpDto){
+    public ResponseEntity<?> registerUser(@RequestBody @ModelAttribute("userDTO") RegisterUserDTO signUpDto){
         if(userRepository.existsByUsername(signUpDto.getUsername())){
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
@@ -65,6 +62,7 @@ public class AuthRESTController {
         user.setRoles(Collections.singleton(roles));
 
         userRepository.save(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("User registered successfully",
+                HttpStatus.CREATED);
     }
 }
