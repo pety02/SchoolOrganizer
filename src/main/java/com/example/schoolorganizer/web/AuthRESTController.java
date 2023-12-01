@@ -1,5 +1,6 @@
 package com.example.schoolorganizer.web;
 
+import com.example.schoolorganizer.dao.Implementation.RegisterUserDAOImpl;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.model.User;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 @RestController
@@ -36,41 +38,33 @@ public class AuthRESTController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private RegisterUserDAOImpl registeredUserDAOImpl;
+
     @PostMapping("/signin")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginUserDTO loginDto){
-        /*Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDto.getUsername(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);*/
-        return null;
+        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody RegisterUserDTO signUpDto){
-
-        // add check for username exists in a DB
         if(userRepository.existsByUsername(signUpDto.getUsername())){
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        // add check for email exists in DB
         if(userRepository.existsByEmail(signUpDto.getEmail())){
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        // create user object
-        User user = new User();
-        user.setName(signUpDto.getName());
-        user.setUsername(signUpDto.getUsername());
-        user.setEmail(signUpDto.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
+        User user = registeredUserDAOImpl.transformFromDTOToEntity(signUpDto);
 
-        UserRole roles = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
+        UserRole roles = roleRepository.findByName("CUSTOM_USER").orElseThrow();
         user.setRoles(Collections.singleton(roles));
 
         userRepository.save(user);
-
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
 }

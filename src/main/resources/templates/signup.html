@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragments/header::header"></head>
+<head th:replace="~{fragments/header::header}"></head>
 <body xmlns:th="http://www.thymeleaf.org">
     <form class="container mt-5">
         <h2>Sign Up</h2>
@@ -41,6 +41,6 @@
         <button type="submit" class="btn btn-primary">Sign Up</button>
         <a href="/signin" class="btn btn-light">Sign In</a>
     </form>
-    <footer th:replace="fragments/footer::footer"></footer>
+    <footer th:replace="~{fragments/footer::footer}"></footer>
 </body>
 </html>

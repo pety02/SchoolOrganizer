@@ -1,5 +1,6 @@
 package com.example.schoolorganizer.dto;
 
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -9,6 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RegisterUserDTO {
+    @EqualsAndHashCode.Include
+    @Id
+    @Min(1)
+    private Long userId;
     @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The name should starts with capital letter.")
     @Size(min = 1, max = 60, message = "The name length should be between 1 and 60 letters.")
     private String name;
