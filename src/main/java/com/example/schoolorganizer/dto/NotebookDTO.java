@@ -3,6 +3,7 @@ package com.example.schoolorganizer.dto;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,8 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class NotebookDTO {
     @EqualsAndHashCode.Include
-    @Id
-    @Min(value = 1, message = "The notebookId should be bigger or equal to 1.")
+    @Positive(message = "Id should be positive!")
     private Long notebookId;
     @NonNull
     @DateTimeFormat

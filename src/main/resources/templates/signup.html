@@ -1,54 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-                xmlns="http://www.w3.org/1999/html">
+      xmlns="http://www.w3.org/1999/html">
 <head th:replace="~{fragments/header::header}"></head>
 <body xmlns:th="http://www.thymeleaf.org">
-    <form class="container mt-5" method="post" action="#" th:action="@{/auth/signup}" th:object="${userDTO}">
-        <h2>Sign Up</h2>
-        <div class="form-row row align-items-center">
-            <div class="form-group col-md-6">
-                <label for="name" class="visually-hidden">Name</label>
-                <input type="text" class="form-control" name="name" id="name" th:field="*{name}" placeholder="Name">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="surname" class="visually-hidden">Surname</label>
-                <input type="text" class="form-control" name="surname" id="surname" th:field="*{surname}" placeholder="Surname">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="email" class="visually-hidden">Email</label>
-                <input type="email" class="form-control" name="email" id="email" th:field="*{email}" placeholder="Email">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="username" class="visually-hidden">Username</label>
-                <input type="text" class="form-control" name="username" id="username" th:field="*{username}" placeholder="Username">
-            </div>
-            <div class="form-group col-md-6 mt-2">
-                <label for="password" class="visually-hidden">Password</label>
-                <input type="password" class="form-control" name="password" id="password" th:field="*{password}" placeholder="Password">
-            </div>
-            <div class="form-group col-md-6 mt-2">
-                <label for="reEnteredPassword" class="visually-hidden">Re-Enter Password</label>
-                <input type="password" class="form-control" name="reEnteredPassword" id="reEnteredPassword"
-                       th:field="*{reEnteredPassword}" placeholder="Re-Enter Password">
+<form class="container mt-5" method="post" action="#" th:action="@{/auth/signup}" th:object="${userDTO}">
+    <h2>Sign Up</h2>
+    <div class="form-row row align-items-center">
+        <div class="form-group col-md-6">
+            <label for="name" class="visually-hidden">Name</label>
+            <input type="text" class="form-control" name="name" id="name" th:field="*{name}" placeholder="Name">
+            <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-dismissible fade show"
+                 data-err-alert>
+                <span th:errors="*{name}" class="alert-danger"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         </div>
-        <div class="form-group mt-2">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Stay signed in
-                </label>
+        <div class="form-group col-md-6">
+            <label for="surname" class="visually-hidden">Surname</label>
+            <input type="text" class="form-control" name="surname" id="surname" th:field="*{surname}"
+                   placeholder="Surname">
+            <div th:if="${#fields.hasErrors('surname')}" class="alert alert-danger alert-dismissible fade show"
+                 data-err-alert>
+                <span th:errors="*{surname}" class="alert-danger"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="btn">Sign Up</button>
-        <a href="/signin" class="btn btn-light">Sign In</a>
-    </form>
-    <script>
-        btn = document.querySelector("#btn")
-        btn.addEventListener("submit",(e)=>{
-            e.preventDefault()
+        <div class="form-group col-md-6 mt-2">
+            <label for="email" class="visually-hidden">Email</label>
+            <input type="email" class="form-control" name="email" id="email" th:field="*{email}" placeholder="Email"
+                   required>
+            <div th:if="${#fields.hasErrors('email')}" class="alert alert-danger alert-dismissible fade show"
+                 data-err-alert>
+                <span th:errors="*{email}" class="alert-danger"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+        <div class="form-group col-md-6 mt-2">
+            <label for="username" class="visually-hidden">Username</label>
+            <input type="text" class="form-control" name="username" id="username" th:field="*{username}"
+                   placeholder="Username" required>
+            <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger alert-dismissible fade show"
+                 data-err-alert>
+                <span th:errors="*{username}" class="alert-danger"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+        <div class="form-group col-md-6 mt-2">
+            <label for="password" class="visually-hidden">Password</label>
+            <input type="password" class="form-control" name="password" id="password" th:field="*{password}"
+                   placeholder="Password" required>
+            <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger alert-dismissible fade show"
+                 data-err-alert>
+                <span th:errors="*{password}" class="alert-danger"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+        <div class="form-group col-md-6 mt-2">
+            <label for="reEnteredPassword" class="visually-hidden">Re-Enter Password</label>
+            <input type="password" class="form-control" name="reEnteredPassword" id="reEnteredPassword"
+                   th:field="*{reEnteredPassword}"
+                   placeholder="Re-Enter Password" required>
+            <div th:if="${#fields.hasErrors('reEnteredPassword')}"
+                 class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                <span th:errors="*{reEnteredPassword}" class="alert-danger"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    </div>
+
+    <button th:if="${#fields.hasErrors('*')}" type="button"
+            class="btn-close text-nowrap text-center h-100 alert alert-dismissible fade show"
+            id="btn-close-errs"
+            data-bs-dismiss="alert" aria-label="Close">
+        <span class="ms-4">Close all</span>
+    </button>
+    <div class="form-group mt-2">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="gridCheck">
+            <label class="form-check-label" for="gridCheck">
+                Stay signed in
+            </label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" id="btn">Sign Up</button>
+    <a href="/signin" class="btn btn-light">Sign In</a>
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.querySelector("#btn");
+        btn.addEventListener("submit", (e) => {
+            e.preventDefault();
         })
-    </script>
-    <footer th:replace="~{fragments/footer::footer}"></footer>
+        const btnCloseErrs = document.querySelector("#btn-close-errs")
+        btnCloseErrs.addEventListener("click", () => {
+            const alerts = document.querySelectorAll("[data-err-alert]");
+            alerts.forEach((a) => {
+                new bootstrap.Alert(a).close();
+            })
+        })
+    });
+</script>
+<footer th:replace="~{fragments/footer::footer}"></footer>
 </body>
 </html>

@@ -18,8 +18,8 @@ public class User {
     private String email;
     @Column(nullable = false, unique = true, length = 150)
     private String username;
-    @Column(nullable = false, length = 150)
-    private String password;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Password password;
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Task> tasks;
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
@@ -32,12 +32,13 @@ public class User {
         removes person Y from his/her friendsList or else he/her adds you as friend. */
     @ManyToMany
     private Set<UserRole> roles;
+
     public User() {
 
     }
 
     public User(final String name, final String surname, final String email,
-                final String username, final String password, final List<Task> tasks,
+                final String username, final Password password, final List<Task> tasks,
                 final List<Notebook> notebooks, final List<User> friends,
                 final Set<UserRole> roles) {
         setName(name);
@@ -62,10 +63,6 @@ public class User {
     }
 
     public void setUserId(final Long userId) {
-        if(userId <= 0) {
-            throw new IllegalArgumentException("Invalid userId!");
-        }
-
         this.userId = userId;
     }
 
@@ -101,11 +98,11 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public void setPassword(final Password password) {
         this.password = password;
     }
 
@@ -132,6 +129,7 @@ public class User {
     public void setFriends(final List<User> friends) {
         this.friends = new ArrayList<>(friends);
     }
+
     public Set<UserRole> getRoles() {
         return roles;
     }

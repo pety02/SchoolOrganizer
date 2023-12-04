@@ -16,8 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TaskDTO {
     @EqualsAndHashCode.Include
-    @Id
-    @Min(value = 1, message = "The taskId should be number bigger or equal to 1.")
+    @Positive(message = "Id should be positive!")
     private Long taskId;
     @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The title should starts with capital letter.")
     @Size(min = 1, max = 200, message = "The title length should be between 1 and 200 letters.")

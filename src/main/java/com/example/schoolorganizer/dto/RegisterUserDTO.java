@@ -11,13 +11,12 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RegisterUserDTO {
     @EqualsAndHashCode.Include
-    @Id
-    @Min(1)
+    @Positive(message = "Id should be positive!")
     private Long userId;
-    @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The name should starts with capital letter.")
+    @Pattern(regexp = "^[A-Z,a-z]{1,60}$", message = "The name should starts with capital letter.")
     @Size(min = 1, max = 60, message = "The name length should be between 1 and 60 letters.")
     private String name;
-    @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The surname should starts with capital letter.")
+    @Pattern(regexp = "^[A-Z,a-z]{1,100}$", message = "The surname should starts with capital letter.")
     @Size(min = 1, max = 100, message = "The surname length should be between 1 and 100 letters.")
     private String surname;
     @NonNull
@@ -27,7 +26,7 @@ public class RegisterUserDTO {
     private String email;
     @NonNull
     @NotBlank(message = "The username is required.")
-    @Pattern(regexp = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){8,150}[a-zA-Z0-9]$", message = "The username should contains lowercase, uppercase and digits.")
+    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
     @Size(min = 8, max = 150, message = "The username length should be between 8 and 150 characters.")
     private String username;
     @NonNull

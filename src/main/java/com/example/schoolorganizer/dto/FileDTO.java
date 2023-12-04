@@ -1,6 +1,5 @@
 package com.example.schoolorganizer.dto;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,8 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class FileDTO {
     @EqualsAndHashCode.Include
-    @Id
-    @Min(value = 1, message = "The fileId should be bigger or equal to 1.")
+    @Positive(message = "Id should be positive!")
     private Long fileId;
     @NonNull
     @DateTimeFormat
@@ -37,7 +35,7 @@ public class FileDTO {
     @NonNull
     @NotBlank(message = "The path is required.")
     @Pattern(regexp = "^.*[^\\w -.].*$", message = "The path contains words separated with \\.")
-    @Size(min = 1, max = 1000, message = "The path lentght should be between 1 and 1000 characters.")
+    @Size(min = 1, max = 1000, message = "The path length should be between 1 and 1000 characters.")
     private String path;
     private NotebookDTO addedInNotebook;
     private List<TaskDTO> addedInTask;
