@@ -7,6 +7,7 @@ import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.service.Impl.UserServiceImpl;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,8 @@ public class AuthRESTController {
     public String login(@Valid @ModelAttribute LoginUserDTO user,
                         final BindingResult binding,
                         Model model,
-                        RedirectAttributes redirectAttributes) {
+                        RedirectAttributes redirectAttributes,
+                        HttpSession session) {
         if (binding.hasErrors()) {
             log.error("Error logging user in: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("user", user);
@@ -53,10 +55,9 @@ public class AuthRESTController {
                 return "redirect:signin";
             }
 
-            if (!model.containsAttribute("user")) {
-                model.addAttribute("user", user);
-            }
-            return "redirect:home";
+            var loggedInUser = userService.getUserById(user.getUserId()).orElseThrow();
+            session.setAttribute("user", loggedInUser);
+            return "redirect:/home";
         } catch (Exception e) {
             if (!model.containsAttribute("user")) {
                 model.addAttribute("user", user);

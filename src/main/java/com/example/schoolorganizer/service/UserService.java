@@ -8,5 +8,7 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> updateData(UpdateUserDataDTO userDTO);
 
+    Optional<User> getUserById(Long id);
+
     Optional<User> delete(Integer userID);
 }

@@ -2,10 +2,13 @@ package com.example.schoolorganizer.web;
 
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
+import com.example.schoolorganizer.model.User;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
@@ -26,11 +29,19 @@ public class MainController {
     }
 
     @GetMapping("/home")
-    public String getHomeForm(Model model, LoginUserDTO user) {
-        if (!model.containsAttribute("user")) {
-            model.addAttribute("user", user);
+    public String getHomeForm(HttpSession httpSession, Model model) {
+        User loggedUser = (User) httpSession.getAttribute("user");
+        if (loggedUser != null) {
+            model.addAttribute("user", loggedUser);
+            return "home";
         }
 
-        return "home";
+        return "redirect:/signin";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/signin";
     }
 }

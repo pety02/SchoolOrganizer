@@ -43,6 +43,11 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     }
 
     @Override
+    public Optional<User> getUserById(Long id) {
+        return userRepo.findByUserId(id);
+    }
+
+    @Override
     public Optional<User> login(String username, String hashedPassword) {
         String hash;
         try {
