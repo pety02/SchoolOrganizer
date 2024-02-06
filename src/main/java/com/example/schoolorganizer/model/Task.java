@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Table
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long taskId;
     @Column(length = 200)
     private String title;
@@ -29,6 +29,7 @@ public class Task {
 
     public Task() {
     }
+
     public Task(final String title, final LocalDate startDate, final LocalDate finishDate,
                 final String description, final Boolean isFinished, final List<File> files,
                 final User createdBy) {
@@ -40,22 +41,12 @@ public class Task {
         setFiles(files);
         setCreatedBy(createdBy);
     }
-    public Task(final Task that) {
-        this(that.getTitle(), that.getStartDate(), that.getFinishDate(),
-                that.getDescription(), that.getFinished(), that.getFiles(),
-                that.getCreatedBy());
-        setTaskId(that.getTaskId());
-    }
 
     public Long getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(final Long taskId) {
-        if(taskId <= 0) {
-            throw new IllegalArgumentException("Invalid taskId!");
-        }
-
+    public void setTaskId(Long taskId) {
         this.taskId = taskId;
     }
 
@@ -63,31 +54,31 @@ public class Task {
         return title;
     }
 
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
     public LocalDate getStartDate() {
-        return LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate. getDayOfMonth());
+        return startDate;
     }
 
-    public void setStartDate(final LocalDate startDate) {
-        this.startDate = LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth());
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getFinishDate() {
-        return LocalDate.of(finishDate.getYear(), finishDate.getMonth(), finishDate.getDayOfMonth());
+        return finishDate;
     }
 
-    public void setFinishDate(final LocalDate finishDate) {
-        this.finishDate = LocalDate.of(finishDate.getYear(), finishDate.getMonth(), finishDate.getDayOfMonth());
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -95,23 +86,23 @@ public class Task {
         return isFinished;
     }
 
-    public void setFinished(final Boolean finished) {
+    public void setFinished(Boolean finished) {
         isFinished = finished;
     }
 
     public List<File> getFiles() {
-        return new ArrayList<>(files);
+        return files;
     }
 
-    public void setFiles(final List<File> files) {
-        this.files = new ArrayList<>(files);
+    public void setFiles(List<File> files) {
+        this.files = files;
     }
 
     public User getCreatedBy() {
-        return new User(createdBy);
+        return createdBy;
     }
 
-    public void setCreatedBy(final User createdBy) {
-        this.createdBy = new User(createdBy);
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 }

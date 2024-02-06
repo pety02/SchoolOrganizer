@@ -41,33 +41,28 @@ public class File {
         setAddedInNotebookSections(addedInNotebookSections);
         setAddedInTask(addedInTask);
     }
-    public File(final File that) {
-        this(that.getDate(), that.getName(), that.getExtension(),
-                that.getArtificialName(), that.getPath(), that.getAddedInNotebookSections(),
-                that.getAddedInTask());
-    }
 
     public Long getFileId() {
         return fileId;
     }
 
-    public void setFileId(final Long fileId) {
+    public void setFileId(Long fileId) {
         this.fileId = fileId;
     }
 
     public LocalDate getDate() {
-        return LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+        return date;
     }
 
-    public void setDate(final LocalDate date) {
-        this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -75,7 +70,7 @@ public class File {
         return extension;
     }
 
-    public void setExtension(final String extension) {
+    public void setExtension(String extension) {
         this.extension = extension;
     }
 
@@ -83,7 +78,7 @@ public class File {
         return artificialName;
     }
 
-    public void setArtificialName(final String artificialName) {
+    public void setArtificialName(String artificialName) {
         this.artificialName = artificialName;
     }
 
@@ -91,23 +86,23 @@ public class File {
         return path;
     }
 
-    public void setPath(final String path) {
+    public void setPath(String path) {
         this.path = path;
     }
 
     public List<NotebookSection> getAddedInNotebookSections() {
-        return new ArrayList<NotebookSection>(addedInNotebookSections);
+        return addedInNotebookSections;
     }
 
-    public void setAddedInNotebookSections(final List<NotebookSection> addedInNotebookSections) {
-        this.addedInNotebookSections = new ArrayList<NotebookSection>(addedInNotebookSections);
+    public void setAddedInNotebookSections(List<NotebookSection> addedInNotebookSections) {
+        this.addedInNotebookSections = addedInNotebookSections;
     }
 
     public List<Task> getAddedInTask() {
         return addedInTask;
     }
 
-    public void setAddedInTask(final List<Task> addedInTask) {
+    public void setAddedInTask(List<Task> addedInTask) {
         this.addedInTask = addedInTask;
     }
 }

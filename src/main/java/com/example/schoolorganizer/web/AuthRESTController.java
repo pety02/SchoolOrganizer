@@ -1,114 +1,103 @@
 package com.example.schoolorganizer.web;
 
-import com.example.schoolorganizer.dao.Implementation.LoginUserDAOImpl;
-import com.example.schoolorganizer.dao.Implementation.RegisterUserDAOImpl;
+import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.dao.Impl.LoginUserDAOImpl;
+import com.example.schoolorganizer.dao.Impl.RegisterUserDAOImpl;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
-import com.example.schoolorganizer.model.Password;
 import com.example.schoolorganizer.model.User;
-import com.example.schoolorganizer.model.UserRole;
-import com.example.schoolorganizer.repository.PasswordRepository;
-import com.example.schoolorganizer.repository.RoleRepository;
-import com.example.schoolorganizer.repository.UserRepository;
-import com.example.schoolorganizer.security.PasswordHasher;
+import com.example.schoolorganizer.service.Impl.UserServiceImpl;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
+import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
-@RestController
-@RequestMapping("/auth")
+@Controller
+@Slf4j
 public class AuthRESTController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final UserServiceImpl userService;
+    private final IDAO<User, LoginUserDTO> loginDAO;
+    private final IDAO<User, RegisterUserDTO> registerDAO;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordRepository passwordRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    private final RegisterUserDAOImpl registeredUserDAOImpl = new RegisterUserDAOImpl();
-    private final LoginUserDAOImpl loginUserDAOImpl = new LoginUserDAOImpl();
+    public AuthRESTController(UserServiceImpl userService, LoginUserDAOImpl loginDAO, RegisterUserDAOImpl registerDAO) {
+        this.userService = userService;
+        this.loginDAO = loginDAO;
+        this.registerDAO = registerDAO;
+    }
 
     @PostMapping("/signin")
-    public ModelAndView authenticateUser(@RequestBody @ModelAttribute("userDTO") @Valid LoginUserDTO loginDTO,
-                                         BindingResult result, Model userModel) {
+    public String login(@Valid @ModelAttribute LoginUserDTO user,
+                        final BindingResult binding,
+                        Model model,
+                        RedirectAttributes redirectAttributes) {
+        if (binding.hasErrors()) {
+            log.error("Error logging user in: {}", binding.getAllErrors());
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "user", binding);
+            return "redirect:signin";
+        }
         try {
-            String hashedPass = PasswordHasher.hash(loginDTO.getPassword());
-            loginDTO.setPassword(hashedPass);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        if (result.hasErrors()
-                || !userRepository.existsByUsername(loginDTO.getUsername())
-                || !userRepository.exists(Example.of(loginUserDAOImpl.transformFromDTOToEntity(loginDTO)))) {
-            ModelAndView m = new ModelAndView();
-            m.setViewName("signin");
-            m.setStatus(HttpStatus.BAD_REQUEST);
-            return m;
-        }
+            String username = user.getUsername();
+            String password = user.getPassword();
+            user = loginDAO.fromEntityToDTO(userService.login(username, password).orElse(null));
+            if (user == null) {
+                String errors = "Invalid user credentials.";
+                redirectAttributes.addAttribute("errors", errors);
+                return "redirect:signin";
+            }
 
-        ModelAndView m = new ModelAndView();
-        m.setViewName("home");
-        m.setStatus(HttpStatus.OK);
-        User loggedIn = userRepository.findByUsernameOrEmail(loginDTO.getUsername(), null).orElseThrow();
-        userModel.addAttribute("userId", loggedIn.getUserId());
-        return m;
+            if (!model.containsAttribute("user")) {
+                model.addAttribute("user", user);
+            }
+            return "redirect:home";
+        } catch (Exception e) {
+            if (!model.containsAttribute("user")) {
+                model.addAttribute("user", user);
+            }
+            return "redirect:signin";
+        }
     }
 
     @PostMapping("/signup")
-    public ModelAndView registerUser(@RequestBody @ModelAttribute("userDTO") @Valid RegisterUserDTO signUpDTO, BindingResult result) {
-        if (result.hasErrors()
-                || userRepository.existsByUsername(signUpDTO.getUsername())
-                || userRepository.existsByEmail(signUpDTO.getEmail())) {
-            ModelAndView m = new ModelAndView();
-            m.setViewName("signup");
-            m.setStatus(HttpStatus.BAD_REQUEST);
-            return m;
+    public String register(@Valid @ModelAttribute RegisterUserDTO user,
+                           final BindingResult binding,
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
+        if (binding.hasErrors()) {
+            log.error("Error registering user: {}", binding.getAllErrors());
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "user", binding);
+            return "redirect:signup";
         }
-
-        String userPass = signUpDTO.getPassword();
         try {
-            String hashedPassword = PasswordHasher.hash(userPass);
-            signUpDTO.setPassword(hashedPassword);
+            RegisterUserDTO registeredUser = registerDAO.fromEntityToDTO(userService.register(user).orElse(null));
 
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        Password password;
-        try {
-            String hashedPass = PasswordHasher.hash(signUpDTO.getPassword());
-            signUpDTO.setPassword(hashedPass);
-            password = new Password(hashedPass);
-            passwordRepository.save(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        User user = registeredUserDAOImpl.transformFromDTOToEntity(signUpDTO);
-        user.setPassword(password);
-        UserRole role = roleRepository.findByName("CUSTOM_USER").orElseThrow();
-        user.setRoles(Collections.singleton(role));
-        userRepository.save(user);
+            if (registeredUser == null) {
+                String errors = "Invalid user registration data.";
+                redirectAttributes.addFlashAttribute("errors", errors);
 
-        ModelAndView m = new ModelAndView();
-        m.setViewName("signin");
-        m.setStatus(HttpStatus.OK);
-        return m;
+                if (!redirectAttributes.containsAttribute("user")) {
+                    redirectAttributes.addFlashAttribute("user", user);
+                }
+                return "redirect:signup";
+            }
+
+            if (!redirectAttributes.containsAttribute("user")) {
+                redirectAttributes.addFlashAttribute("user", user);
+            }
+            return "redirect:signin";
+        } catch (Exception e) {
+            if (!redirectAttributes.containsAttribute("user")) {
+                redirectAttributes.addFlashAttribute("user", user);
+            }
+            return "redirect:signup";
+        }
     }
 }

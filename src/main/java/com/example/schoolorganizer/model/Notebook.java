@@ -34,17 +34,12 @@ public class Notebook {
         setSections(sections);
         setCreatedBy(createdBy);
     }
-    public Notebook(final Notebook that) {
-        this(that.getDate(), that.getTitle(), that.getSubject(),
-                that.getSections(), that.getCreatedBy());
-        setNotebookId(that.getNotebookId());
-    }
 
     public Long getNotebookId() {
         return notebookId;
     }
 
-    public void setNotebookId(final Long notebookId) {
+    public void setNotebookId(Long notebookId) {
         this.notebookId = notebookId;
     }
 
@@ -52,15 +47,15 @@ public class Notebook {
         return date;
     }
 
-    public void setDate(final LocalDate date) {
-        this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -68,23 +63,23 @@ public class Notebook {
         return subject;
     }
 
-    public void setSubject(final String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
     }
 
     public List<NotebookSection> getSections() {
-        return new ArrayList<>(sections);
+        return sections;
     }
 
-    public void setSections(final List<NotebookSection> sections) {
-        this.sections = new ArrayList<>(sections);
+    public void setSections(List<NotebookSection> sections) {
+        this.sections = sections;
     }
 
     public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(final User createdBy) {
-        this.createdBy = new User(createdBy);
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 }

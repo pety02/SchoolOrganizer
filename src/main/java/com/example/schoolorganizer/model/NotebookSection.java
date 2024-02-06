@@ -10,7 +10,7 @@ import java.util.List;
 @Table
 public class NotebookSection {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long notebookSectionId;
     @Column(nullable = false)
     private LocalDate date;
@@ -25,6 +25,7 @@ public class NotebookSection {
 
     public NotebookSection() {
     }
+
     public NotebookSection(final LocalDate date, final String title, final String content,
                            final List<File> files, final Notebook addedInNotebook) {
         setDate(date);
@@ -33,33 +34,28 @@ public class NotebookSection {
         setFiles(files);
         setAddedInNotebook(addedInNotebook);
     }
-    public NotebookSection(final NotebookSection that) {
-        this(that.getDate(), that.getTitle(), that.getContent(),
-                that.getFiles(), that.getAddedInNotebook());
-        setNotebookSectionId(that.getNotebookSectionId());
-    }
 
     public Long getNotebookSectionId() {
         return notebookSectionId;
     }
 
-    public void setNotebookSectionId(final Long notebookSectionId) {
+    public void setNotebookSectionId(Long notebookSectionId) {
         this.notebookSectionId = notebookSectionId;
     }
 
     public LocalDate getDate() {
-        return LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+        return date;
     }
 
-    public void setDate(final LocalDate date) {
-        this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -67,23 +63,23 @@ public class NotebookSection {
         return content;
     }
 
-    public void setContent(final String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
     public List<File> getFiles() {
-        return new ArrayList<>(files);
+        return files;
     }
 
-    public void setFiles(final List<File> files) {
-        this.files = new ArrayList<>(files);
+    public void setFiles(List<File> files) {
+        this.files = files;
     }
 
     public Notebook getAddedInNotebook() {
         return addedInNotebook;
     }
 
-    public void setAddedInNotebook(final Notebook addedInNotebook) {
-        this.addedInNotebook = new Notebook(addedInNotebook);
+    public void setAddedInNotebook(Notebook addedInNotebook) {
+        this.addedInNotebook = addedInNotebook;
     }
 }

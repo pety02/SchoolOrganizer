@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/html">
 <head th:replace="~{fragments/header::header}"></head>
 <body xmlns:th="http://www.thymeleaf.org">
-<form class="container mt-5" method="post" action="#" th:action="@{/auth/signup}" th:object="${userDTO}">
+<form class="container mt-5" th:method="POST" th:action="@{/signup}" th:object="${user}">
     <h2>Sign Up</h2>
     <div class="form-row row align-items-center">
         <div class="form-group col-md-6">

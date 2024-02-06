@@ -1,6 +1,6 @@
 package com.example.schoolorganizer.dao;
 
-public interface IDAO<DTO, Entity> {
-    Entity transformFromDTOToEntity(DTO dto);
-    DTO transformFromEntityToDTO(Entity entity);
+public interface IDAO <E, DTO> {
+    DTO fromEntityToDTO(E entity);
+    E fromDTOToEntity(DTO dto);
 }
