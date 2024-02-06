@@ -21,13 +21,13 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 @Controller
 @Slf4j
-public class AuthRESTController {
+public class AuthController {
     private final UserServiceImpl userService;
     private final IDAO<User, LoginUserDTO> loginDAO;
     private final IDAO<User, RegisterUserDTO> registerDAO;
 
     @Autowired
-    public AuthRESTController(UserServiceImpl userService, LoginUserDAOImpl loginDAO, RegisterUserDAOImpl registerDAO) {
+    public AuthController(UserServiceImpl userService, LoginUserDAOImpl loginDAO, RegisterUserDAOImpl registerDAO) {
         this.userService = userService;
         this.loginDAO = loginDAO;
         this.registerDAO = registerDAO;

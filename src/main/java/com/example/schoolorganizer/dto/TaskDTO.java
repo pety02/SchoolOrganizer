@@ -1,6 +1,5 @@
 package com.example.schoolorganizer.dto;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import jdk.jfr.BooleanFlag;
 import lombok.*;
@@ -33,5 +32,5 @@ public class TaskDTO {
     @BooleanFlag
     private Boolean isFinished;
     private List<FileDTO> files;
-    private RegisterUserDTO createdBy;
+    private UserDTO createdBy;
 }

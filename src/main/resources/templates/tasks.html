@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/header::header}"></head>
+<body>
+<div th:replace="~{fragments/navigation::navigation}"></div>
+<span th:if="${tasks == null || tasks.size() == 0}" style="color: red; font-size: 20px;">No tasks!</span>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col" class="text-info">Title</th>
+        <th scope="col" class="text-info">Start Date</th>
+        <th scope="col" class="text-info">Finish Date</th>
+        <th scope="col" class="text-info">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}">
+        <td th:text="${task.title}"></td>
+        <td th:text="${task.startDate}"></td>
+        <td th:text="${task.finishDate}"></td>
+        <td th:if="${task.finished == true}" style="color:green;">Finished</td>
+        <td th:if="${task.finished == false}" style="color:red;">Active</td>
+    </tr>
+    </tbody>
+</table>
+<div th:replace="~{fragments/footer::footer}"></div>
+</body>
+</html>
