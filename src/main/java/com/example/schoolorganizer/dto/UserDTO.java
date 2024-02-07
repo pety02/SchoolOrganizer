@@ -1,0 +1,32 @@
+package com.example.schoolorganizer.dto;
+
+import com.example.schoolorganizer.model.UserRole;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+import java.util.List;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class UserDTO {
+    @EqualsAndHashCode.Include
+    @Positive(message = "Id should be positive!")
+    private Long userId;
+    @Pattern(regexp = "^[A-Z,a-z]{1,60}$", message = "The name should starts with capital letter.")
+    private String name;
+    @Pattern(regexp = "^[A-Z,a-z]{1,100}$", message = "The surname should starts with capital letter.")
+    private String surname;
+    @Email(message = "The email should be valid.")
+    private String email;
+    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
+    private String username;
+    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The password should contains lowercase and uppercase.")
+    private String password;
+    private List<TaskDTO> tasks;
+    private List<NotebookDTO> notebooks;
+    private List<UserDTO> friends;
+    private Set<UserRole> roles;
+}

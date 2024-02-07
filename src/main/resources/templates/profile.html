@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/header::header}"></head>
+<body>
+<div th:replace="~{fragments/navigation::navigation}"></div>
+<form th:object="${updateUser}" th:method="POST" th:action="@{/profile/update}">
+    <label for="oldUsername">Old Username</label>
+    <input type="text" id="oldUsername" name="oldUsername" th:field="*{oldUsername}" required>
+    <label for="newUsername">New Username</label>
+    <input type="text" id="newUsername" name="newUsername" th:field="*{newUsername}" required>
+
+    <label for="oldEmail">Old Email</label>
+    <input type="email" id="oldEmail" name="oldEmail" th:field="*{oldEmail}" required>
+    <label for="newEmail">New Email</label>
+    <input type="email" id="newEmail" name="newEmail" th:field="*{newEmail}" required>
+
+    <label for="oldPassword">Old Password</label>
+    <input type="password" id="oldPassword" name="oldPassword" th:field="*{oldPassword}" required>
+    <label for="newPassword">New Password</label>
+    <input type="password" id="newPassword" name="newPassword" th:field="*{newPassword}" required>
+    <label for="reEnteredNewPassword">Re-entered New Password</label>
+    <input type="password" id="reEnteredNewPassword" name="reEnteredNewPassword" th:field="*{reEnteredNewPassword}"
+           required>
+    <button type="submit">Update</button>
+</form>
+<div th:replace="~{fragments/footer::footer}"></div>
+</body>
+</html>

@@ -27,19 +27,51 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     private final UserRepository userRepo;
     private final PasswordRepository passwordRepo;
     private final IDAO<User, RegisterUserDTO> registerDAO;
+    private final IDAO<User, UpdateUserDataDTO> updateUserDAO;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepo,
                            PasswordRepository passwordRepo,
-                           IDAO<User, RegisterUserDTO> registerDAO) {
+                           IDAO<User, RegisterUserDTO> registerDAO,
+                           IDAO<User, UpdateUserDataDTO> updateUserDAO) {
         this.userRepo = userRepo;
         this.passwordRepo = passwordRepo;
         this.registerDAO = registerDAO;
+        this.updateUserDAO = updateUserDAO;
     }
 
     @Override
-    public Optional<User> updateData(UpdateUserDataDTO userDTO) {
-        return Optional.empty();
+    public Optional<User> updateData(Long id, UpdateUserDataDTO userDTO) {
+        if (!userRepo.existsById(id)) {
+            return Optional.empty();
+        }
+        try {
+            boolean isEmailChanged = userDTO.getNewEmail() != null;
+            boolean isUsernameChanged = userDTO.getNewUsername() != null;
+            User oldUser = userRepo
+                    .findByUserId(id)
+                    .orElseThrow();
+            Password oldPassword = passwordRepo.findByOwner(oldUser)
+                    .orElseThrow();
+            String oldPassHash = oldPassword
+                    .getPasswordHash();
+            boolean isPasswordChanged = userDTO.getOldPassword().equals(oldPassHash)
+                    && userDTO.getNewPassword().equals(userDTO.getReEnteredNewPassword());
+            if (isEmailChanged) {
+                oldUser.setEmail(userDTO.getNewEmail());
+            }
+            if (isUsernameChanged) {
+                oldUser.setUsername(userDTO.getNewUsername());
+            }
+            if (isPasswordChanged) {
+                oldPassword.setPasswordHash(PasswordHasher.hash(userDTO.getNewPassword()));
+                oldPassword.setOwner(oldUser);
+                passwordRepo.save(oldPassword);
+            }
+            return Optional.of(userRepo.save(oldUser));
+        } catch (NoSuchElementException | NoSuchAlgorithmException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -66,11 +98,6 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
             return Optional.empty();
         }
 
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<User> delete(Integer userID) {
         return Optional.empty();
     }
 
