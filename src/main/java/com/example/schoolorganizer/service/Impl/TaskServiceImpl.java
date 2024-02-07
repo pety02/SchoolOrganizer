@@ -24,7 +24,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Optional<Task> getUserTaskByTaskId(Long userIdd, int taskId) {
-        return Optional.empty();
+    public Optional<Task> getUserTaskByTaskId(Long userIdd, Long taskId) {
+        return tasksRepo.getTaskByCreatedByUserIdAndTaskId(userIdd, taskId);
     }
 }

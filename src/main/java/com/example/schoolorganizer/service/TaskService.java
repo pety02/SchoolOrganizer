@@ -7,5 +7,5 @@ import com.example.schoolorganizer.model.Task;
 public interface TaskService {
     List<Task> getAllTasksByUserId(Long id);
 
-    Optional<Task> getUserTaskByTaskId(Long userId, int taskId);
+    Optional<Task> getUserTaskByTaskId(Long userId, Long taskId);
 }

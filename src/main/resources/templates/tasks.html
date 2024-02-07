@@ -4,6 +4,7 @@
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
 <span th:if="${tasks == null || tasks.size() == 0}" style="color: red; font-size: 20px;">No tasks!</span>
+<button type="button" th:action="@{/tasks/create}">New Task</button>
 <table class="table">
     <thead>
     <tr>
@@ -18,8 +19,11 @@
         <td th:text="${task.title}"></td>
         <td th:text="${task.startDate}"></td>
         <td th:text="${task.finishDate}"></td>
-        <td th:if="${task.finished == true}" style="color:green;">Finished</td>
-        <td th:if="${task.finished == false}" style="color:red;">Active</td>
+        <td th:if="${task.isFinished}" style="color:green;">Finished</td>
+        <td th:if="${!task.isFinished}" style="color:red;">Active</td>
+        <td><a th:href="@{/tasks/{id}(id=${task.getTaskId()})}">View</a></td>
+        <td><a th:href="@{/tasks/update/{id}(id=${task.getTaskId()})}">Update</a></td>
+        <td><a th:href="@{/tasks/delete/{id}(id=${task.getTaskId()})}">Delete</a></td>
     </tr>
     </tbody>
 </table>

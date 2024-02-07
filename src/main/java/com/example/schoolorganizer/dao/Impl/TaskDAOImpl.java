@@ -1,16 +1,15 @@
 package com.example.schoolorganizer.dao.Impl;
 
 import com.example.schoolorganizer.dao.IDAO;
-import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Task;
-import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class TaskDAOImpl implements IDAO<Task, TaskDTO> {
     private final IDAO<User, UserDTO> userDAO;
 

@@ -10,7 +10,6 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TaskDTO {
@@ -20,15 +19,12 @@ public class TaskDTO {
     @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The title should starts with capital letter.")
     @Size(min = 1, max = 200, message = "The title length should be between 1 and 200 letters.")
     private String title;
-    @NonNull
     @DateTimeFormat
     private LocalDate startDate;
-    @NonNull
     @DateTimeFormat
     private LocalDate finishDate;
     @Size(min = 0, max = 10000)
     private String description;
-    @NonNull
     @BooleanFlag
     private Boolean isFinished;
     private List<FileDTO> files;
