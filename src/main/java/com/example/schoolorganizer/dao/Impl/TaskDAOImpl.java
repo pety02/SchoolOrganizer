@@ -19,6 +19,9 @@ public class TaskDAOImpl implements IDAO<Task, TaskDTO> {
 
     @Override
     public TaskDTO fromEntityToDTO(Task entity) {
+        if (entity == null) {
+            return null;
+        }
         TaskDTO dto = new TaskDTO();
 
         dto.setTaskId(entity.getTaskId());
@@ -35,6 +38,9 @@ public class TaskDAOImpl implements IDAO<Task, TaskDTO> {
 
     @Override
     public Task fromDTOToEntity(TaskDTO taskDTO) {
+        if (taskDTO == null) {
+            return null;
+        }
         Task entity = new Task();
 
         entity.setTaskId(taskDTO.getTaskId());

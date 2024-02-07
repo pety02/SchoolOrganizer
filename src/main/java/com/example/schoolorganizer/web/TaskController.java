@@ -8,14 +8,22 @@ import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.service.TaskService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 @Controller
+@Slf4j
 public class TaskController {
     private final TaskService taskService;
     private final IDAO<Task, TaskDTO> taskDAO;
@@ -61,18 +69,126 @@ public class TaskController {
         return "redirect:/signin";
     }
 
+    @GetMapping("/tasks/create")
+    public String getCreateNewTaskForm(HttpSession httpSession, Model model) {
+        User loggedUser = (User) httpSession.getAttribute("user");
+        if (loggedUser != null) {
+            model.addAttribute("createdTask", new TaskDTO());
+            return "create-task";
+        }
+
+        return "redirect:/signin";
+    }
+
     @PostMapping("/tasks/create")
-    public String createNewTask() {
-        return "";
+    public String createNewTask(@Valid @ModelAttribute TaskDTO task,
+                                BindingResult binding,
+                                Model model,
+                                RedirectAttributes redirectAttributes,
+                                HttpSession httpSession) {
+        User loggedUser = (User) httpSession.getAttribute("user");
+        if (loggedUser == null) {
+            return "redirect:/signin";
+        }
+        if (binding.hasErrors()) {
+            log.error("Error creating new task: {}", binding.getAllErrors());
+            redirectAttributes.addFlashAttribute("createdTask", task);
+            redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "createdTask", binding);
+            return "redirect:/tasks";
+        }
+        try {
+            TaskDTO createdTask = taskDAO.fromEntityToDTO(taskService.createNewTask(task).orElseThrow());
+            if (createdTask == null) {
+                String errors = "Invalid new task data.";
+                redirectAttributes.addFlashAttribute("errors", errors);
+
+                if (!redirectAttributes.containsAttribute("createdTask")) {
+                    redirectAttributes.addFlashAttribute("createdTask", task);
+                }
+                return "redirect:tasks";
+            }
+            if (!redirectAttributes.containsAttribute("createdTask")) {
+                redirectAttributes.addFlashAttribute("createdTask", task);
+            }
+            model.addAttribute("createdTask", createdTask);
+            return "redirect:/create-task";
+        } catch (Exception e) {
+            if (!redirectAttributes.containsAttribute("createdTask")) {
+                redirectAttributes.addFlashAttribute("createdTask", task);
+            }
+            return "redirect:tasks";
+        }
+    }
+
+    @GetMapping("/tasks/update/{id}")
+    public String getCreateNewTaskForm(@PathVariable Long id,
+                                       HttpSession httpSession,
+                                       Model model) {
+        User loggedUser = (User) httpSession.getAttribute("user");
+        try {
+            if (loggedUser != null) {
+                Task taskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
+                TaskDTO taskDTO = taskDAO.fromEntityToDTO(taskEntity);
+
+                model.addAttribute("createdTask", taskDTO);
+                return "create-task";
+            }
+            return "redirect:/tasks";
+        } catch (NoSuchElementException e) {
+            return "redirect:/tasks";
+        }
     }
 
     @PostMapping("tasks/update/{id}")
-    public String updateTaskById(@PathVariable Long id) {
-        return "";
+    public String updateTaskById(@PathVariable Long id,
+                                 @Valid @ModelAttribute TaskDTO task,
+                                 BindingResult binding,
+                                 Model model,
+                                 RedirectAttributes redirectAttributes,
+                                 HttpSession httpSession) {
+        User loggedUser = (User) httpSession.getAttribute("user");
+        if (loggedUser == null) {
+            return "redirect:/signin";
+        }
+        if (binding.hasErrors()) {
+            log.error("Error updating task: {}", binding.getAllErrors());
+            redirectAttributes.addFlashAttribute("updatedTask", task);
+            redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "updatedTask", binding);
+            return "redirect:/tasks";
+        }
+        try {
+            TaskDTO updatedTask = taskDAO.fromEntityToDTO(taskService.updateTaskById(id, task).orElseThrow());
+            if (updatedTask == null) {
+                String errors = "Invalid updating task data.";
+                redirectAttributes.addFlashAttribute("errors", errors);
+
+                if (!redirectAttributes.containsAttribute("updatedTask")) {
+                    redirectAttributes.addFlashAttribute("updatedTask", task);
+                }
+                return "redirect:tasks";
+            }
+            if (!redirectAttributes.containsAttribute("updatedTask")) {
+                redirectAttributes.addFlashAttribute("updatedTask", task);
+            }
+            model.addAttribute("updatedTask", updatedTask);
+            return "redirect:/update-task";
+        } catch (Exception e) {
+            if (!redirectAttributes.containsAttribute("updatedTask")) {
+                redirectAttributes.addFlashAttribute("updatedTask", task);
+            }
+            return "redirect:tasks";
+        }
     }
 
     @PostMapping("tasks/delete/{id}")
-    public String deleteTaskById(@PathVariable Long id) {
-        return "";
+    public String deleteTaskById(@PathVariable Long id,
+                                 HttpSession httpSession) {
+        User loggedUser = (User) httpSession.getAttribute("user");
+        if (loggedUser == null) {
+            return "redirect:/signin";
+        }
+
+        taskService.deleteTaskById(id);
+        return "redirect:tasks";
     }
 }

@@ -42,6 +42,12 @@ public class Task {
         setCreatedBy(createdBy);
     }
 
+    public Task(Task other) {
+        this(other.getTitle(), other.getStartDate(), other.getFinishDate(),
+                other.getDescription(), other.getFinished(), other.getFiles(),
+                other.getCreatedBy());
+    }
+
     public Long getTaskId() {
         return taskId;
     }

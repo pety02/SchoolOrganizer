@@ -10,11 +10,13 @@ public class UserDAOImpl implements IDAO<User, UserDTO> {
 
     @Override
     public UserDTO fromEntityToDTO(User entity) {
+        // TODO: not implemented
         return null;
     }
 
     @Override
     public User fromDTOToEntity(UserDTO userDTO) {
+        // TODO: not implemented
         return null;
     }
 }
