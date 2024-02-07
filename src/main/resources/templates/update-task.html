@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{fragments/header::header}"></head>
 <body>
-
+<div th:replace="~{fragments/navigation::navigation}"></div>
+<a th:href="@{/tasks}">Back</a>
+<form th:object="${updatedTask}" th:method="POST" th:action="@{/tasks/update/{id}(id=${updatedTask.taskId})}">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" th:field="*{title}">
+    <label for="startDate">Start Date</label>
+    <input type="date" id="startDate" name="startDate" th:value="*{startDate}" required>
+    <label for="finishDate">Finish Date</label>
+    <input type="date" id="finishDate" name="finishDate" th:value="*{finishDate}" required>
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description" th:field="*{description}">
+    <label for="isFinished">Status (finished/active)</label>
+    <input type="checkbox" id="isFinished" name="isFinished" th:field="*{isFinished}">
+    <button type="submit">Save</button>
+    <a th:href="@{/tasks}">Cancel</a>
+</form>
+<div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>

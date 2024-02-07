@@ -54,8 +54,7 @@ public class TaskServiceImpl implements TaskService {
             Task task = taskDAO.fromDTOToEntity(taskDTO);
             if (tasksRepo.existsById(id)) {
                 try {
-                    Task toBeUpdated = new Task(task);
-                    return Optional.of(tasksRepo.save(toBeUpdated));
+                    return Optional.of(tasksRepo.save(task));
                 } catch (NoSuchElementException e) {
                     return Optional.empty();
                 }

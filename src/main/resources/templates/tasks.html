@@ -4,7 +4,7 @@
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
 <span th:if="${tasks == null || tasks.size() == 0}" style="color: red; font-size: 20px;">No tasks!</span>
-<button type="button" th:action="@{/tasks/create}">New Task</button>
+<a th:href="@{/tasks/create}">New Task</a>
 <table class="table">
     <thead>
     <tr>
@@ -21,9 +21,13 @@
         <td th:text="${task.finishDate}"></td>
         <td th:if="${task.isFinished}" style="color:green;">Finished</td>
         <td th:if="${!task.isFinished}" style="color:red;">Active</td>
-        <td><a th:href="@{/tasks/{id}(id=${task.getTaskId()})}">View</a></td>
-        <td><a th:href="@{/tasks/update/{id}(id=${task.getTaskId()})}">Update</a></td>
-        <td><a th:href="@{/tasks/delete/{id}(id=${task.getTaskId()})}">Delete</a></td>
+        <td><a th:href="@{/tasks/{id}(id=${task.taskId})}">View</a></td>
+        <td><a th:href="@{/tasks/update/{id}(id=${task.taskId})}">Update</a></td>
+        <td>
+            <form th:object="${task}" th:action="@{/tasks/delete/{id}(id=${task.taskId})}" th:method="GET">
+                <input type="submit" th:value="Delete">
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

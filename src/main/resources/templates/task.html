@@ -3,6 +3,7 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
+<a th:href="@{/tasks}">Back</a>
 <table class="table" th:object="${currentTask}">
     <tbody>
     <tr>

@@ -14,19 +14,19 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TaskDTO {
     @EqualsAndHashCode.Include
-    @Positive(message = "Id should be positive!")
     private Long taskId;
-    @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The title should starts with capital letter.")
+    @Pattern(regexp = "^[A-Z]([a-z]+\\s?)+$", message = "The title should starts with capital letter.")
     @Size(min = 1, max = 200, message = "The title length should be between 1 and 200 letters.")
     private String title;
     @DateTimeFormat
     private LocalDate startDate;
     @DateTimeFormat
     private LocalDate finishDate;
-    @Size(min = 0, max = 10000)
+    @Pattern(regexp = "^[A-Z]([a-z]+\\s?)+$", message = "The description should starts with capital letter.")
+    @Size(min = 1, max = 1000)
     private String description;
     @BooleanFlag
     private Boolean isFinished;
     private List<FileDTO> files;
-    private UserDTO createdBy;
+    private LoginUserDTO createdBy;
 }
