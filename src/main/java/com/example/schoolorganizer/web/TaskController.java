@@ -2,7 +2,7 @@ package com.example.schoolorganizer.web;
 
 import java.util.*;
 
-import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.Task;
@@ -24,11 +24,11 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
-    private final IDAO<Task, TaskDTO> taskDAO;
-    private final IDAO<User, LoginUserDTO> userDAO;
+    private final IAdapter<Task, TaskDTO> taskDAO;
+    private final IAdapter<User, LoginUserDTO> userDAO;
 
     @Autowired
-    public TaskController(TaskService taskService, IDAO<Task, TaskDTO> taskDAO, IDAO<User, LoginUserDTO> userDAO) {
+    public TaskController(TaskService taskService, IAdapter<Task, TaskDTO> taskDAO, IAdapter<User, LoginUserDTO> userDAO) {
 
         this.taskService = taskService;
         this.taskDAO = taskDAO;

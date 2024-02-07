@@ -1,6 +1,6 @@
 package com.example.schoolorganizer.service.Impl;
 
-import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.dto.UpdateUserDataDTO;
 import com.example.schoolorganizer.model.Password;
@@ -26,14 +26,14 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
 
     private final UserRepository userRepo;
     private final PasswordRepository passwordRepo;
-    private final IDAO<User, RegisterUserDTO> registerDAO;
-    private final IDAO<User, UpdateUserDataDTO> updateUserDAO;
+    private final IAdapter<User, RegisterUserDTO> registerDAO;
+    private final IAdapter<User, UpdateUserDataDTO> updateUserDAO;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepo,
                            PasswordRepository passwordRepo,
-                           IDAO<User, RegisterUserDTO> registerDAO,
-                           IDAO<User, UpdateUserDataDTO> updateUserDAO) {
+                           IAdapter<User, RegisterUserDTO> registerDAO,
+                           IAdapter<User, UpdateUserDataDTO> updateUserDAO) {
         this.userRepo = userRepo;
         this.passwordRepo = passwordRepo;
         this.registerDAO = registerDAO;

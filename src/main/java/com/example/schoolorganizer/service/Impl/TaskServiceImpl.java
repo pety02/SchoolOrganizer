@@ -1,6 +1,6 @@
 package com.example.schoolorganizer.service.Impl;
 
-import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.repository.TaskRepository;
@@ -15,10 +15,10 @@ import java.util.Optional;
 @Component
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository tasksRepo;
-    private final IDAO<Task, TaskDTO> taskDAO;
+    private final IAdapter<Task, TaskDTO> taskDAO;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository tasksRepo, IDAO<Task, TaskDTO> taskDAO) {
+    public TaskServiceImpl(TaskRepository tasksRepo, IAdapter<Task, TaskDTO> taskDAO) {
         this.tasksRepo = tasksRepo;
         this.taskDAO = taskDAO;
     }

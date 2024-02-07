@@ -1,8 +1,8 @@
 package com.example.schoolorganizer.web;
 
-import com.example.schoolorganizer.dao.IDAO;
-import com.example.schoolorganizer.dao.Impl.LoginUserDAOImpl;
-import com.example.schoolorganizer.dao.Impl.RegisterUserDAOImpl;
+import com.example.schoolorganizer.adapter.IAdapter;
+import com.example.schoolorganizer.adapter.Impl.LoginUserAdapterImpl;
+import com.example.schoolorganizer.adapter.Impl.RegisterUserAdapterImpl;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.model.User;
@@ -23,11 +23,11 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 @Slf4j
 public class AuthController {
     private final UserServiceImpl userService;
-    private final IDAO<User, LoginUserDTO> loginDAO;
-    private final IDAO<User, RegisterUserDTO> registerDAO;
+    private final IAdapter<User, LoginUserDTO> loginDAO;
+    private final IAdapter<User, RegisterUserDTO> registerDAO;
 
     @Autowired
-    public AuthController(UserServiceImpl userService, LoginUserDAOImpl loginDAO, RegisterUserDAOImpl registerDAO) {
+    public AuthController(UserServiceImpl userService, LoginUserAdapterImpl loginDAO, RegisterUserAdapterImpl registerDAO) {
         this.userService = userService;
         this.loginDAO = loginDAO;
         this.registerDAO = registerDAO;

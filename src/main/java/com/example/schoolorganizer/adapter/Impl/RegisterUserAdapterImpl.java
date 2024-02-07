@@ -1,13 +1,13 @@
-package com.example.schoolorganizer.dao.Impl;
+package com.example.schoolorganizer.adapter.Impl;
 
-import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.model.Password;
 import com.example.schoolorganizer.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RegisterUserDAOImpl implements IDAO<User, RegisterUserDTO> {
+public class RegisterUserAdapterImpl implements IAdapter<User, RegisterUserDTO> {
 
     @Override
     public RegisterUserDTO fromEntityToDTO(User entity) {

@@ -1,6 +1,6 @@
-package com.example.schoolorganizer.dao.Impl;
+package com.example.schoolorganizer.adapter.Impl;
 
-import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Password;
 import com.example.schoolorganizer.model.User;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.NoSuchElementException;
 
 @Component
-public class UserDAOImpl implements IDAO<User, UserDTO> {
+public class UserAdapterImpl implements IAdapter<User, UserDTO> {
     private final PasswordRepository passwordRepo;
 
-    public UserDAOImpl(PasswordRepository passwordRepo) {
+    public UserAdapterImpl(PasswordRepository passwordRepo) {
         this.passwordRepo = passwordRepo;
     }
 

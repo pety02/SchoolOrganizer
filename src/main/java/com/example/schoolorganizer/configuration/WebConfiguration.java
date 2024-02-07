@@ -11,4 +11,16 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("redirect:/signin");
         registry.addViewController("/error").setViewName("");
     }
+
+    /* TODO: to fix intercepting the cases when someone wants to login with
+        giving him/her a role USER and permit him/her to see his/her profile.
+    */
+    /*
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/signin", "/logout");
+    }
+    */
 }

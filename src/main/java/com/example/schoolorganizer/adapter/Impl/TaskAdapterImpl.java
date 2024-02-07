@@ -1,6 +1,6 @@
-package com.example.schoolorganizer.dao.Impl;
+package com.example.schoolorganizer.adapter.Impl;
 
-import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.Task;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class TaskDAOImpl implements IDAO<Task, TaskDTO> {
-    private final IDAO<User, LoginUserDTO> userDAO;
+public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
+    private final IAdapter<User, LoginUserDTO> userDAO;
 
-    public TaskDAOImpl(IDAO<User, LoginUserDTO> userDAO) {
+    public TaskAdapterImpl(IAdapter<User, LoginUserDTO> userDAO) {
         this.userDAO = userDAO;
     }
 

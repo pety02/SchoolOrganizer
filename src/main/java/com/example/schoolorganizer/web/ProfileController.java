@@ -1,6 +1,6 @@
 package com.example.schoolorganizer.web;
 
-import com.example.schoolorganizer.dao.IDAO;
+import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.UpdateUserDataDTO;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.service.UserService;
@@ -13,23 +13,21 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 @Controller
 @Slf4j
 public class ProfileController {
-    private final IDAO<User, UpdateUserDataDTO> userDAO;
+    private final IAdapter<User, UpdateUserDataDTO> userDAO;
     private final UserService userService;
 
     @Autowired
-    public ProfileController(IDAO<User, UpdateUserDataDTO> userDAO, UserService userService) {
+    public ProfileController(IAdapter<User, UpdateUserDataDTO> userDAO, UserService userService) {
         this.userDAO = userDAO;
         this.userService = userService;
     }
