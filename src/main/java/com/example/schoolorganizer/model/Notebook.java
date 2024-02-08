@@ -20,7 +20,7 @@ public class Notebook {
     private String subject;
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<NotebookSection> sections;
-    @OneToOne
+    @ManyToOne
     private User createdBy;
 
     public Notebook() {

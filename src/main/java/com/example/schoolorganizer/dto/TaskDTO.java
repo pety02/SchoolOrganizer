@@ -22,8 +22,7 @@ public class TaskDTO {
     private LocalDate startDate;
     @DateTimeFormat
     private LocalDate finishDate;
-    @Pattern(regexp = "^[A-Z]([a-z]+\\s?)+$", message = "The description should starts with capital letter.")
-    @Size(min = 1, max = 1000)
+    @Size(min = 1, max = 1000, message = "The description length should be between 1 and 1000 characters.")
     private String description;
     @BooleanFlag
     private Boolean isFinished;

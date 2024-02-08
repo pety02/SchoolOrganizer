@@ -23,10 +23,9 @@ public class NotebookDTO {
     @NonNull
     @DateTimeFormat
     private LocalDate date;
-    @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The title should starts with capital letter.")
+    @Pattern(regexp = "^[A-Z]([a-z]+\\s?)+$", message = "The title should starts with capital letter.")
     @Size(min = 1, max = 100, message = "The title length should be between 1 and 100 letters.")
     private String title;
-    @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The subject name should starts with capital letter.")
     @Size(min = 1, max = 120, message = "The subject name length should be between 1 and 120 letters.")
     private String subject;
     private List<NotebookSectionDTO> sections;

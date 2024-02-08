@@ -52,7 +52,9 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{id}")
-    public String getUserTaskByItsId(HttpSession httpSession, Model model, @PathVariable Long id) {
+    public String getUserTaskByItsId(HttpSession httpSession,
+                                     Model model,
+                                     @PathVariable Long id) {
         User loggedUser = (User) httpSession.getAttribute("user");
         if (loggedUser != null) {
             try {
@@ -109,7 +111,7 @@ public class TaskController {
                 return "redirect:/tasks";
             }
             if (!redirectAttributes.containsAttribute("createdTask")) {
-                redirectAttributes.addFlashAttribute("createdTask", task);
+                redirectAttributes.addFlashAttribute("createdTask", createdTask);
             }
             model.addAttribute("createdTask", createdTask);
             return "redirect:/tasks";
@@ -132,7 +134,6 @@ public class TaskController {
                 TaskDTO taskDTO = taskDAO.fromEntityToDTO(taskEntity);
 
                 model.addAttribute("updatedTask", taskDTO);
-                System.out.println(taskDTO.getStartDate());
                 return "update-task";
             }
             model.addAttribute("updatedTask", new TaskDTO());

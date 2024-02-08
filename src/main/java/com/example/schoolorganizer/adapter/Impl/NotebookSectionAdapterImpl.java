@@ -29,9 +29,9 @@ public class NotebookSectionAdapterImpl implements IAdapter<NotebookSection, Not
         dto.setDate(entity.getDate());
         dto.setTitle(entity.getTitle());
         List<FileDTO> fileDTOS = new ArrayList<>();
-        for (var file : entity.getFiles()) {
+        /*for (var file : entity.getFiles()) {
             fileDTOS.add(fileAdapter.fromEntityToDTO(file));
-        }
+        }*/
         dto.setFiles(fileDTOS);
         dto.setContent(entity.getContent());
         return dto;
