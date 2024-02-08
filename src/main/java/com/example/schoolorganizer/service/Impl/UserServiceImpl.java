@@ -14,6 +14,7 @@ import com.example.schoolorganizer.service.RegisterUserService;
 import com.example.schoolorganizer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
@@ -21,7 +22,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
+@Service
 public class UserServiceImpl implements RegisterUserService, LoginUserService, UserService {
 
     private final UserRepository userRepo;

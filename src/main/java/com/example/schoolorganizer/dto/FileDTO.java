@@ -37,6 +37,4 @@ public class FileDTO {
     @Pattern(regexp = "^.*[^\\w -.].*$", message = "The path contains words separated with \\.")
     @Size(min = 1, max = 1000, message = "The path length should be between 1 and 1000 characters.")
     private String path;
-    private NotebookDTO addedInNotebook;
-    private List<TaskDTO> addedInTask;
 }

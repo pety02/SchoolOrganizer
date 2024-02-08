@@ -3,8 +3,8 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
-<span th:if="${tasks == null || tasks.size() == 0}" style="color: red; font-size: 20px;">No tasks!</span>
 <a th:href="@{/tasks/create}">New Task</a>
+<span th:if="${tasks == null || tasks.size() == 0}" style="color: red; font-size: 20px;">No available tasks!</span>
 <table class="table">
     <thead>
     <tr>
@@ -24,7 +24,7 @@
         <td><a th:href="@{/tasks/{id}(id=${task.taskId})}">View</a></td>
         <td><a th:href="@{/tasks/update/{id}(id=${task.taskId})}">Update</a></td>
         <td>
-            <form th:object="${task}" th:action="@{/tasks/delete/{id}(id=${task.taskId})}" th:method="GET">
+            <form th:object="${task}" th:action="@{/tasks/delete/{id}(id=*{taskId})}" th:method="GET">
                 <input type="submit" th:value="Delete">
             </form>
         </td>

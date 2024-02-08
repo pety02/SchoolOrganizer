@@ -26,5 +26,4 @@ public class NotebookSectionDTO {
     @Size(min = 1, max = 100000, message = "The content should be between 1 and 10000 letters.")
     private String content;
     private List<FileDTO> files;
-    private NotebookDTO addedInNotebook;
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/header::header}"></head>
+<body>
+<div th:replace="~{fragments/navigation::navigation}"></div>
+<span th:if="${notebooks == null || notebooks.size() == 0}"
+      style="color: red; font-size: 20px;">No available notebooks!</span>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col" class="text-info">Creation Date</th>
+        <th scope="col" class="text-info">Title</th>
+        <th scope="col" class="text-info">Subject</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="currentNotebook : ${notebooks}">
+        <td th:text="${currentNotebook.date}"></td>
+        <td th:text="${currentNotebook.title}"></td>
+        <td th:text="${currentNotebook.subject}"></td>
+        <td><a th:href="@{/notebooks/{id}(id=${currentNotebook.notebookId})}">View</a></td>
+        <td><a th:href="@{/notebooks/update/{id}(id=${currentNotebook.notebookId})}">Update</a></td>
+        <td>
+            <form th:object="${currentNotebook}" th:action="@{/notebooks/delete/{id}(id=*{notebookId})}"
+                  th:method="GET">
+                <input type="submit" th:value="Delete">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div th:replace="~{fragments/footer::footer}"></div>
+</body>
+</html>

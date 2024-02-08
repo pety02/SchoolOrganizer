@@ -7,12 +7,13 @@ import com.example.schoolorganizer.repository.TaskRepository;
 import com.example.schoolorganizer.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@Component
+@Service
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository tasksRepo;
     private final IAdapter<Task, TaskDTO> taskDAO;

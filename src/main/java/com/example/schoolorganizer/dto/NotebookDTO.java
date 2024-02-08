@@ -30,5 +30,5 @@ public class NotebookDTO {
     @Size(min = 1, max = 120, message = "The subject name length should be between 1 and 120 letters.")
     private String subject;
     private List<NotebookSectionDTO> sections;
-    private RegisterUserDTO createdBy;
+    private UserDTO createdBy;
 }
