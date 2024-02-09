@@ -7,14 +7,17 @@ import com.example.schoolorganizer.model.NotebookSection;
 import com.example.schoolorganizer.repository.NotebookRepository;
 import com.example.schoolorganizer.repository.NotebookSectionRepository;
 import com.example.schoolorganizer.service.NotebookSectionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class NotebookSectionImpl implements NotebookSectionService {
     private final NotebookSectionRepository notebookSectionRepo;
     private final IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter;
@@ -46,6 +49,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
             created.setAddedInNotebook(notebook);
             return Optional.of(notebookSectionRepo.save(created));
         } catch (NoSuchElementException e) {
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
         }
     }
@@ -60,6 +64,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
             updatedSection.setAddedInNotebook(notebook);
             return Optional.of(notebookSectionRepo.save(updatedSection));
         } catch (NoSuchElementException e) {
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
         }
     }

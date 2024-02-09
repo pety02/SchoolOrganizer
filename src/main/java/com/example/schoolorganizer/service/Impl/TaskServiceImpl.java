@@ -5,15 +5,17 @@ import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.repository.TaskRepository;
 import com.example.schoolorganizer.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository tasksRepo;
     private final IAdapter<Task, TaskDTO> taskDAO;
@@ -57,6 +59,7 @@ public class TaskServiceImpl implements TaskService {
                 try {
                     return Optional.of(tasksRepo.save(task));
                 } catch (NoSuchElementException e) {
+                    log.error(LocalDate.now() + ": " + e.getMessage());
                     return Optional.empty();
                 }
             }

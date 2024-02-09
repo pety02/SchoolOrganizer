@@ -12,33 +12,32 @@ import com.example.schoolorganizer.security.PasswordHasher;
 import com.example.schoolorganizer.service.LoginUserService;
 import com.example.schoolorganizer.service.RegisterUserService;
 import com.example.schoolorganizer.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements RegisterUserService, LoginUserService, UserService {
 
     private final UserRepository userRepo;
     private final PasswordRepository passwordRepo;
     private final IAdapter<User, RegisterUserDTO> registerDAO;
-    private final IAdapter<User, UpdateUserDataDTO> updateUserDAO;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepo,
                            PasswordRepository passwordRepo,
-                           IAdapter<User, RegisterUserDTO> registerDAO,
-                           IAdapter<User, UpdateUserDataDTO> updateUserDAO) {
+                           IAdapter<User, RegisterUserDTO> registerDAO) {
         this.userRepo = userRepo;
         this.passwordRepo = passwordRepo;
         this.registerDAO = registerDAO;
-        this.updateUserDAO = updateUserDAO;
     }
 
     @Override
@@ -71,6 +70,7 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
             }
             return Optional.of(userRepo.save(oldUser));
         } catch (NoSuchElementException | NoSuchAlgorithmException e) {
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
         }
     }
@@ -95,7 +95,8 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
                     }
                 }
             }
-        } catch (NoSuchAlgorithmException | NoSuchElementException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchElementException e) {
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
         }
 

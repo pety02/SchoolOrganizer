@@ -3,18 +3,19 @@ package com.example.schoolorganizer.service.Impl;
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.model.Notebook;
-import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.repository.NotebookRepository;
 import com.example.schoolorganizer.service.NotebookService;
-import org.aspectj.weaver.ast.Not;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class NotebookServiceImpl implements NotebookService {
     private final NotebookRepository notebookRepo;
     private final IAdapter<Notebook, NotebookDTO> notebookAdapter;
@@ -55,6 +56,7 @@ public class NotebookServiceImpl implements NotebookService {
             try {
                 return Optional.of(notebookRepo.save(notebook));
             } catch (NoSuchElementException e) {
+                log.error(LocalDate.now() + ": " + e.getMessage());
                 return Optional.empty();
             }
         }
