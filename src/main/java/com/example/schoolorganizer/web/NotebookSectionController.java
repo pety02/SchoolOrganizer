@@ -3,7 +3,6 @@ package com.example.schoolorganizer.web;
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
-import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.Notebook;
 import com.example.schoolorganizer.model.NotebookSection;
 import com.example.schoolorganizer.model.User;
@@ -42,9 +41,9 @@ public class NotebookSectionController {
     }
 
     @GetMapping("/notebooks/{id}/create")
-    public String getNewNotebookSectionForm(HttpSession httpSession,
-                                            Model model,
-                                            @PathVariable Long id) {
+    public String getNewNotebookSectionForm(@PathVariable Long id,
+                                            HttpSession httpSession,
+                                            Model model) {
         User loggedUser = (User) httpSession.getAttribute("user");
         if (loggedUser != null) {
             model.addAttribute("newNotebookSection", new NotebookSectionDTO());
@@ -72,10 +71,9 @@ public class NotebookSectionController {
             return "redirect:/notebooks/{id}";
         }
         try {
-            createdSectionDTO.setNotebookSectionId(id);
             NotebookSectionDTO createdSection = notebookSectionAdapter.fromEntityToDTO(notebookSectionService.createNewNotebookSectionByNotebookId(id, createdSectionDTO).orElseThrow());
             if (createdSection == null) {
-                String errors = "Invalid new task data.";
+                String errors = "Invalid new notebook section data.";
                 redirectAttributes.addFlashAttribute("errors", errors);
 
                 if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
@@ -89,6 +87,7 @@ public class NotebookSectionController {
             model.addAttribute("createdNotebookSection", createdSection);
             return "redirect:/notebooks/{id}";
         } catch (Exception e) {
+            System.out.println("in catch after creating new notebook section");
             if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
                 redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
             }
@@ -111,10 +110,10 @@ public class NotebookSectionController {
                 model.addAttribute("updatedNotebookSection", updateDTO);
                 return "update-notebook-section";
             }
-            model.addAttribute("updatedNotebookSection", new TaskDTO());
+            model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
             return "redirect:/notebooks/{id}";
         } catch (NoSuchElementException e) {
-            model.addAttribute("updatedNotebookSection", new TaskDTO());
+            model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
             return "redirect:/notebooks/{id}";
         }
     }
@@ -129,14 +128,14 @@ public class NotebookSectionController {
                                         @PathVariable Long sectionId) {
         User loggedUser = (User) httpSession.getAttribute("user");
         if (loggedUser == null) {
-            model.addAttribute("updatedTask", new TaskDTO());
+            model.addAttribute("updatedTask", new NotebookSectionDTO());
             return "redirect:/signin";
         }
         if (binding.hasErrors()) {
             log.error("Error updating notebook section: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "updatedNotebookSection", binding);
-            model.addAttribute("updatedNotebookSection", new TaskDTO());
+            model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
             return "redirect:/notebooks/{id}";
         }
         try {
@@ -152,7 +151,7 @@ public class NotebookSectionController {
                 if (!redirectAttributes.containsAttribute("updatedNotebookSection")) {
                     redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
                 }
-                model.addAttribute("updatedNotebookSection", new TaskDTO());
+                model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
                 return "redirect:/notebooks/{id}";
             }
             if (!redirectAttributes.containsAttribute("updatedNotebookSection")) {
@@ -164,7 +163,7 @@ public class NotebookSectionController {
             if (!redirectAttributes.containsAttribute("updatedNotebookSection")) {
                 redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
             }
-            model.addAttribute("updatedNotebookSection", new TaskDTO());
+            model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
             return "redirect:/notebooks/{id}";
         }
     }

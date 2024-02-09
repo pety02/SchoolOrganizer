@@ -1,7 +1,6 @@
 package com.example.schoolorganizer.service.Impl;
 
 import com.example.schoolorganizer.adapter.IAdapter;
-import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
 import com.example.schoolorganizer.model.Notebook;
 import com.example.schoolorganizer.model.NotebookSection;
@@ -20,14 +19,12 @@ public class NotebookSectionImpl implements NotebookSectionService {
     private final NotebookSectionRepository notebookSectionRepo;
     private final IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter;
     private final NotebookRepository notebookRepo;
-    private final IAdapter<Notebook, NotebookDTO> notebookAdapter;
 
     @Autowired
-    public NotebookSectionImpl(NotebookSectionRepository notebookSectionRepo, IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter, NotebookRepository notebookRepo, IAdapter<Notebook, NotebookDTO> notebookAdapter) {
+    public NotebookSectionImpl(NotebookSectionRepository notebookSectionRepo, IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter, NotebookRepository notebookRepo) {
         this.notebookSectionRepo = notebookSectionRepo;
         this.notebookSectionAdapter = notebookSectionAdapter;
         this.notebookRepo = notebookRepo;
-        this.notebookAdapter = notebookAdapter;
     }
 
     @Override
@@ -44,10 +41,10 @@ public class NotebookSectionImpl implements NotebookSectionService {
     public Optional<NotebookSection> createNewNotebookSectionByNotebookId(Long id, NotebookSectionDTO notebookSectionDTO) {
         try {
             Notebook notebook = notebookRepo.findById(id).orElseThrow();
-            NotebookSection notebookSection = notebookSectionRepo.save(notebookSectionAdapter.fromDTOToEntity(notebookSectionDTO));
-            notebook.getSections().add(notebookSection);
-            notebookRepo.save(notebook);
-            return Optional.of(notebookSection);
+            System.out.println("notebook found");
+            NotebookSection created = notebookSectionAdapter.fromDTOToEntity(notebookSectionDTO);
+            created.setAddedInNotebook(notebook);
+            return Optional.of(notebookSectionRepo.save(created));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }
@@ -59,15 +56,9 @@ public class NotebookSectionImpl implements NotebookSectionService {
             NotebookSection notebookSection = notebookSectionRepo.findById(id).orElseThrow();
             Notebook notebook = notebookSection.getAddedInNotebook();
             NotebookSection updatedSection = notebookSectionAdapter.fromDTOToEntity(notebookSectionDTO);
-            for (var currNotebookSection : notebook.getSections()) {
-                if (currNotebookSection.getNotebookSectionId().equals(updatedSection.getNotebookSectionId())) {
-                    currNotebookSection = updatedSection;
-                    notebookSectionRepo.save(currNotebookSection);
-                    break;
-                }
-            }
-            notebookRepo.save(notebook);
-            return Optional.of(updatedSection);
+            updatedSection.setNotebookSectionId(notebookSection.getNotebookSectionId());
+            updatedSection.setAddedInNotebook(notebook);
+            return Optional.of(notebookSectionRepo.save(updatedSection));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }

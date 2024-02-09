@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{fragments/header::header}"></head>
 <body>
-
+<div th:replace="~{fragments/navigation::navigation}"></div>
+<form th:object="${newNotebookSection}" th:method="POST" th:action="@{/notebooks/{id}/create(id=${id})}">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" th:field="*{title}">
+    <label for="date">Date</label>
+    <input type="date" id="date" name="date" th:field="*{date}" required>
+    <label for="content">Content</label>
+    <input type="text" id="content" name="content" th:field="*{content}">
+    <button type="submit">Save</button>
+    <a th:href="@{/notebooks/{id}(id=${id})}">Cancel</a>
+</form>
+<div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>
