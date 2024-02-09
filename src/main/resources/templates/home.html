@@ -3,9 +3,31 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
-<div th:object="${user}">
-    <p>Welcome, <span th:text="*{name}"></span> <span th:text="*{surname}"></span>!</p>
+<div th:object="${user}" class="snippet-container mt-5">
+    <p style="font-size:2rem;">Welcome, <span th:text="*{name}" style="color:mediumspringgreen"></span> <span
+            th:text="*{surname}" style="color:mediumspringgreen"></span>!</p>
 </div>
+<div class="container" style="font-size:1rem;">
+    <span class="badge italic italic-tag">Brief description:</span>
+    <p>The aim of our web application is to provide you the opportunity to organize your
+        school or academic life.</p>
+    <span class="badge italic italic-tag">What we offer?</span>
+    <ol>
+        <li><span style="color:darkred">Calendar panel</span> with the opportunity to add events on it.</li>
+        <li><span style="color:darkred">Tasks panel</span> with the opportunity to see all your important tasks'
+            information, adding new tasks, editing already added tasks and deleting
+            them.
+        </li>
+        <li><span style="color:darkred">Notebooks panel</span> with the opportunity to view, create, update and delete
+            some
+            notebooks' sections.
+        </li>
+        <Li><span style="color:darkred">Profile panel</span> with the opportunity to edit your personal data.</Li>
+    </ol>
+    <br>
+    <span class="italic">Enjoy with us!</span>
+</div>
+<br>
 <div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>
