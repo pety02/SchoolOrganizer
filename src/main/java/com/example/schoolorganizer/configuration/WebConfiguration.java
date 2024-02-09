@@ -9,7 +9,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("redirect:/signin");
-        registry.addViewController("/error").setViewName("");
+        registry.addViewController("/error").setViewName("error-page");
     }
 
     /* TODO: to fix intercepting the cases when someone wants to login with

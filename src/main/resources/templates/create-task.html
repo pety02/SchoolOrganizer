@@ -10,7 +10,7 @@
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="title" class="visually-hidden">Title</label>
-                <input type="text" class="form-control" id="title" name="title" th:field="*{title}">
+                <input type="text" class="form-control" id="title" name="title" th:field="*{title}" placeholder="Title">
                 <div th:if="${#fields.hasErrors('title')}"
                      class="alert alert-danger alert-dismissible fade show" data-err-alert>
                     <span th:errors="*{title}" class="alert-danger"></span>
@@ -38,7 +38,8 @@
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="description" class="visually-hidden">Description</label>
-                <input type="text" class="form-control" id="description" name="description" th:field="*{description}">
+                <input type="text" class="form-control" id="description" name="description" th:field="*{description}"
+                       placeholder="Description">
                 <div th:if="${#fields.hasErrors('description')}"
                      class="alert alert-danger alert-dismissible fade show" data-err-alert>
                     <span th:errors="*{description}" class="alert-danger"></span>

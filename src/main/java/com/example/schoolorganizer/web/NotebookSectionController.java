@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
@@ -91,6 +92,7 @@ public class NotebookSectionController {
             if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
                 redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
             }
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/notebooks/{id}";
         }
     }
@@ -114,6 +116,7 @@ public class NotebookSectionController {
             return "redirect:/notebooks/{id}";
         } catch (NoSuchElementException e) {
             model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/notebooks/{id}";
         }
     }
@@ -164,6 +167,7 @@ public class NotebookSectionController {
                 redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
             }
             model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/notebooks/{id}";
         }
     }

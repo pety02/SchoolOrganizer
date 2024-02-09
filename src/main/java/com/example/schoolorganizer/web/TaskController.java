@@ -1,5 +1,6 @@
 package com.example.schoolorganizer.web;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import com.example.schoolorganizer.adapter.IAdapter;
@@ -63,7 +64,7 @@ public class TaskController {
                 model.addAttribute("currentTask", currentTaskDTO);
                 return "task";
             } catch (NoSuchElementException e) {
-                System.out.println(e.getMessage());
+                log.error(LocalDate.now() + ": " + e.getMessage());
                 return "redirect:/tasks";
             }
         }
@@ -119,6 +120,7 @@ public class TaskController {
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", task);
             }
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/tasks";
         }
     }
@@ -140,6 +142,7 @@ public class TaskController {
             return "redirect:/tasks";
         } catch (NoSuchElementException e) {
             model.addAttribute("updatedTask", new TaskDTO());
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/tasks";
         }
     }
@@ -187,6 +190,7 @@ public class TaskController {
                 redirectAttributes.addFlashAttribute("updatedTask", task);
             }
             model.addAttribute("updatedTask", new TaskDTO());
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/tasks";
         }
     }

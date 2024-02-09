@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
@@ -70,6 +71,7 @@ public class ProfileController {
             return "redirect:/signin";
         } catch (NoSuchElementException e) {
             model.addAttribute("updateUser", new UpdateUserDataDTO());
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/profile";
         }
     }

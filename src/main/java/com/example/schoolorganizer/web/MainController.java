@@ -44,4 +44,9 @@ public class MainController {
         session.invalidate();
         return "redirect:/signin";
     }
+
+    @GetMapping("/error")
+    public String getErrorPage() {
+        return "error-page";
+    }
 }

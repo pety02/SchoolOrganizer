@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
@@ -76,8 +76,8 @@ public class NotebookController {
                 }
                 model.addAttribute("currentNotebookSections", notebookSectionsDTOs);
                 return "notebook";
-            } catch (NoSuchElementException e) {
-                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                log.error(LocalDate.now() + ": " + e.getMessage());
                 return "redirect:/notebooks";
             }
         }
@@ -133,6 +133,7 @@ public class NotebookController {
             if (!redirectAttributes.containsAttribute("createdNotebook")) {
                 redirectAttributes.addFlashAttribute("createdNotebook", notebookDTO);
             }
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/notebooks";
         }
     }
@@ -152,8 +153,9 @@ public class NotebookController {
             }
             model.addAttribute("updatedNotebook", new NotebookDTO());
             return "redirect:/notebooks";
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             model.addAttribute("updatedNotebook", new NotebookDTO());
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/notebooks";
         }
     }
@@ -201,6 +203,7 @@ public class NotebookController {
                 redirectAttributes.addFlashAttribute("updatedNotebook", notebookDTO);
             }
             model.addAttribute("updatedNotebook", new NotebookDTO());
+            log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/notebooks";
         }
     }
