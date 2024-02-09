@@ -1,6 +1,5 @@
 package com.example.schoolorganizer.model;
 
-import com.example.schoolorganizer.security.PasswordHasher;
 import jakarta.persistence.*;
 
 @Entity

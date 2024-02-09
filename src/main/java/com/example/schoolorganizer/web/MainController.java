@@ -3,12 +3,10 @@ package com.example.schoolorganizer.web;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.model.User;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {

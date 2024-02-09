@@ -1,6 +1,5 @@
 package com.example.schoolorganizer.repository;
 
-import com.example.schoolorganizer.model.Password;
 import com.example.schoolorganizer.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -13,12 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotebookAdapterImpl implements IAdapter<Notebook, NotebookDTO> {
     private final UserAdapterImpl userAdapter;
-    private final NotebookSectionAdapterImpl notebookSectionAdapter;
 
     @Autowired
-    public NotebookAdapterImpl(UserAdapterImpl userAdapter, NotebookSectionAdapterImpl notebookSectionAdapter) {
+    public NotebookAdapterImpl(UserAdapterImpl userAdapter) {
         this.userAdapter = userAdapter;
-        this.notebookSectionAdapter = notebookSectionAdapter;
     }
 
     @Override

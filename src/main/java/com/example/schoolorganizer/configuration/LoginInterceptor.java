@@ -2,12 +2,13 @@ package com.example.schoolorganizer.configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+    public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler)
             throws Exception {
         if (!request.isUserInRole("STUDENT")) {
             response.sendRedirect("/signin");
@@ -17,12 +18,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response,
-                           Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                           @NonNull Object handler, ModelAndView modelAndView) {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
+    public void afterCompletion(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, Exception ex) {
     }
 }

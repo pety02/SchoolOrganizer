@@ -21,9 +21,9 @@ public class UserDTO {
     private String surname;
     @Email(message = "The email should be valid.")
     private String email;
-    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
     private String username;
-    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The password should contains lowercase and uppercase.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The password should contains lowercase and uppercase.")
     private String password;
     private List<TaskDTO> tasks;
     private List<NotebookDTO> notebooks;

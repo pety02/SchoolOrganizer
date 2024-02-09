@@ -7,17 +7,10 @@ import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
 import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.model.NotebookSection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class NotebookSectionAdapterImpl implements IAdapter<NotebookSection, NotebookSectionDTO> {
-    private final FileAdapterImpl fileAdapter;
-
-    @Autowired
-    public NotebookSectionAdapterImpl(FileAdapterImpl fileAdapter) {
-        this.fileAdapter = fileAdapter;
-    }
 
     @Override
     public NotebookSectionDTO fromEntityToDTO(NotebookSection entity) {

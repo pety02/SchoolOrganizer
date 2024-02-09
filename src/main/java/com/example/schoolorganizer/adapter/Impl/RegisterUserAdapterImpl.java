@@ -2,7 +2,6 @@ package com.example.schoolorganizer.adapter.Impl;
 
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
-import com.example.schoolorganizer.model.Password;
 import com.example.schoolorganizer.model.User;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +34,6 @@ public class RegisterUserAdapterImpl implements IAdapter<User, RegisterUserDTO> 
         entity.setSurname(registerUserDTO.getSurname());
         entity.setEmail(registerUserDTO.getEmail());
         entity.setUsername(registerUserDTO.getUsername());
-        Password p = new Password();
-        p.setPasswordHash(registerUserDTO.getPassword());
 
         return entity;
     }

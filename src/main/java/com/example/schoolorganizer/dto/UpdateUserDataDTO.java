@@ -20,18 +20,18 @@ public class UpdateUserDataDTO {
     private String newEmail;
     @NonNull
     @NotBlank(message = "The username is required.")
-    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
     @Size(min = 8, max = 150, message = "The username length should be between 8 and 150 characters.")
     private String oldUsername;
-    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The username should contains lowercase, uppercase and digits.")
     private String newUsername;
     @NonNull
     @NotBlank(message = "The password is required.")
-    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The password should contains lowercase and uppercase.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The password should contains lowercase and uppercase.")
     @Size(min = 8, max = 150, message = "The password length should be between 8 and 150 characters.")
     private String oldPassword;
-    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The re-entered password should contains lowercase and uppercase.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The re-entered password should contains lowercase and uppercase.")
     private String newPassword;
-    @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The re-entered password should contains lowercase and uppercase.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The re-entered password should contains lowercase and uppercase.")
     private String reEnteredNewPassword;
 }
