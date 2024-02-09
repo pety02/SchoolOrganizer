@@ -3,26 +3,101 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
-<form th:object="${updateUser}" th:method="POST" th:action="@{/profile/update}">
-    <label for="oldUsername">Old Username</label>
-    <input type="text" id="oldUsername" name="oldUsername" th:field="*{oldUsername}" required>
-    <label for="newUsername">New Username</label>
-    <input type="text" id="newUsername" name="newUsername" th:field="*{newUsername}" required>
+<div class="container mt-5" style="font-size:1rem;">
+    <form th:object="${updateUser}" th:method="POST" th:action="@{/profile/update}">
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="oldUsername" class="visually-hidden">Old Username</label>
+                <input type="text" class="form-control" id="oldUsername" name="oldUsername" th:field="*{oldUsername}"
+                       readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="newUsername" class="visually-hidden">New Username</label>
+                <input type="text" class="form-control" id="newUsername" name="newUsername" th:field="*{newUsername}"
+                       placeholder="New Username" required>
+                <div th:if="${#fields.hasErrors('newUsername')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{newUsername}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="oldEmail" class="visually-hidden">Old Email</label>
+                <input type="email" class="form-control" id="oldEmail" name="oldEmail" th:field="*{oldEmail}"
+                       readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="newEmail" class="visually-hidden">New Email</label>
+                <input type="email" class="form-control" id="newEmail" name="newEmail" th:field="*{newEmail}"
+                       placeholder="New Email" required>
+                <div th:if="${#fields.hasErrors('newEmail')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{newEmail}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="oldPassword" class="visually-hidden">Old Password</label>
+                <input type="password" class="form-control" id="oldPassword" name="oldPassword"
+                       th:field="*{oldPassword}" placeholder="Old Password" required>
+                <div th:if="${#fields.hasErrors('oldPassword')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{oldPassword}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="newPassword" class="visually-hidden">New Password</label>
+                <input type="password" class="form-control" id="newPassword" name="newPassword"
+                       th:field="*{newPassword}" placeholder="New Password" required>
+                <div th:if="${#fields.hasErrors('newPassword')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{newPassword}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="reEnteredNewPassword" class="visually-hidden">Re-entered New Password</label>
+                <input type="password" class="form-control" id="reEnteredNewPassword" name="reEnteredNewPassword"
+                       th:field="*{reEnteredNewPassword}" placeholder="Re-Entered New Password"
+                       required>
+                <div th:if="${#fields.hasErrors('reEnteredNewPassword')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{reEnteredNewPassword}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a th:href="@{/home}" class="btn btn-light">Cancel</a>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
 
-    <label for="oldEmail">Old Email</label>
-    <input type="email" id="oldEmail" name="oldEmail" th:field="*{oldEmail}" required>
-    <label for="newEmail">New Email</label>
-    <input type="email" id="newEmail" name="newEmail" th:field="*{newEmail}" required>
-
-    <label for="oldPassword">Old Password</label>
-    <input type="password" id="oldPassword" name="oldPassword" th:field="*{oldPassword}" required>
-    <label for="newPassword">New Password</label>
-    <input type="password" id="newPassword" name="newPassword" th:field="*{newPassword}" required>
-    <label for="reEnteredNewPassword">Re-entered New Password</label>
-    <input type="password" id="reEnteredNewPassword" name="reEnteredNewPassword" th:field="*{reEnteredNewPassword}"
-           required>
-    <button type="submit">Update</button>
-</form>
+    });
+    const btn = document.querySelector("#btn");
+    btn.addEventListener("submit", (e) => {
+        e.preventDefault();
+    })
+    const btnCloseErrs = document.querySelector("#btn-close-errs")
+    btnCloseErrs.addEventListener("click", () => {
+        const alerts = document.querySelectorAll("[data-err-alert]");
+        alerts.forEach((a) => {
+            new bootstrap.Alert(a).close();
+        })
+    })
+</script>
 <div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>
