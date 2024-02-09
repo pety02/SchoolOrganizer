@@ -2,34 +2,36 @@
 <html lang="en">
 <head th:replace="~{fragments/header::header}"></head>
 <body>
-<div th:replace="~{fragments/header::header}"></div>
-<a th:href="@{/notebooks}">Back</a>
-<a th:href="@{/notebooks/{id}/create(id=${id})}">New Section</a>
-<table class="table" th:each="section : ${currentNotebookSections}">
-    <tbody>
-    <tr>
-        <th scope="row" style="color:orange;">Date</th>
-        <td th:text="*{section.date}"></td>
-    </tr>
-    <tr>
-        <th scope="row" style="color:orange;">Title</th>
-        <td th:text="*{section.title}"></td>
-    </tr>
-    <tr>
-        <th scope="row" style="color:orange;">Content</th>
-        <td th:text="*{section.content}"></td>
-    </tr>
-    <tr>
-        <td>
-            <a th:href="@{/notebooks/{id}/update/{sectionId}(id=${id}, sectionId=${section.notebookSectionId})}">Update</a>
-        </td>
-        <td>
-            <a th:href="@{/notebooks/{id}/delete/{sectionId}(id=${id}, sectionId=${section.notebookSectionId})}">Delete</a>
-        </td>
-    </tr>
-    <tr></tr>
-    </tbody>
-</table>
+<div th:replace="~{fragments/navigation::navigation}"></div>
+<div class="container mt-5" style="font-size:1rem;">
+    <a th:href="@{/notebooks}">Back</a>
+    <a th:href="@{/notebooks/{id}/create(id=${id})}">New Section</a>
+    <table class="table" th:each="section : ${currentNotebookSections}">
+        <tbody>
+        <tr>
+            <th scope="row" style="color:orange;">Date</th>
+            <td th:text="*{section.date}"></td>
+        </tr>
+        <tr>
+            <th scope="row" style="color:orange;">Title</th>
+            <td th:text="*{section.title}"></td>
+        </tr>
+        <tr>
+            <th scope="row" style="color:orange;">Content</th>
+            <td th:text="*{section.content}"></td>
+        </tr>
+        <tr>
+            <td>
+                <a th:href="@{/notebooks/{id}/update/{sectionId}(id=${id}, sectionId=${section.notebookSectionId})}">Update</a>
+            </td>
+            <td>
+                <a th:href="@{/notebooks/{id}/delete/{sectionId}(id=${id}, sectionId=${section.notebookSectionId})}">Delete</a>
+            </td>
+        </tr>
+        <tr></tr>
+        </tbody>
+    </table>
+</div>
 <div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>

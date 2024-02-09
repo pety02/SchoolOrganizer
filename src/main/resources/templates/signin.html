@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body xmlns:th="http://www.thymeleaf.org">
 <form class="container mt-5" th:method="POST" th:action="@{/signin}" th:object="${user}">
-    <h2>Sign In</h2>
+    <h2 style="font-size:2rem;color:lightgreen;">Sign In</h2>
     <div class="form-row row align-items-center">
         <div class="form-group col-md-6">
             <label for="username" class="visually-hidden">Username</label>
@@ -43,6 +43,7 @@
     <a href="/signup" class="btn btn-light">Sign Up</a>
     <button type="submit" class="btn btn-primary" id="btn">Sign In</button>
 </form>
+<br>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
 

@@ -3,17 +3,19 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
-<a th:href="@{/notebooks}">Back</a>
-<form th:object="${createdNotebook}" th:method="POST" th:action="@{/notebooks/create}">
-    <label for="title">Title</label>
-    <input type="text" id="title" name="title" th:field="*{title}">
-    <label for="date">Date</label>
-    <input type="date" id="date" name="date" th:field="*{date}" required>
-    <label for="subject">Subject</label>
-    <input type="text" id="subject" name="subject" th:field="*{subject}">
-    <button type="submit">Save</button>
-    <a th:href="@{/notebooks}">Cancel</a>
-</form>
+<div class="container mt-5" style="font-size:1rem;">
+    <a th:href="@{/notebooks}">Back</a>
+    <form th:object="${createdNotebook}" th:method="POST" th:action="@{/notebooks/create}">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" th:field="*{title}">
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" th:field="*{date}" required>
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" th:field="*{subject}">
+        <button type="submit">Save</button>
+        <a th:href="@{/notebooks}">Cancel</a>
+    </form>
+</div>
 <div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>

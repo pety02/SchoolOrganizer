@@ -4,7 +4,7 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body xmlns:th="http://www.thymeleaf.org">
 <form class="container mt-5" th:method="POST" th:action="@{/signup}" th:object="${user}">
-    <h2>Sign Up</h2>
+    <h2 style="font-size:2rem;color:lightgreen;">Sign Up</h2>
     <div class="form-row row align-items-center">
         <div class="form-group col-md-6">
             <label for="name" class="visually-hidden">Name</label>
@@ -85,6 +85,7 @@
     <button type="submit" class="btn btn-primary" id="btn">Sign Up</button>
     <a href="/signin" class="btn btn-light">Sign In</a>
 </form>
+<br>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.querySelector("#btn");

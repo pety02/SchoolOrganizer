@@ -3,32 +3,34 @@
 <head th:replace="~{fragments/header::header}"></head>
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
-<a th:href="@{/tasks}">Back</a>
-<table class="table" th:object="${currentTask}">
-    <tbody>
-    <tr>
-        <th scope="row" style="color:orange;">Title</th>
-        <td th:text="*{title}"></td>
-    </tr>
-    <tr>
-        <th scope="row" style="color:orange;">Start Date</th>
-        <td th:text="*{startDate}"></td>
-    </tr>
-    <tr>
-        <th scope="row" style="color:orange;">Finish Date</th>
-        <td th:text="*{finishDate}"></td>
-    </tr>
-    <tr>
-        <th scope="row" style="color:orange;">Description</th>
-        <td th:text="*{description}"></td>
-    </tr>
-    <tr>
-        <th scope="row" style="color:orange;">Status</th>
-        <td th:if="${currentTask.isFinished == true}" th:text="Finished" style="color:green;"></td>
-        <td th:if="${currentTask.isFinished == false}" th:text="Active" style="color:red;"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="container mt-5" style="font-size:1rem;">
+    <a th:href="@{/tasks}">Back</a>
+    <table class="table" th:object="${currentTask}">
+        <tbody>
+        <tr>
+            <th scope="row" style="color:orange;">Title</th>
+            <td th:text="*{title}"></td>
+        </tr>
+        <tr>
+            <th scope="row" style="color:orange;">Start Date</th>
+            <td th:text="*{startDate}"></td>
+        </tr>
+        <tr>
+            <th scope="row" style="color:orange;">Finish Date</th>
+            <td th:text="*{finishDate}"></td>
+        </tr>
+        <tr>
+            <th scope="row" style="color:orange;">Description</th>
+            <td th:text="*{description}"></td>
+        </tr>
+        <tr>
+            <th scope="row" style="color:orange;">Status</th>
+            <td th:if="${currentTask.isFinished == true}" th:text="Finished" style="color:green;"></td>
+            <td th:if="${currentTask.isFinished == false}" th:text="Active" style="color:red;"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 <div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>
