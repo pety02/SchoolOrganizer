@@ -7,16 +7,61 @@
     <a th:href="@{/notebooks}">Back</a>
     <form th:object="${updatedNotebook}" th:method="POST"
           th:action="@{/notebooks/update/{id}(id=${updatedNotebook.notebookId})}">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title" th:field="*{title}">
-        <label for="date">Date</label>
-        <input type="date" id="date" name="date" th:value="*{date}" required>
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" name="subject" th:field="*{subject}">
-        <button type="submit">Save</button>
-        <a th:href="@{/notebooks}">Cancel</a>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="title" class="visually-hidden">Title</label>
+                <input type="text" class="form-control" id="title" name="title" th:field="*{title}" placeholder="Title">
+                <div th:if="${#fields.hasErrors('title')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{title}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="date" class="visually-hidden">Date</label>
+                <input type="date" class="form-control" id="date" name="date" th:value="*{date}" required>
+                <div th:if="${#fields.hasErrors('date')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{date}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="subject" class="visually-hidden">Subject</label>
+                <input type="text" class="form-control" id="subject" name="subject" th:field="*{subject}"
+                       placeholder="Subject">
+                <div th:if="${#fields.hasErrors('subject')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{subject}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/notebooks}" class="btn btn-light">Cancel</a>
     </form>
 </div>
+<br>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    });
+    const btn = document.querySelector("#btn");
+    btn.addEventListener("submit", (e) => {
+        e.preventDefault();
+    })
+    const btnCloseErrs = document.querySelector("#btn-close-errs")
+    btnCloseErrs.addEventListener("click", () => {
+        const alerts = document.querySelectorAll("[data-err-alert]");
+        alerts.forEach((a) => {
+            new bootstrap.Alert(a).close();
+        })
+    })
+</script>
 <div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>
