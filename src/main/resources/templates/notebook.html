@@ -4,6 +4,7 @@
 <body>
 <div th:replace="~{fragments/header::header}"></div>
 <a th:href="@{/notebooks}">Back</a>
+<a th:href="@{/notebooks/{id}(id=${id})/create}">New Section</a>
 <table class="table" th:each="section : ${currentNotebookSections}">
     <tbody>
     <tr>
@@ -17,6 +18,14 @@
     <tr>
         <th scope="row" style="color:orange;">Content</th>
         <td th:text="*{section.content}"></td>
+    </tr>
+    <tr>
+        <td>
+            <a th:href="@{/notebooks/{id}(id=${id})/update/{sectionId}(sectionId=${section.notebookSectionId})}">Update</a>
+        </td>
+        <td>
+            <a th:href="@{/notebooks/{id}(id=${id})/delete/{sectionId}(sectionId=${section.notebookSectionId})}">Delete</a>
+        </td>
     </tr>
     <tr></tr>
     </tbody>

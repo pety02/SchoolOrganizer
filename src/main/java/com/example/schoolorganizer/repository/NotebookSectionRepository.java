@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NotebookSectionRepository extends JpaRepository<NotebookSection, Long> {
     List<NotebookSection> findAllByAddedInNotebookNotebookId(Long id);
+
+    Optional<NotebookSection> findByAddedInNotebook_NotebookIdAndNotebookSectionId(Long notebookId, Long sectionId);
 }

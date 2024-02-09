@@ -124,7 +124,7 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/update/{id}")
-    public String getCreateNewTaskForm(@PathVariable Long id,
+    public String getUpdateNewTaskForm(@PathVariable Long id,
                                        HttpSession httpSession,
                                        Model model) {
         User loggedUser = (User) httpSession.getAttribute("user");
