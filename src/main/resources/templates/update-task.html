@@ -4,22 +4,77 @@
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
 <div class="container mt-5" style="font-size:1rem;">
-    <a th:href="@{/tasks}">Back</a>
+    <a th:href="@{/tasks}" class="btn btn-light">Back</a>
+    <br>
     <form th:object="${updatedTask}" th:method="POST" th:action="@{/tasks/update/{id}(id=${updatedTask.taskId})}">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title" th:field="*{title}">
-        <label for="startDate">Start Date</label>
-        <input type="date" id="startDate" name="startDate" th:value="*{startDate}" required>
-        <label for="finishDate">Finish Date</label>
-        <input type="date" id="finishDate" name="finishDate" th:value="*{finishDate}" required>
-        <label for="description">Description</label>
-        <input type="text" id="description" name="description" th:field="*{description}">
-        <label for="isFinished">Status (finished/active)</label>
-        <input type="checkbox" id="isFinished" name="isFinished" th:field="*{isFinished}">
-        <button type="submit">Save</button>
-        <a th:href="@{/tasks}">Cancel</a>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="title" class="visually-hidden">Title</label>
+                <input type="text" class="form-control" id="title" name="title" th:field="*{title}" placeholder="Title">
+                <div th:if="${#fields.hasErrors('title')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{title}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="startDate" class="visually-hidden">Start Date</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" th:value="*{startDate}"
+                       required>
+            </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="finishDate" class="visually-hidden">Finish Date</label>
+                <input type="date" class="form-control" id="finishDate" name="finishDate" th:value="*{finishDate}"
+                       required>
+            </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="description" class="visually-hidden">Description</label>
+                <input type="text" class="form-control" id="description" name="description" th:field="*{description}"
+                       placeholder="Description">
+                <div th:if="${#fields.hasErrors('description')}"
+                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
+                    <span th:errors="*{description}" class="alert-danger"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="isFinished">Status (finished/active)</label>
+                <input type="checkbox" id="isFinished" name="isFinished" th:field="*{isFinished}">
+            </div>
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-light" th:href="@{/tasks}">Cancel</a>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    });
+    const btn = document.querySelector("#btn");
+    btn.addEventListener("submit", (e) => {
+        e.preventDefault();
+    })
+    const btnCloseErrs = document.querySelector("#btn-close-errs")
+    btnCloseErrs.addEventListener("click", () => {
+        const alerts = document.querySelectorAll("[data-err-alert]");
+        alerts.forEach((a) => {
+            new bootstrap.Alert(a).close();
+        })
+    })
+</script>
 <div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>

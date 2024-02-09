@@ -4,7 +4,8 @@
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
 <div class="container mt-5" style="font-size:1rem;">
-    <a th:href="@{/notebooks}">Back</a>
+    <a th:href="@{/notebooks}" class="btn btn-light">Back</a>
+    <br>
     <form th:object="${updatedNotebook}" th:method="POST"
           th:action="@{/notebooks/update/{id}(id=${updatedNotebook.notebookId})}">
         <div class="form-row row align-items-center">
@@ -18,17 +19,14 @@
                 </div>
             </div>
         </div>
+        <br>
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="date" class="visually-hidden">Date</label>
                 <input type="date" class="form-control" id="date" name="date" th:value="*{date}" required>
-                <div th:if="${#fields.hasErrors('date')}"
-                     class="alert alert-danger alert-dismissible fade show" data-err-alert>
-                    <span th:errors="*{date}" class="alert-danger"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
             </div>
         </div>
+        <br>
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="subject" class="visually-hidden">Subject</label>
@@ -41,6 +39,7 @@
                 </div>
             </div>
         </div>
+        <br>
         <button type="submit" class="btn btn-primary">Save</button>
         <a th:href="@{/notebooks}" class="btn btn-light">Cancel</a>
     </form>

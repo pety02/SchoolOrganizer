@@ -4,7 +4,8 @@
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
 <div class="container mt-5" style="font-size:1rem;">
-    <a th:href="@{/tasks}">Back</a>
+    <a th:href="@{/tasks}" class="btn btn-light">Back</a>
+    <br>
     <table class="table" th:object="${currentTask}">
         <tbody>
         <tr>

@@ -4,7 +4,8 @@
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
 <div class="container mt-5" style="font-size:1rem;">
-    <a th:href="@{/notebooks/create}">New Notebook</a>
+    <a th:href="@{/notebooks/create}" class="btn btn-light">New Notebook</a>
+    <br>
     <span th:if="${notebooks == null || notebooks.size() == 0}"
           style="color: red; font-size: 20px;">No available notebooks!</span>
     <table class="table">
@@ -20,12 +21,13 @@
             <td th:text="${currentNotebook.date}"></td>
             <td th:text="${currentNotebook.title}"></td>
             <td th:text="${currentNotebook.subject}"></td>
-            <td><a th:href="@{/notebooks/{id}(id=${currentNotebook.notebookId})}">View</a></td>
-            <td><a th:href="@{/notebooks/update/{id}(id=${currentNotebook.notebookId})}">Update</a></td>
+            <td><a th:href="@{/notebooks/{id}(id=${currentNotebook.notebookId})}" class="btn btn-primary">View</a></td>
+            <td><a th:href="@{/notebooks/update/{id}(id=${currentNotebook.notebookId})}"
+                   class="btn btn-success">Update</a></td>
             <td>
                 <form th:object="${currentNotebook}" th:action="@{/notebooks/delete/{id}(id=*{notebookId})}"
                       th:method="GET">
-                    <input type="submit" th:value="Delete">
+                    <input type="submit" th:value="Delete" class="btn btn-danger">
                 </form>
             </td>
         </tr>

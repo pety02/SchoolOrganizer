@@ -4,8 +4,9 @@
 <body>
 <div th:replace="~{fragments/navigation::navigation}"></div>
 <div class="container mt-5" style="font-size:1rem;">
-    <a th:href="@{/notebooks}">Back</a>
-    <a th:href="@{/notebooks/{id}/create(id=${id})}">New Section</a>
+    <a th:href="@{/notebooks}" class="btn btn-light">Back</a>
+    <a th:href="@{/notebooks/{id}/create(id=${id})}" class="btn btn-light">New Section</a>
+    <br>
     <table class="table" th:each="section : ${currentNotebookSections}">
         <tbody>
         <tr>
