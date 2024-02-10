@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
 import com.example.schoolorganizer.model.NotebookSection;
+import jakarta.transaction.Transactional;
 
 public interface NotebookSectionService {
     List<NotebookSection> getAllNotebookSectionsByNotebookId(Long id);

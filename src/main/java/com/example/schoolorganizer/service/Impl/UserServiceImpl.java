@@ -12,6 +12,7 @@ import com.example.schoolorganizer.security.PasswordHasher;
 import com.example.schoolorganizer.service.LoginUserService;
 import com.example.schoolorganizer.service.RegisterUserService;
 import com.example.schoolorganizer.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,35 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
         this.registerDAO = registerDAO;
     }
 
+    @Override
+    public Optional<User> getUserById(Long id) {
+        return userRepo.findByUserId(id);
+    }
+
+    @Override
+    public Optional<User> login(String username, String hashedPassword) {
+        String hash;
+        try {
+            hash = PasswordHasher.hash(hashedPassword);
+            if (userRepo.existsByUsername(username)) {
+                User loggedIn = userRepo.findByUsername(username).orElseThrow();
+                Collection<Password> passwords = passwordRepo.findByPasswordHash(hash);
+                Password pass = passwordRepo.findByOwner(loggedIn).orElse(null);
+                for (var p : passwords) {
+                    if (pass != null && p.getPasswordHash().equals(pass.getPasswordHash())) {
+                        return Optional.of(loggedIn);
+                    }
+                }
+            }
+        } catch (NoSuchAlgorithmException | NoSuchElementException e) {
+            log.error(LocalDate.now() + ": " + e.getMessage());
+            return Optional.empty();
+        }
+
+        return Optional.empty();
+    }
+
+    @Transactional
     @Override
     public Optional<User> updateData(Long id, UpdateUserDataDTO userDTO) {
         if (!userRepo.existsById(id)) {
@@ -75,34 +105,7 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
         }
     }
 
-    @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepo.findByUserId(id);
-    }
-
-    @Override
-    public Optional<User> login(String username, String hashedPassword) {
-        String hash;
-        try {
-            hash = PasswordHasher.hash(hashedPassword);
-            if (userRepo.existsByUsername(username)) {
-                User loggedIn = userRepo.findByUsername(username).orElseThrow();
-                Collection<Password> passwords = passwordRepo.findByPasswordHash(hash);
-                Password pass = passwordRepo.findByOwner(loggedIn).orElse(null);
-                for (var p : passwords) {
-                    if (pass != null && p.getPasswordHash().equals(pass.getPasswordHash())) {
-                        return Optional.of(loggedIn);
-                    }
-                }
-            }
-        } catch (NoSuchAlgorithmException | NoSuchElementException e) {
-            log.error(LocalDate.now() + ": " + e.getMessage());
-            return Optional.empty();
-        }
-
-        return Optional.empty();
-    }
-
+    @Transactional
     @Override
     public Optional<User> register(RegisterUserDTO userDTO) {
         if (!userRepo.existsByUsername(userDTO.getUsername()) && !userRepo.existsByEmail(userDTO.getEmail())) {

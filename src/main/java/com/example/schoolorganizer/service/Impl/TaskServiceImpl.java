@@ -5,6 +5,7 @@ import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.repository.TaskRepository;
 import com.example.schoolorganizer.service.TaskService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class TaskServiceImpl implements TaskService {
         return tasksRepo.getTaskByCreatedByUserIdAndTaskId(userId, taskId);
     }
 
+    @Transactional
     @Override
     public Optional<Task> createNewTask(TaskDTO taskDTO) {
         if (taskDTO == null) {
@@ -48,6 +50,7 @@ public class TaskServiceImpl implements TaskService {
         return Optional.empty();
     }
 
+    @Transactional
     @Override
     public Optional<Task> updateTaskById(Long id, TaskDTO taskDTO) {
         if (taskDTO == null) {
@@ -67,6 +70,7 @@ public class TaskServiceImpl implements TaskService {
         return Optional.empty();
     }
 
+    @Transactional
     @Override
     public void deleteTaskById(Long id) {
         tasksRepo.deleteById(id);

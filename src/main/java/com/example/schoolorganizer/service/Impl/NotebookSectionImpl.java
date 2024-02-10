@@ -7,6 +7,7 @@ import com.example.schoolorganizer.model.NotebookSection;
 import com.example.schoolorganizer.repository.NotebookRepository;
 import com.example.schoolorganizer.repository.NotebookSectionRepository;
 import com.example.schoolorganizer.service.NotebookSectionService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
         return notebookSectionRepo.findByAddedInNotebook_NotebookIdAndNotebookSectionId(notebookId, sectionId);
     }
 
+    @Transactional
     @Override
     public Optional<NotebookSection> createNewNotebookSectionByNotebookId(Long id, NotebookSectionDTO notebookSectionDTO) {
         try {
@@ -54,6 +56,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
         }
     }
 
+    @Transactional
     @Override
     public Optional<NotebookSection> updateNotebookSectionById(Long id, NotebookSectionDTO notebookSectionDTO) {
         try {
@@ -69,6 +72,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
         }
     }
 
+    @Transactional
     @Override
     public void deleteNotebookSectionById(Long id) {
         notebookSectionRepo.deleteById(id);

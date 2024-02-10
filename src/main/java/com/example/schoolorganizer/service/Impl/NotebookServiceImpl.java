@@ -5,6 +5,7 @@ import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.model.Notebook;
 import com.example.schoolorganizer.repository.NotebookRepository;
 import com.example.schoolorganizer.service.NotebookService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class NotebookServiceImpl implements NotebookService {
         return notebookRepo.findByCreatedByUserIdAndNotebookId(userId, notebookId);
     }
 
+    @Transactional
     @Override
     public Optional<Notebook> createNewNotebook(NotebookDTO notebookDTO) {
         if (notebookDTO == null) {
@@ -46,6 +48,7 @@ public class NotebookServiceImpl implements NotebookService {
         return Optional.of(notebookRepo.save(notebook));
     }
 
+    @Transactional
     @Override
     public Optional<Notebook> updateNotebookById(Long id, NotebookDTO notebookDTO) {
         if (notebookDTO == null) {
@@ -63,6 +66,7 @@ public class NotebookServiceImpl implements NotebookService {
         return Optional.empty();
     }
 
+    @Transactional
     @Override
     public void deleteNotebookById(Long id) {
         notebookRepo.deleteById(id);
