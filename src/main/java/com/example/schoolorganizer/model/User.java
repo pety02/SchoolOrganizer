@@ -25,6 +25,9 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<User> friends;
 
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<CalendarEvent> events;
+
     /* TODO: to implement a method that insert definite User (person Y)
         to friendsList of other User (person X) and send him/her request
         for friendship. If he/she (person Y) disagree it, the first User (person X)

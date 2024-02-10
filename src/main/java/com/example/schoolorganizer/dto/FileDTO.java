@@ -8,14 +8,12 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class FileDTO {
     @EqualsAndHashCode.Include
     @Positive(message = "Id should be positive!")
     private Long fileId;
-    @NonNull
     @DateTimeFormat
     private LocalDate date;
     @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The name should starts with capital letter.")

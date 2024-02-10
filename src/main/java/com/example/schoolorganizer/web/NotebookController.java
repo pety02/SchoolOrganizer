@@ -110,19 +110,17 @@ public class NotebookController {
             log.error("Error creating new notebook: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdNotebook", notebookDTO);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "createdNotebook", binding);
-            return "redirect:/notebooks";
+            return "redirect:/notebooks/create";
         }
         try {
             notebookDTO.setCreatedBy(userAdapter.fromEntityToDTO(loggedUser));
             NotebookDTO createdNotebook = notebookAdapter.fromEntityToDTO(notebookService.createNewNotebook(notebookDTO).orElseThrow());
             if (createdNotebook == null) {
-                String errors = "Invalid new notebook data.";
-                redirectAttributes.addFlashAttribute("errors", errors);
 
                 if (!redirectAttributes.containsAttribute("createdNotebook")) {
                     redirectAttributes.addFlashAttribute("createdNotebook", notebookDTO);
                 }
-                return "redirect:/notebooks";
+                return "redirect:/notebooks/create";
             }
             if (!redirectAttributes.containsAttribute("createdNotebook")) {
                 redirectAttributes.addFlashAttribute("createdNotebook", createdNotebook);
@@ -130,11 +128,9 @@ public class NotebookController {
             model.addAttribute("createdNotebook", createdNotebook);
             return "redirect:/notebooks";
         } catch (Exception e) {
-            if (!redirectAttributes.containsAttribute("createdNotebook")) {
-                redirectAttributes.addFlashAttribute("createdNotebook", notebookDTO);
-            }
+            model.addAttribute("createdNotebook", new NotebookDTO());
             log.error(LocalDate.now() + ": " + e.getMessage());
-            return "redirect:/notebooks";
+            return "redirect:/notebooks/create";
         }
     }
 
@@ -176,22 +172,20 @@ public class NotebookController {
             log.error("Error updating notebook: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updatedNotebook", notebookDTO);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "updatedNotebook", binding);
+            model.addAttribute("errors", "");
             model.addAttribute("updatedNotebook", new NotebookDTO());
-            return "redirect:/notebooks";
+            return "redirect:/notebooks/update/{id}";
         }
         try {
             notebookDTO.setNotebookId(id);
             notebookDTO.setCreatedBy(userAdapter.fromEntityToDTO(loggedUser));
             NotebookDTO updatedNotebook = notebookAdapter.fromEntityToDTO(notebookService.updateNotebookById(id, notebookDTO).orElseThrow());
             if (updatedNotebook == null) {
-                String errors = "Invalid updating notebook data.";
-                redirectAttributes.addFlashAttribute("errors", errors);
-
                 if (!redirectAttributes.containsAttribute("updatedNotebook")) {
                     redirectAttributes.addFlashAttribute("updatedNotebook", notebookDTO);
                 }
                 model.addAttribute("updatedNotebook", new NotebookDTO());
-                return "redirect:/notebooks";
+                return "redirect:/notebooks/update/{id}";
             }
             if (!redirectAttributes.containsAttribute("updatedNotebook")) {
                 redirectAttributes.addFlashAttribute("updatedNotebook", updatedNotebook);
@@ -204,7 +198,7 @@ public class NotebookController {
             }
             model.addAttribute("updatedNotebook", new NotebookDTO());
             log.error(LocalDate.now() + ": " + e.getMessage());
-            return "redirect:/notebooks";
+            return "redirect:/notebooks/update/{id}";
         }
     }
 

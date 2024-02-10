@@ -97,7 +97,7 @@ public class TaskController {
             log.error("Error creating new task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdTask", task);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "createdTask", binding);
-            return "redirect:/tasks";
+            return "redirect:/tasks/create";
         }
         try {
             task.setCreatedBy(userDAO.fromEntityToDTO(loggedUser));
@@ -109,7 +109,7 @@ public class TaskController {
                 if (!redirectAttributes.containsAttribute("createdTask")) {
                     redirectAttributes.addFlashAttribute("createdTask", task);
                 }
-                return "redirect:/tasks";
+                return "redirect:/tasks/create";
             }
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", createdTask);
@@ -121,7 +121,7 @@ public class TaskController {
                 redirectAttributes.addFlashAttribute("createdTask", task);
             }
             log.error(LocalDate.now() + ": " + e.getMessage());
-            return "redirect:/tasks";
+            return "redirect:/tasks/create";
         }
     }
 
@@ -164,7 +164,7 @@ public class TaskController {
             redirectAttributes.addFlashAttribute("updatedTask", task);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "updatedTask", binding);
             model.addAttribute("updatedTask", new TaskDTO());
-            return "redirect:/tasks";
+            return "redirect:/tasks/update/{id}";
         }
         try {
             task.setTaskId(id);
@@ -178,7 +178,7 @@ public class TaskController {
                     redirectAttributes.addFlashAttribute("updatedTask", task);
                 }
                 model.addAttribute("updatedTask", new TaskDTO());
-                return "redirect:/tasks";
+                return "redirect:/tasks/update/{id}";
             }
             if (!redirectAttributes.containsAttribute("updatedTask")) {
                 redirectAttributes.addFlashAttribute("updatedTask", task);
@@ -191,7 +191,7 @@ public class TaskController {
             }
             model.addAttribute("updatedTask", new TaskDTO());
             log.error(LocalDate.now() + ": " + e.getMessage());
-            return "redirect:/tasks";
+            return "redirect:/tasks/update/{id}";
         }
     }
 

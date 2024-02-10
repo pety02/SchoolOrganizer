@@ -69,7 +69,7 @@ public class NotebookSectionController {
             log.error("Error creating new notebooks section: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "createdNotebookSection", binding);
-            return "redirect:/notebooks/{id}";
+            return "redirect:/notebooks/{id}/create";
         }
         try {
             NotebookSectionDTO createdSection = notebookSectionAdapter.fromEntityToDTO(notebookSectionService.createNewNotebookSectionByNotebookId(id, createdSectionDTO).orElseThrow());
@@ -80,7 +80,7 @@ public class NotebookSectionController {
                 if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
                     redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
                 }
-                return "redirect:/notebooks/{id}";
+                return "redirect:/notebooks/{id}/create";
             }
             if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
                 redirectAttributes.addFlashAttribute("createdNotebookSection", createdSection);
@@ -93,7 +93,7 @@ public class NotebookSectionController {
                 redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
             }
             log.error(LocalDate.now() + ": " + e.getMessage());
-            return "redirect:/notebooks/{id}";
+            return "redirect:/notebooks/{id}/create";
         }
     }
 
@@ -139,7 +139,7 @@ public class NotebookSectionController {
             redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "updatedNotebookSection", binding);
             model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
-            return "redirect:/notebooks/{id}";
+            return "redirect:/notebooks/{id}/update/{sectionId}";
         }
         try {
             updatedSectionDTO.setNotebookSectionId(sectionId);
@@ -155,7 +155,7 @@ public class NotebookSectionController {
                     redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
                 }
                 model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
-                return "redirect:/notebooks/{id}";
+                return "redirect:/notebooks/{id}/update/{sectionId}";
             }
             if (!redirectAttributes.containsAttribute("updatedNotebookSection")) {
                 redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
@@ -168,7 +168,7 @@ public class NotebookSectionController {
             }
             model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
             log.error(LocalDate.now() + ": " + e.getMessage());
-            return "redirect:/notebooks/{id}";
+            return "redirect:/notebooks/{id}/update/{sectionId}";
         }
     }
 
