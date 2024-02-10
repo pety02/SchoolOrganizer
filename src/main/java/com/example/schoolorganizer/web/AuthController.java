@@ -1,11 +1,7 @@
 package com.example.schoolorganizer.web;
 
-import com.example.schoolorganizer.adapter.IAdapter;
-import com.example.schoolorganizer.adapter.Impl.LoginUserAdapterImpl;
-import com.example.schoolorganizer.adapter.Impl.RegisterUserAdapterImpl;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
-import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.Impl.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
@@ -24,8 +20,6 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 @Slf4j
 public class AuthController {
     private final UserServiceImpl userService;
-    private final IAdapter<User, LoginUserDTO> loginDAO;
-    private final IAdapter<User, RegisterUserDTO> registerDAO;
 
     /*private void authenticate(LoginUserDTO user, AuthenticationManager authManager) {
         AuthenticationManager authenticationManager = authManager;
@@ -36,12 +30,8 @@ public class AuthController {
     }*/
 
     @Autowired
-    public AuthController(UserServiceImpl userService,
-                          LoginUserAdapterImpl loginDAO,
-                          RegisterUserAdapterImpl registerDAO) {
+    public AuthController(UserServiceImpl userService) {
         this.userService = userService;
-        this.loginDAO = loginDAO;
-        this.registerDAO = registerDAO;
     }
 
     @PostMapping("/signin")
@@ -62,7 +52,7 @@ public class AuthController {
         try {
             String username = user.getUsername();
             String password = user.getPassword();
-            user = loginDAO.fromEntityToDTO(userService.login(username, password).orElse(null));
+            user = userService.login(username, password).orElse(null);
             if (user == null) {
                 String errors = "Invalid user credentials.";
                 redirectAttributes.addAttribute("errors", errors);
@@ -99,7 +89,7 @@ public class AuthController {
             return "redirect:signup";
         }
         try {
-            RegisterUserDTO registeredUser = registerDAO.fromEntityToDTO(userService.register(user).orElse(null));
+            RegisterUserDTO registeredUser = userService.register(user).orElse(null);
 
             if (registeredUser == null) {
                 String errors = "Invalid user registration data.";

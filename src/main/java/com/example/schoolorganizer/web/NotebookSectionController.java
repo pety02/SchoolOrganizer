@@ -3,9 +3,9 @@ package com.example.schoolorganizer.web;
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
+import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Notebook;
 import com.example.schoolorganizer.model.NotebookSection;
-import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.NotebookSectionService;
 import com.example.schoolorganizer.service.NotebookService;
@@ -49,7 +49,7 @@ public class NotebookSectionController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         model.addAttribute("newNotebookSection", new NotebookSectionDTO());
         return "new-notebook-section";
     }
@@ -64,7 +64,7 @@ public class NotebookSectionController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error creating new notebooks section: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
@@ -72,7 +72,6 @@ public class NotebookSectionController {
             return "redirect:/notebooks/{id}/create";
         }
         try {
-            ///if(createdSectionDTO.getDate().isBefore(createdSectionDTO.get))
             NotebookSectionDTO createdSection = notebookSectionAdapter.fromEntityToDTO(notebookSectionService.createNewNotebookSectionByNotebookId(id, createdSectionDTO).orElseThrow());
             if (createdSection == null) {
                 String errors = "Invalid new notebook section data.";
@@ -107,7 +106,7 @@ public class NotebookSectionController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         try {
             NotebookSection notebookSectionEntity = notebookSectionService.getNotebookSectionByNotebookIdAndSectionId(id, sectionId).orElseThrow();
             NotebookSectionDTO updateDTO = notebookSectionAdapter.fromEntityToDTO(notebookSectionEntity);
@@ -132,7 +131,7 @@ public class NotebookSectionController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error updating notebook section: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
@@ -178,7 +177,7 @@ public class NotebookSectionController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         notebookSectionService.deleteNotebookSectionById(sectionId);
         return "redirect:/notebooks/{id}";
     }

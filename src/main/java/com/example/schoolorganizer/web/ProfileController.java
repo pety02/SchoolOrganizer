@@ -1,8 +1,7 @@
 package com.example.schoolorganizer.web;
 
-import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.UpdateUserDataDTO;
-import com.example.schoolorganizer.model.User;
+import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -25,12 +24,19 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 @Controller
 @Slf4j
 public class ProfileController {
-    private final IAdapter<User, UpdateUserDataDTO> userDAO;
     private final UserService userService;
 
+    private UpdateUserDataDTO fromLoggedUserToUpdateUser(UserDTO loggedUser) {
+        UpdateUserDataDTO updatingUser = new UpdateUserDataDTO();
+        updatingUser.setUserId(loggedUser.getUserId());
+        updatingUser.setOldEmail(loggedUser.getEmail());
+        updatingUser.setOldUsername(loggedUser.getUsername());
+
+        return updatingUser;
+    }
+
     @Autowired
-    public ProfileController(IAdapter<User, UpdateUserDataDTO> userDAO, UserService userService) {
-        this.userDAO = userDAO;
+    public ProfileController(UserService userService) {
         this.userService = userService;
     }
 
@@ -41,9 +47,10 @@ public class ProfileController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
 
-        model.addAttribute("updateUser", userDAO.fromEntityToDTO(loggedUser));
+        UpdateUserDataDTO updatingUser = fromLoggedUserToUpdateUser(loggedUser);
+        model.addAttribute("updateUser", updatingUser);
         return "profile";
     }
 
@@ -56,7 +63,7 @@ public class ProfileController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error updating user profile: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updateUser", updatedUser);
@@ -65,8 +72,7 @@ public class ProfileController {
             return "redirect:/profile";
         }
         try {
-            User updatedEntity = userService.updateData(loggedUser.getUserId(), updatedUser).orElseThrow();
-            UpdateUserDataDTO updatedDTO = userDAO.fromEntityToDTO(updatedEntity);
+            UpdateUserDataDTO updatedDTO = userService.updateData(loggedUser.getUserId(), updatedUser).orElseThrow();
             model.addAttribute("updateUser", updatedDTO);
             return "redirect:/signin";
         } catch (NoSuchElementException e) {

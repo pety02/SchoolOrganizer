@@ -2,6 +2,7 @@ package com.example.schoolorganizer.web;
 
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
+import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import jakarta.servlet.http.HttpSession;
@@ -36,7 +37,7 @@ public class MainController {
     @GetMapping("/home")
     public String getHomeForm(HttpSession httpSession, Model model) {
         if (UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
-            User loggedUser = (User) httpSession.getAttribute("user");
+            UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
             model.addAttribute("user", loggedUser);
             return "home";
         }

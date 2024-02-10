@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface RegisterUserService {
 
-    Optional<User> register(RegisterUserDTO userDTO);
+    Optional<RegisterUserDTO> register(RegisterUserDTO userDTO);
 }

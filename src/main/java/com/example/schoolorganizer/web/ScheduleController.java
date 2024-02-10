@@ -4,7 +4,6 @@ import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.CalendarEventDTO;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.CalendarEvent;
-import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.CalendarEventService;
 import jakarta.servlet.http.HttpSession;
@@ -26,16 +25,12 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 @Controller
 @Slf4j
 public class ScheduleController {
-    private final CalendarEventService eventService;
-    private final IAdapter<User, UserDTO> userDAO;
-    private final IAdapter<CalendarEvent, CalendarEventDTO> eventDAO;
+    private final IAdapter<CalendarEvent, CalendarEventDTO> eventAdapter;
     private final CalendarEventService calendarService;
 
     @Autowired
-    public ScheduleController(CalendarEventService eventService, IAdapter<User, UserDTO> userDAO, IAdapter<CalendarEvent, CalendarEventDTO> enetDAO, CalendarEventService calendarService) {
-        this.eventService = eventService;
-        this.userDAO = userDAO;
-        this.eventDAO = enetDAO;
+    public ScheduleController(CalendarEventService eventService, IAdapter<CalendarEvent, CalendarEventDTO> eventAdapter, CalendarEventService calendarService) {
+        this.eventAdapter = eventAdapter;
         this.calendarService = calendarService;
     }
 
@@ -44,7 +39,7 @@ public class ScheduleController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedin = (User) httpSession.getAttribute("user");
+        UserDTO loggedin = (UserDTO) httpSession.getAttribute("user");
 
         model.addAttribute("createdEvent", new CalendarEventDTO());
         return "schedule";
@@ -59,7 +54,7 @@ public class ScheduleController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error creating new task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdEvent", calendarEvent);
@@ -67,11 +62,11 @@ public class ScheduleController {
             return "redirect:/schedule";
         }
         try {
-            calendarEvent.setCreatedBy(userDAO.fromEntityToDTO(loggedUser));
+            calendarEvent.setCreatedBy(loggedUser);
             if (calendarEvent.getEndDate() == null) {
                 calendarEvent.setEndDate(calendarEvent.getStartDate());
             }
-            CalendarEventDTO createdEvent = eventDAO.fromEntityToDTO(calendarService.createEventByUserId(loggedUser.getUserId(), calendarEvent).orElseThrow());
+            CalendarEventDTO createdEvent = eventAdapter.fromEntityToDTO(calendarService.createEventByUserId(loggedUser.getUserId(), calendarEvent).orElseThrow());
             if (createdEvent == null) {
                 String errors = "Invalid new event data.";
                 redirectAttributes.addFlashAttribute("errors", errors);

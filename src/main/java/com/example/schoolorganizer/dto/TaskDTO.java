@@ -27,5 +27,5 @@ public class TaskDTO {
     @BooleanFlag
     private Boolean isFinished;
     private List<FileDTO> files;
-    private LoginUserDTO createdBy;
+    private UserDTO createdBy;
 }

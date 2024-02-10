@@ -6,6 +6,7 @@ import java.util.*;
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
+import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
@@ -42,7 +43,7 @@ public class TaskController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         List<Task> userTasksEntities = taskService.getAllTasksByUserId(loggedUser.getUserId());
         List<TaskDTO> userTasksDTOs = new ArrayList<>();
         for (var t : userTasksEntities) {
@@ -59,7 +60,7 @@ public class TaskController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
 
         try {
             Task currentTaskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
@@ -77,7 +78,7 @@ public class TaskController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         model.addAttribute("createdTask", new TaskDTO());
         return "create-task";
     }
@@ -91,7 +92,7 @@ public class TaskController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error creating new task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdTask", task);
@@ -99,7 +100,7 @@ public class TaskController {
             return "redirect:/tasks/create";
         }
         try {
-            task.setCreatedBy(userDAO.fromEntityToDTO(loggedUser));
+            task.setCreatedBy(loggedUser);
             TaskDTO createdTask = taskDAO.fromEntityToDTO(taskService.createNewTask(task).orElseThrow());
             if (createdTask == null) {
                 String errors = "Invalid new task data.";
@@ -131,7 +132,7 @@ public class TaskController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         try {
             Task taskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
             TaskDTO taskDTO = taskDAO.fromEntityToDTO(taskEntity);
@@ -155,7 +156,7 @@ public class TaskController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        User loggedUser = (User) httpSession.getAttribute("user");
+        UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error updating task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updatedTask", task);
@@ -165,7 +166,7 @@ public class TaskController {
         }
         try {
             task.setTaskId(id);
-            task.setCreatedBy(userDAO.fromEntityToDTO(loggedUser));
+            task.setCreatedBy(loggedUser);
             TaskDTO updatedTask = taskDAO.fromEntityToDTO(taskService.updateTaskById(id, task).orElseThrow());
             if (updatedTask == null) {
                 String errors = "Invalid updating task data.";
