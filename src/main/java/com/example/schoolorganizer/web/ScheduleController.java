@@ -66,16 +66,7 @@ public class ScheduleController {
             if (calendarEvent.getEndDate() == null) {
                 calendarEvent.setEndDate(calendarEvent.getStartDate());
             }
-            CalendarEventDTO createdEvent = eventAdapter.fromEntityToDTO(calendarService.createEventByUserId(loggedUser.getUserId(), calendarEvent).orElseThrow());
-            if (createdEvent == null) {
-                String errors = "Invalid new event data.";
-                redirectAttributes.addFlashAttribute("errors", errors);
-
-                if (!redirectAttributes.containsAttribute("createdEvent")) {
-                    redirectAttributes.addFlashAttribute("createdEvent", calendarEvent);
-                }
-                return "redirect:/schedule";
-            }
+            CalendarEventDTO createdEvent = calendarService.createEventByUserId(loggedUser.getUserId(), calendarEvent).orElseThrow();
             if (!redirectAttributes.containsAttribute("createdEvent")) {
                 redirectAttributes.addFlashAttribute("createdEvent", createdEvent);
             }
