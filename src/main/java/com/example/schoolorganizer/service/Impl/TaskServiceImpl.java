@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,31 +29,41 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAllTasksByUserId(Long id) {
-        return tasksRepo.getTasksByCreatedByUserId(id);
+    public List<TaskDTO> getAllTasksByUserId(Long id) {
+        List<Task> tasks = tasksRepo.getTasksByCreatedByUserId(id);
+        List<TaskDTO> tasksDTOs = new ArrayList<>();
+        for (var currentTask : tasks) {
+            TaskDTO currentTaskDTO = taskDAO.fromEntityToDTO(currentTask);
+            tasksDTOs.add(currentTaskDTO);
+        }
+
+        return tasksDTOs;
     }
 
     @Override
-    public Optional<Task> getUserTaskByTaskId(Long userId, Long taskId) {
-        return tasksRepo.getTaskByCreatedByUserIdAndTaskId(userId, taskId);
+    public Optional<TaskDTO> getUserTaskByTaskId(Long userId, Long taskId) {
+        return Optional.of(taskDAO.
+                fromEntityToDTO(tasksRepo.
+                        getTaskByCreatedByUserIdAndTaskId(userId, taskId)
+                        .orElseThrow()));
     }
 
     @Transactional
     @Override
-    public Optional<Task> createNewTask(TaskDTO taskDTO) {
+    public Optional<TaskDTO> createNewTask(TaskDTO taskDTO) {
         if (taskDTO == null) {
             return Optional.empty();
         }
         if (taskDTO.getStartDate().isBefore(taskDTO.getFinishDate())) {
             Task task = taskDAO.fromDTOToEntity(taskDTO);
-            return Optional.of(tasksRepo.save(task));
+            return Optional.of(taskDAO.fromEntityToDTO(tasksRepo.save(task)));
         }
         return Optional.empty();
     }
 
     @Transactional
     @Override
-    public Optional<Task> updateTaskById(Long id, TaskDTO taskDTO) {
+    public Optional<TaskDTO> updateTaskById(Long id, TaskDTO taskDTO) {
         if (taskDTO == null) {
             return Optional.empty();
         }
@@ -60,7 +71,7 @@ public class TaskServiceImpl implements TaskService {
             Task task = taskDAO.fromDTOToEntity(taskDTO);
             if (tasksRepo.existsById(id)) {
                 try {
-                    return Optional.of(tasksRepo.save(task));
+                    return Optional.of(taskDAO.fromEntityToDTO(tasksRepo.save(task)));
                 } catch (NoSuchElementException e) {
                     log.error(LocalDate.now() + ": " + e.getMessage());
                     return Optional.empty();

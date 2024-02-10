@@ -7,13 +7,13 @@ import com.example.schoolorganizer.model.Task;
 import jakarta.transaction.Transactional;
 
 public interface TaskService {
-    List<Task> getAllTasksByUserId(Long id);
+    List<TaskDTO> getAllTasksByUserId(Long id);
 
-    Optional<Task> getUserTaskByTaskId(Long userId, Long taskId);
+    Optional<TaskDTO> getUserTaskByTaskId(Long userId, Long taskId);
 
-    Optional<Task> createNewTask(TaskDTO taskDTO);
+    Optional<TaskDTO> createNewTask(TaskDTO taskDTO);
 
-    Optional<Task> updateTaskById(Long id, TaskDTO taskDTO);
+    Optional<TaskDTO> updateTaskById(Long id, TaskDTO taskDTO);
 
     void deleteTaskById(Long id);
 }

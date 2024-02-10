@@ -3,12 +3,8 @@ package com.example.schoolorganizer.web;
 import java.time.LocalDate;
 import java.util.*;
 
-import com.example.schoolorganizer.adapter.IAdapter;
-import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
-import com.example.schoolorganizer.model.Task;
-import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.TaskService;
 import jakarta.servlet.http.HttpSession;
@@ -27,15 +23,11 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
-    private final IAdapter<Task, TaskDTO> taskDAO;
-    private final IAdapter<User, LoginUserDTO> userDAO;
 
     @Autowired
-    public TaskController(TaskService taskService, IAdapter<Task, TaskDTO> taskDAO, IAdapter<User, LoginUserDTO> userDAO) {
+    public TaskController(TaskService taskService) {
 
         this.taskService = taskService;
-        this.taskDAO = taskDAO;
-        this.userDAO = userDAO;
     }
 
     @GetMapping("/tasks")
@@ -44,11 +36,7 @@ public class TaskController {
             return "redirect:/signin";
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
-        List<Task> userTasksEntities = taskService.getAllTasksByUserId(loggedUser.getUserId());
-        List<TaskDTO> userTasksDTOs = new ArrayList<>();
-        for (var t : userTasksEntities) {
-            userTasksDTOs.add(taskDAO.fromEntityToDTO(t));
-        }
+        List<TaskDTO> userTasksDTOs = taskService.getAllTasksByUserId(loggedUser.getUserId());
         model.addAttribute("tasks", userTasksDTOs);
         return "tasks";
     }
@@ -63,8 +51,7 @@ public class TaskController {
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
 
         try {
-            Task currentTaskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
-            TaskDTO currentTaskDTO = taskDAO.fromEntityToDTO(currentTaskEntity);
+            TaskDTO currentTaskDTO = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
             model.addAttribute("currentTask", currentTaskDTO);
             return "task";
         } catch (NoSuchElementException e) {
@@ -101,16 +88,7 @@ public class TaskController {
         }
         try {
             task.setCreatedBy(loggedUser);
-            TaskDTO createdTask = taskDAO.fromEntityToDTO(taskService.createNewTask(task).orElseThrow());
-            if (createdTask == null) {
-                String errors = "Invalid new task data.";
-                redirectAttributes.addFlashAttribute("errors", errors);
-
-                if (!redirectAttributes.containsAttribute("createdTask")) {
-                    redirectAttributes.addFlashAttribute("createdTask", task);
-                }
-                return "redirect:/tasks/create";
-            }
+            TaskDTO createdTask = taskService.createNewTask(task).orElseThrow();
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", createdTask);
             }
@@ -134,9 +112,10 @@ public class TaskController {
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         try {
-            Task taskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
-            TaskDTO taskDTO = taskDAO.fromEntityToDTO(taskEntity);
-
+            TaskDTO taskDTO = taskService
+                    .getUserTaskByTaskId(loggedUser
+                            .getUserId(), id)
+                    .orElseThrow();
             model.addAttribute("updatedTask", taskDTO);
             return "update-task";
         } catch (NoSuchElementException e) {
@@ -167,17 +146,7 @@ public class TaskController {
         try {
             task.setTaskId(id);
             task.setCreatedBy(loggedUser);
-            TaskDTO updatedTask = taskDAO.fromEntityToDTO(taskService.updateTaskById(id, task).orElseThrow());
-            if (updatedTask == null) {
-                String errors = "Invalid updating task data.";
-                redirectAttributes.addFlashAttribute("errors", errors);
-
-                if (!redirectAttributes.containsAttribute("updatedTask")) {
-                    redirectAttributes.addFlashAttribute("updatedTask", task);
-                }
-                model.addAttribute("updatedTask", new TaskDTO());
-                return "redirect:/tasks/update/{id}";
-            }
+            TaskDTO updatedTask = taskService.updateTaskById(id, task).orElseThrow();
             if (!redirectAttributes.containsAttribute("updatedTask")) {
                 redirectAttributes.addFlashAttribute("updatedTask", task);
             }
