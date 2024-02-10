@@ -1,5 +1,6 @@
 package com.example.schoolorganizer.security.configuration;
 
+/*
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -15,9 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+*/
+
+/*
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+*/
 public class WebSecurityConfiguration {
 
     /*
@@ -58,10 +64,9 @@ public class WebSecurityConfiguration {
         var chain = http
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/home", "/tasks/**", "/schedule/**",
-                                        "/notebooks/**", "/profile", "/logout")
-                                .hasAnyRole("USER", "ADMIN")
-                                .anyRequest().authenticated())
+                                .anyRequest()
+                                .authenticated())
+                .httpBasic(withDefaults())
                 .formLogin(login -> login.loginPage("/signin").permitAll())
                 .build();
 

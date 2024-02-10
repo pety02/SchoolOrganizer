@@ -10,12 +10,14 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler)
             throws Exception {
+
         /*
         if (!request.isUserInRole("USER")) {
             response.sendRedirect("/signin");
             return false;
         }
         */
+
         return true;
     }
 
