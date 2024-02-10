@@ -1,11 +1,8 @@
 package com.example.schoolorganizer.web;
 
-import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
 import com.example.schoolorganizer.dto.UserDTO;
-import com.example.schoolorganizer.model.Notebook;
-import com.example.schoolorganizer.model.NotebookSection;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.NotebookSectionService;
 import com.example.schoolorganizer.service.NotebookService;
@@ -33,18 +30,12 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 public class NotebookController {
     private final NotebookService notebookService;
     private final NotebookSectionService notebookSectionService;
-    private final IAdapter<Notebook, NotebookDTO> notebookAdapter;
-    private final IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter;
 
     @Autowired
     public NotebookController(NotebookService notebookService,
-                              NotebookSectionService notebookSectionService,
-                              IAdapter<Notebook, NotebookDTO> notebookAdapter,
-                              IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter) {
+                              NotebookSectionService notebookSectionService) {
         this.notebookService = notebookService;
         this.notebookSectionService = notebookSectionService;
-        this.notebookAdapter = notebookAdapter;
-        this.notebookSectionAdapter = notebookSectionAdapter;
     }
 
     @GetMapping("/notebooks")
@@ -53,11 +44,7 @@ public class NotebookController {
             return "redirect:/signin";
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
-        List<Notebook> userNotebookEntities = notebookService.getAllNotebooksByUserId(loggedUser.getUserId());
-        List<NotebookDTO> userNotebookDTOs = new ArrayList<>();
-        for (var n : userNotebookEntities) {
-            userNotebookDTOs.add(notebookAdapter.fromEntityToDTO(n));
-        }
+        List<NotebookDTO> userNotebookDTOs = notebookService.getAllNotebooksByUserId(loggedUser.getUserId());
         model.addAttribute("notebooks", userNotebookDTOs);
         return "notebooks";
     }
@@ -71,11 +58,7 @@ public class NotebookController {
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         try {
-            List<NotebookSection> notebookSections = notebookSectionService.getAllNotebookSectionsByNotebookId(id);
-            List<NotebookSectionDTO> notebookSectionsDTOs = new ArrayList<>();
-            for (var section : notebookSections) {
-                notebookSectionsDTOs.add(notebookSectionAdapter.fromEntityToDTO(section));
-            }
+            List<NotebookSectionDTO> notebookSectionsDTOs = notebookSectionService.getAllNotebookSectionsByNotebookId(id);
             model.addAttribute("currentNotebookSections", notebookSectionsDTOs);
             return "notebook";
         } catch (Exception e) {
@@ -112,14 +95,7 @@ public class NotebookController {
         }
         try {
             notebookDTO.setCreatedBy(loggedUser);
-            NotebookDTO createdNotebook = notebookAdapter.fromEntityToDTO(notebookService.createNewNotebook(notebookDTO).orElseThrow());
-            if (createdNotebook == null) {
-
-                if (!redirectAttributes.containsAttribute("createdNotebook")) {
-                    redirectAttributes.addFlashAttribute("createdNotebook", notebookDTO);
-                }
-                return "redirect:/notebooks/create";
-            }
+            NotebookDTO createdNotebook = notebookService.createNewNotebook(notebookDTO).orElseThrow();
             if (!redirectAttributes.containsAttribute("createdNotebook")) {
                 redirectAttributes.addFlashAttribute("createdNotebook", createdNotebook);
             }
@@ -141,9 +117,9 @@ public class NotebookController {
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         try {
-            Notebook notebookEntity = notebookService.getNotebookByNotebookId(loggedUser.getUserId(), id).orElseThrow();
-            NotebookDTO notebookDTO = notebookAdapter.fromEntityToDTO(notebookEntity);
-
+            NotebookDTO notebookDTO = notebookService
+                    .getNotebookByNotebookId(loggedUser.getUserId(), id)
+                    .orElseThrow();
             model.addAttribute("updatedNotebook", notebookDTO);
             return "update-notebook";
         } catch (Exception e) {
@@ -175,14 +151,9 @@ public class NotebookController {
         try {
             notebookDTO.setNotebookId(id);
             notebookDTO.setCreatedBy(loggedUser);
-            NotebookDTO updatedNotebook = notebookAdapter.fromEntityToDTO(notebookService.updateNotebookById(id, notebookDTO).orElseThrow());
-            if (updatedNotebook == null) {
-                if (!redirectAttributes.containsAttribute("updatedNotebook")) {
-                    redirectAttributes.addFlashAttribute("updatedNotebook", notebookDTO);
-                }
-                model.addAttribute("updatedNotebook", new NotebookDTO());
-                return "redirect:/notebooks/update/{id}";
-            }
+            NotebookDTO updatedNotebook = notebookService
+                    .updateNotebookById(id, notebookDTO)
+                    .orElseThrow();
             if (!redirectAttributes.containsAttribute("updatedNotebook")) {
                 redirectAttributes.addFlashAttribute("updatedNotebook", updatedNotebook);
             }

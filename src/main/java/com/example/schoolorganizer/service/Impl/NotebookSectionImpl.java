@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -32,18 +33,28 @@ public class NotebookSectionImpl implements NotebookSectionService {
     }
 
     @Override
-    public List<NotebookSection> getAllNotebookSectionsByNotebookId(Long id) {
-        return notebookSectionRepo.findAllByAddedInNotebookNotebookId(id);
+    public List<NotebookSectionDTO> getAllNotebookSectionsByNotebookId(Long id) {
+        List<NotebookSection> notebookSections = notebookSectionRepo.findAllByAddedInNotebookNotebookId(id);
+        List<NotebookSectionDTO> notebookSectionDTOs = new ArrayList<>();
+        for (var currentSection : notebookSections) {
+            NotebookSectionDTO currentSectionDTO = notebookSectionAdapter.fromEntityToDTO(currentSection);
+            notebookSectionDTOs.add(currentSectionDTO);
+        }
+
+        return notebookSectionDTOs;
     }
 
     @Override
-    public Optional<NotebookSection> getNotebookSectionByNotebookIdAndSectionId(Long notebookId, Long sectionId) {
-        return notebookSectionRepo.findByAddedInNotebook_NotebookIdAndNotebookSectionId(notebookId, sectionId);
+    public Optional<NotebookSectionDTO> getNotebookSectionByNotebookIdAndSectionId(Long notebookId, Long sectionId) {
+        return Optional.of(notebookSectionAdapter
+                .fromEntityToDTO(notebookSectionRepo
+                        .findByAddedInNotebook_NotebookIdAndNotebookSectionId(notebookId, sectionId)
+                        .orElseThrow()));
     }
 
     @Transactional
     @Override
-    public Optional<NotebookSection> createNewNotebookSectionByNotebookId(Long id, NotebookSectionDTO notebookSectionDTO) {
+    public Optional<NotebookSectionDTO> createNewNotebookSectionByNotebookId(Long id, NotebookSectionDTO notebookSectionDTO) {
         try {
             Notebook notebook = notebookRepo.findById(id).orElseThrow();
             if (notebookSectionDTO.getDate().isBefore(notebook.getDate())) {
@@ -51,7 +62,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
             }
             NotebookSection created = notebookSectionAdapter.fromDTOToEntity(notebookSectionDTO);
             created.setAddedInNotebook(notebook);
-            return Optional.of(notebookSectionRepo.save(created));
+            return Optional.of(notebookSectionAdapter.fromEntityToDTO(notebookSectionRepo.save(created)));
         } catch (NoSuchElementException e) {
             log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
@@ -60,7 +71,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
 
     @Transactional
     @Override
-    public Optional<NotebookSection> updateNotebookSectionById(Long id, NotebookSectionDTO notebookSectionDTO) {
+    public Optional<NotebookSectionDTO> updateNotebookSectionById(Long id, NotebookSectionDTO notebookSectionDTO) {
         try {
             NotebookSection notebookSection = notebookSectionRepo.findById(id).orElseThrow();
             Notebook notebook = notebookSection.getAddedInNotebook();
@@ -70,7 +81,7 @@ public class NotebookSectionImpl implements NotebookSectionService {
             NotebookSection updatedSection = notebookSectionAdapter.fromDTOToEntity(notebookSectionDTO);
             updatedSection.setNotebookSectionId(notebookSection.getNotebookSectionId());
             updatedSection.setAddedInNotebook(notebook);
-            return Optional.of(notebookSectionRepo.save(updatedSection));
+            return Optional.of(notebookSectionAdapter.fromEntityToDTO(notebookSectionRepo.save(updatedSection)));
         } catch (NoSuchElementException e) {
             log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();

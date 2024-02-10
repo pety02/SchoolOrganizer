@@ -1,11 +1,8 @@
 package com.example.schoolorganizer.web;
 
-import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
 import com.example.schoolorganizer.dto.UserDTO;
-import com.example.schoolorganizer.model.Notebook;
-import com.example.schoolorganizer.model.NotebookSection;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.NotebookSectionService;
 import com.example.schoolorganizer.service.NotebookService;
@@ -30,16 +27,13 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 @Slf4j
 public class NotebookSectionController {
     private final NotebookSectionService notebookSectionService;
-    private final IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter;
     private final NotebookService notebookService;
-    private final IAdapter<Notebook, NotebookDTO> notebookAdapter;
 
     @Autowired
-    public NotebookSectionController(NotebookSectionService notebookSectionService, IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter, NotebookService notebookService, IAdapter<Notebook, NotebookDTO> notebookAdapter) {
+    public NotebookSectionController(NotebookSectionService notebookSectionService,
+                                     NotebookService notebookService) {
         this.notebookSectionService = notebookSectionService;
-        this.notebookSectionAdapter = notebookSectionAdapter;
         this.notebookService = notebookService;
-        this.notebookAdapter = notebookAdapter;
     }
 
     @GetMapping("/notebooks/{id}/create")
@@ -72,23 +66,13 @@ public class NotebookSectionController {
             return "redirect:/notebooks/{id}/create";
         }
         try {
-            NotebookSectionDTO createdSection = notebookSectionAdapter.fromEntityToDTO(notebookSectionService.createNewNotebookSectionByNotebookId(id, createdSectionDTO).orElseThrow());
-            if (createdSection == null) {
-                String errors = "Invalid new notebook section data.";
-                redirectAttributes.addFlashAttribute("errors", errors);
-
-                if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
-                    redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
-                }
-                return "redirect:/notebooks/{id}/create";
-            }
+            NotebookSectionDTO createdSection = notebookSectionService.createNewNotebookSectionByNotebookId(id, createdSectionDTO).orElseThrow();
             if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
                 redirectAttributes.addFlashAttribute("createdNotebookSection", createdSection);
             }
             model.addAttribute("createdNotebookSection", createdSection);
             return "redirect:/notebooks/{id}";
         } catch (Exception e) {
-            System.out.println("in catch after creating new notebook section");
             if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
                 redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
             }
@@ -108,10 +92,10 @@ public class NotebookSectionController {
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         try {
-            NotebookSection notebookSectionEntity = notebookSectionService.getNotebookSectionByNotebookIdAndSectionId(id, sectionId).orElseThrow();
-            NotebookSectionDTO updateDTO = notebookSectionAdapter.fromEntityToDTO(notebookSectionEntity);
-
-            model.addAttribute("updatedNotebookSection", updateDTO);
+            NotebookSectionDTO updatedNotebookSectionDTO = notebookSectionService
+                    .getNotebookSectionByNotebookIdAndSectionId(id, sectionId)
+                    .orElseThrow();
+            model.addAttribute("updatedNotebookSection", updatedNotebookSectionDTO);
             return "update-notebook-section";
         } catch (NoSuchElementException e) {
             model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
@@ -141,20 +125,10 @@ public class NotebookSectionController {
         }
         try {
             updatedSectionDTO.setNotebookSectionId(sectionId);
-            NotebookDTO notebook = notebookAdapter.fromEntityToDTO(notebookService.getNotebookByNotebookId(loggedUser.getUserId(), id).orElseThrow());
+            NotebookDTO notebook = notebookService.getNotebookByNotebookId(loggedUser.getUserId(), id).orElseThrow();
             notebook.getSections().add(updatedSectionDTO);
             notebookService.updateNotebookById(notebook.getNotebookId(), notebook);
-            NotebookSectionDTO updatedNotebookSection = notebookSectionAdapter.fromEntityToDTO(notebookSectionService.updateNotebookSectionById(sectionId, updatedSectionDTO).orElseThrow());
-            if (updatedNotebookSection == null) {
-                String errors = "Invalid updating notebook section data.";
-                redirectAttributes.addFlashAttribute("errors", errors);
-
-                if (!redirectAttributes.containsAttribute("updatedNotebookSection")) {
-                    redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
-                }
-                model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
-                return "redirect:/notebooks/{id}/update/{sectionId}";
-            }
+            NotebookSectionDTO updatedNotebookSection = notebookSectionService.updateNotebookSectionById(sectionId, updatedSectionDTO).orElseThrow();
             if (!redirectAttributes.containsAttribute("updatedNotebookSection")) {
                 redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
             }

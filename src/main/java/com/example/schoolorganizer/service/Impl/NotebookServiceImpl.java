@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,36 +29,49 @@ public class NotebookServiceImpl implements NotebookService {
     }
 
     @Override
-    public List<Notebook> getAllNotebooksByUserId(Long id) {
-        return notebookRepo.findAllByCreatedByUserId(id);
+    public List<NotebookDTO> getAllNotebooksByUserId(Long id) {
+
+        List<Notebook> notebooks = notebookRepo.findAllByCreatedByUserId(id);
+        List<NotebookDTO> notebookDTOs = new ArrayList<>();
+        for (var currentNotebook : notebooks) {
+            NotebookDTO currentNotebookDTO = notebookAdapter.fromEntityToDTO(currentNotebook);
+            notebookDTOs.add(currentNotebookDTO);
+        }
+
+        return notebookDTOs;
     }
 
     @Override
-    public Optional<Notebook> getNotebookByNotebookId(Long userId, Long notebookId) {
-        return notebookRepo.findByCreatedByUserIdAndNotebookId(userId, notebookId);
+    public Optional<NotebookDTO> getNotebookByNotebookId(Long userId, Long notebookId) {
+        return Optional.of(notebookAdapter
+                .fromEntityToDTO(notebookRepo
+                        .findByCreatedByUserIdAndNotebookId(userId,
+                                notebookId).orElseThrow()));
     }
 
     @Transactional
     @Override
-    public Optional<Notebook> createNewNotebook(NotebookDTO notebookDTO) {
+    public Optional<NotebookDTO> createNewNotebook(NotebookDTO notebookDTO) {
         if (notebookDTO == null) {
             return Optional.empty();
         }
 
         Notebook notebook = notebookAdapter.fromDTOToEntity(notebookDTO);
-        return Optional.of(notebookRepo.save(notebook));
+        return Optional.of(notebookAdapter
+                .fromEntityToDTO(notebookRepo.save(notebook)));
     }
 
     @Transactional
     @Override
-    public Optional<Notebook> updateNotebookById(Long id, NotebookDTO notebookDTO) {
+    public Optional<NotebookDTO> updateNotebookById(Long id, NotebookDTO notebookDTO) {
         if (notebookDTO == null) {
             return Optional.empty();
         }
         Notebook notebook = notebookAdapter.fromDTOToEntity(notebookDTO);
         if (notebookRepo.existsById(id)) {
             try {
-                return Optional.of(notebookRepo.save(notebook));
+                return Optional.of(notebookAdapter
+                        .fromEntityToDTO(notebookRepo.save(notebook)));
             } catch (NoSuchElementException e) {
                 log.error(LocalDate.now() + ": " + e.getMessage());
                 return Optional.empty();
