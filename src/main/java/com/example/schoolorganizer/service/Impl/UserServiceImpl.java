@@ -60,6 +60,8 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
                         return Optional.of(loggedIn);
                     }
                 }
+            } else {
+                throw new IllegalArgumentException("The username is incorrect.");
             }
         } catch (NoSuchAlgorithmException | NoSuchElementException e) {
             log.error(LocalDate.now() + ": " + e.getMessage());
@@ -108,20 +110,21 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     @Transactional
     @Override
     public Optional<User> register(RegisterUserDTO userDTO) {
-        if (!userRepo.existsByUsername(userDTO.getUsername()) && !userRepo.existsByEmail(userDTO.getEmail())) {
-            User u = registerDAO.fromDTOToEntity(userDTO);
+        if (!userRepo.existsByUsername(userDTO.getUsername())
+                && !userRepo.existsByEmail(userDTO.getEmail())) {
+            User registered = registerDAO.fromDTOToEntity(userDTO);
             String hashedPassword;
             try {
                 hashedPassword = PasswordHasher.hash(userDTO.getPassword());
             } catch (NoSuchAlgorithmException ex) {
                 hashedPassword = userDTO.getPassword();
             }
-            u.setRoles(Set.of(UserRole.STUDENT));
-            userRepo.save(u);
-            Password p = new Password(hashedPassword, u);
+            registered.setRoles(Set.of(UserRole.STUDENT));
+            userRepo.save(registered);
+            Password p = new Password(hashedPassword, registered);
 
             passwordRepo.save(p);
-            return Optional.of(u);
+            return Optional.of(registered);
         }
         return Optional.empty();
     }

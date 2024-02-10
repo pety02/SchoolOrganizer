@@ -46,7 +46,9 @@ public class NotebookSectionImpl implements NotebookSectionService {
     public Optional<NotebookSection> createNewNotebookSectionByNotebookId(Long id, NotebookSectionDTO notebookSectionDTO) {
         try {
             Notebook notebook = notebookRepo.findById(id).orElseThrow();
-            System.out.println("notebook found");
+            if (notebookSectionDTO.getDate().isBefore(notebook.getDate())) {
+                throw new IllegalArgumentException("Invalid section date. The section date should be after notebook creation date.");
+            }
             NotebookSection created = notebookSectionAdapter.fromDTOToEntity(notebookSectionDTO);
             created.setAddedInNotebook(notebook);
             return Optional.of(notebookSectionRepo.save(created));
@@ -62,6 +64,9 @@ public class NotebookSectionImpl implements NotebookSectionService {
         try {
             NotebookSection notebookSection = notebookSectionRepo.findById(id).orElseThrow();
             Notebook notebook = notebookSection.getAddedInNotebook();
+            if (notebookSectionDTO.getDate().isBefore(notebook.getDate())) {
+                throw new IllegalArgumentException("Invalid section date. The section date should be after notebook creation date.");
+            }
             NotebookSection updatedSection = notebookSectionAdapter.fromDTOToEntity(notebookSectionDTO);
             updatedSection.setNotebookSectionId(notebookSection.getNotebookSectionId());
             updatedSection.setAddedInNotebook(notebook);

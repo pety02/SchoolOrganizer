@@ -72,6 +72,7 @@ public class NotebookSectionController {
             return "redirect:/notebooks/{id}/create";
         }
         try {
+            ///if(createdSectionDTO.getDate().isBefore(createdSectionDTO.get))
             NotebookSectionDTO createdSection = notebookSectionAdapter.fromEntityToDTO(notebookSectionService.createNewNotebookSectionByNotebookId(id, createdSectionDTO).orElseThrow());
             if (createdSection == null) {
                 String errors = "Invalid new notebook section data.";

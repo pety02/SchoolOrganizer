@@ -38,6 +38,9 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     @Transactional
     @Override
     public Optional<CalendarEvent> createEventByUserId(Long id, CalendarEventDTO eventDTO) {
+        if (eventDTO.getEndDate().isBefore(eventDTO.getStartDate())) {
+            throw new IllegalArgumentException("The start date of the event should be before the end date.");
+        }
         CalendarEvent event = calendarEventAdapter.fromDTOToEntity(eventDTO);
         User createdBy = userRepo.findByUserId(id).orElseThrow();
         event.setCreatedBy(createdBy);
