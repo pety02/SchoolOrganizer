@@ -7,6 +7,7 @@ import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Notebook;
 import com.example.schoolorganizer.model.NotebookSection;
 import com.example.schoolorganizer.model.User;
+import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.NotebookSectionService;
 import com.example.schoolorganizer.service.NotebookService;
 import jakarta.servlet.http.HttpSession;
@@ -38,7 +39,11 @@ public class NotebookController {
     private final IAdapter<User, UserDTO> userAdapter;
 
     @Autowired
-    public NotebookController(NotebookService notebookService, NotebookSectionService notebookSectionService, IAdapter<Notebook, NotebookDTO> notebookAdapter, IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter, IAdapter<User, UserDTO> userAdapter) {
+    public NotebookController(NotebookService notebookService,
+                              NotebookSectionService notebookSectionService,
+                              IAdapter<Notebook, NotebookDTO> notebookAdapter,
+                              IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter,
+                              IAdapter<User, UserDTO> userAdapter) {
         this.notebookService = notebookService;
         this.notebookSectionService = notebookSectionService;
         this.notebookAdapter = notebookAdapter;
@@ -48,52 +53,49 @@ public class NotebookController {
 
     @GetMapping("/notebooks")
     public String getAllUserNotebooks(HttpSession httpSession, Model model) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser != null) {
-            List<Notebook> userNotebookEntities = notebookService.getAllNotebooksByUserId(loggedUser.getUserId());
-            List<NotebookDTO> userNotebookDTOs = new ArrayList<>();
-            for (var n : userNotebookEntities) {
-                userNotebookDTOs.add(notebookAdapter.fromEntityToDTO(n));
-            }
-            model.addAttribute("notebooks", userNotebookDTOs);
-            return "notebooks";
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
-
-        return "redirect:/signin";
+        User loggedUser = (User) httpSession.getAttribute("user");
+        List<Notebook> userNotebookEntities = notebookService.getAllNotebooksByUserId(loggedUser.getUserId());
+        List<NotebookDTO> userNotebookDTOs = new ArrayList<>();
+        for (var n : userNotebookEntities) {
+            userNotebookDTOs.add(notebookAdapter.fromEntityToDTO(n));
+        }
+        model.addAttribute("notebooks", userNotebookDTOs);
+        return "notebooks";
     }
 
     @GetMapping("/notebooks/{id}")
     public String viewNotebook(HttpSession httpSession,
                                Model model,
                                @PathVariable Long id) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser != null) {
-            try {
-                List<NotebookSection> notebookSections = notebookSectionService.getAllNotebookSectionsByNotebookId(id);
-                List<NotebookSectionDTO> notebookSectionsDTOs = new ArrayList<>();
-                for (var section : notebookSections) {
-                    notebookSectionsDTOs.add(notebookSectionAdapter.fromEntityToDTO(section));
-                }
-                model.addAttribute("currentNotebookSections", notebookSectionsDTOs);
-                return "notebook";
-            } catch (Exception e) {
-                log.error(LocalDate.now() + ": " + e.getMessage());
-                return "redirect:/notebooks";
-            }
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
-
-        return "redirect:/signin";
+        User loggedUser = (User) httpSession.getAttribute("user");
+        try {
+            List<NotebookSection> notebookSections = notebookSectionService.getAllNotebookSectionsByNotebookId(id);
+            List<NotebookSectionDTO> notebookSectionsDTOs = new ArrayList<>();
+            for (var section : notebookSections) {
+                notebookSectionsDTOs.add(notebookSectionAdapter.fromEntityToDTO(section));
+            }
+            model.addAttribute("currentNotebookSections", notebookSectionsDTOs);
+            return "notebook";
+        } catch (Exception e) {
+            log.error(LocalDate.now() + ": " + e.getMessage());
+            return "redirect:/notebooks";
+        }
     }
 
     @GetMapping("/notebooks/create")
     public String getNewNotebookForm(HttpSession httpSession, Model model) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser != null) {
-            model.addAttribute("createdNotebook", new NotebookDTO());
-            return "create-notebook";
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
-
-        return "redirect:/signin";
+        User loggedUser = (User) httpSession.getAttribute("user");
+        model.addAttribute("createdNotebook", new NotebookDTO());
+        return "create-notebook";
     }
 
     @PostMapping("/notebooks/create")
@@ -102,10 +104,10 @@ public class NotebookController {
                                    Model model,
                                    RedirectAttributes redirectAttributes,
                                    HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error creating new notebook: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdNotebook", notebookDTO);
@@ -138,17 +140,16 @@ public class NotebookController {
     public String getUpdateNotebookForm(@PathVariable Long id,
                                         HttpSession httpSession,
                                         Model model) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
+        }
         User loggedUser = (User) httpSession.getAttribute("user");
         try {
-            if (loggedUser != null) {
-                Notebook notebookEntity = notebookService.getNotebookByNotebookId(loggedUser.getUserId(), id).orElseThrow();
-                NotebookDTO notebookDTO = notebookAdapter.fromEntityToDTO(notebookEntity);
+            Notebook notebookEntity = notebookService.getNotebookByNotebookId(loggedUser.getUserId(), id).orElseThrow();
+            NotebookDTO notebookDTO = notebookAdapter.fromEntityToDTO(notebookEntity);
 
-                model.addAttribute("updatedNotebook", notebookDTO);
-                return "update-notebook";
-            }
-            model.addAttribute("updatedNotebook", new NotebookDTO());
-            return "redirect:/notebooks";
+            model.addAttribute("updatedNotebook", notebookDTO);
+            return "update-notebook";
         } catch (Exception e) {
             model.addAttribute("updatedNotebook", new NotebookDTO());
             log.error(LocalDate.now() + ": " + e.getMessage());
@@ -163,11 +164,10 @@ public class NotebookController {
                                  Model model,
                                  RedirectAttributes redirectAttributes,
                                  HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
-            model.addAttribute("updatedNotebook", new NotebookDTO());
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error updating notebook: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updatedNotebook", notebookDTO);
@@ -205,10 +205,10 @@ public class NotebookController {
     @GetMapping("/notebooks/delete/{id}")
     public String deleteNotebook(@PathVariable Long id,
                                  HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
 
         notebookService.deleteNotebookById(id);
         return "redirect:/notebooks";

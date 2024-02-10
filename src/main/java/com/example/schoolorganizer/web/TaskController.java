@@ -8,6 +8,7 @@ import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
+import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.TaskService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -38,49 +39,47 @@ public class TaskController {
 
     @GetMapping("/tasks")
     public String getAllUserTasksForm(HttpSession httpSession, Model model) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser != null) {
-            List<Task> userTasksEntities = taskService.getAllTasksByUserId(loggedUser.getUserId());
-            List<TaskDTO> userTasksDTOs = new ArrayList<>();
-            for (var t : userTasksEntities) {
-                userTasksDTOs.add(taskDAO.fromEntityToDTO(t));
-            }
-            model.addAttribute("tasks", userTasksDTOs);
-            return "tasks";
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
-
-        return "redirect:/signin";
+        User loggedUser = (User) httpSession.getAttribute("user");
+        List<Task> userTasksEntities = taskService.getAllTasksByUserId(loggedUser.getUserId());
+        List<TaskDTO> userTasksDTOs = new ArrayList<>();
+        for (var t : userTasksEntities) {
+            userTasksDTOs.add(taskDAO.fromEntityToDTO(t));
+        }
+        model.addAttribute("tasks", userTasksDTOs);
+        return "tasks";
     }
 
     @GetMapping("/tasks/{id}")
     public String getUserTaskByItsId(HttpSession httpSession,
                                      Model model,
                                      @PathVariable Long id) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser != null) {
-            try {
-                Task currentTaskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
-                TaskDTO currentTaskDTO = taskDAO.fromEntityToDTO(currentTaskEntity);
-                model.addAttribute("currentTask", currentTaskDTO);
-                return "task";
-            } catch (NoSuchElementException e) {
-                log.error(LocalDate.now() + ": " + e.getMessage());
-                return "redirect:/tasks";
-            }
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
 
-        return "redirect:/signin";
+        try {
+            Task currentTaskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
+            TaskDTO currentTaskDTO = taskDAO.fromEntityToDTO(currentTaskEntity);
+            model.addAttribute("currentTask", currentTaskDTO);
+            return "task";
+        } catch (NoSuchElementException e) {
+            log.error(LocalDate.now() + ": " + e.getMessage());
+            return "redirect:/tasks";
+        }
     }
 
     @GetMapping("/tasks/create")
     public String getCreateNewTaskForm(HttpSession httpSession, Model model) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser != null) {
-            model.addAttribute("createdTask", new TaskDTO());
-            return "create-task";
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
-
-        return "redirect:/signin";
+        User loggedUser = (User) httpSession.getAttribute("user");
+        model.addAttribute("createdTask", new TaskDTO());
+        return "create-task";
     }
 
     @PostMapping("/tasks/create")
@@ -89,10 +88,10 @@ public class TaskController {
                                 Model model,
                                 RedirectAttributes redirectAttributes,
                                 HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error creating new task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdTask", task);
@@ -129,17 +128,16 @@ public class TaskController {
     public String getUpdateNewTaskForm(@PathVariable Long id,
                                        HttpSession httpSession,
                                        Model model) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
+        }
         User loggedUser = (User) httpSession.getAttribute("user");
         try {
-            if (loggedUser != null) {
-                Task taskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
-                TaskDTO taskDTO = taskDAO.fromEntityToDTO(taskEntity);
+            Task taskEntity = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
+            TaskDTO taskDTO = taskDAO.fromEntityToDTO(taskEntity);
 
-                model.addAttribute("updatedTask", taskDTO);
-                return "update-task";
-            }
-            model.addAttribute("updatedTask", new TaskDTO());
-            return "redirect:/tasks";
+            model.addAttribute("updatedTask", taskDTO);
+            return "update-task";
         } catch (NoSuchElementException e) {
             model.addAttribute("updatedTask", new TaskDTO());
             log.error(LocalDate.now() + ": " + e.getMessage());
@@ -154,11 +152,10 @@ public class TaskController {
                                  Model model,
                                  RedirectAttributes redirectAttributes,
                                  HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
-            model.addAttribute("updatedTask", new TaskDTO());
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error updating task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updatedTask", task);
@@ -198,8 +195,7 @@ public class TaskController {
     @GetMapping("/tasks/delete/{id}")
     public String deleteTaskById(@PathVariable Long id,
                                  HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
 

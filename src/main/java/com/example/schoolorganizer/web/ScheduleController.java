@@ -5,6 +5,7 @@ import com.example.schoolorganizer.dto.CalendarEventDTO;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.CalendarEvent;
 import com.example.schoolorganizer.model.User;
+import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.CalendarEventService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -40,10 +41,10 @@ public class ScheduleController {
 
     @GetMapping("/schedule")
     public String getSchedule(HttpSession httpSession, Model model) {
-        User loggedin = (User) httpSession.getAttribute("user");
-        if (loggedin == null) {
-            return "redirect:signin";
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
+        User loggedin = (User) httpSession.getAttribute("user");
 
         model.addAttribute("createdEvent", new CalendarEventDTO());
         return "schedule";
@@ -55,10 +56,10 @@ public class ScheduleController {
                                          Model model,
                                          RedirectAttributes redirectAttributes,
                                          HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error creating new task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdEvent", calendarEvent);

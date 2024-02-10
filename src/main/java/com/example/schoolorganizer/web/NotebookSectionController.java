@@ -6,6 +6,7 @@ import com.example.schoolorganizer.dto.NotebookSectionDTO;
 import com.example.schoolorganizer.model.Notebook;
 import com.example.schoolorganizer.model.NotebookSection;
 import com.example.schoolorganizer.model.User;
+import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.NotebookSectionService;
 import com.example.schoolorganizer.service.NotebookService;
 import jakarta.servlet.http.HttpSession;
@@ -45,13 +46,12 @@ public class NotebookSectionController {
     public String getNewNotebookSectionForm(@PathVariable Long id,
                                             HttpSession httpSession,
                                             Model model) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser != null) {
-            model.addAttribute("newNotebookSection", new NotebookSectionDTO());
-            return "new-notebook-section";
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
         }
-
-        return "redirect:/signin";
+        User loggedUser = (User) httpSession.getAttribute("user");
+        model.addAttribute("newNotebookSection", new NotebookSectionDTO());
+        return "new-notebook-section";
     }
 
     @PostMapping("/notebooks/{id}/create")
@@ -61,10 +61,10 @@ public class NotebookSectionController {
                                            RedirectAttributes redirectAttributes,
                                            BindingResult binding,
                                            @PathVariable Long id) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error creating new notebooks section: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdNotebookSection", createdSectionDTO);
@@ -103,17 +103,16 @@ public class NotebookSectionController {
                                                @ModelAttribute NotebookSectionDTO notebookSectionDTO,
                                                @PathVariable Long id,
                                                @PathVariable Long sectionId) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
+        }
         User loggedUser = (User) httpSession.getAttribute("user");
         try {
-            if (loggedUser != null) {
-                NotebookSection notebookSectionEntity = notebookSectionService.getNotebookSectionByNotebookIdAndSectionId(id, sectionId).orElseThrow();
-                NotebookSectionDTO updateDTO = notebookSectionAdapter.fromEntityToDTO(notebookSectionEntity);
+            NotebookSection notebookSectionEntity = notebookSectionService.getNotebookSectionByNotebookIdAndSectionId(id, sectionId).orElseThrow();
+            NotebookSectionDTO updateDTO = notebookSectionAdapter.fromEntityToDTO(notebookSectionEntity);
 
-                model.addAttribute("updatedNotebookSection", updateDTO);
-                return "update-notebook-section";
-            }
-            model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
-            return "redirect:/notebooks/{id}";
+            model.addAttribute("updatedNotebookSection", updateDTO);
+            return "update-notebook-section";
         } catch (NoSuchElementException e) {
             model.addAttribute("updatedNotebookSection", new NotebookSectionDTO());
             log.error(LocalDate.now() + ": " + e.getMessage());
@@ -129,11 +128,10 @@ public class NotebookSectionController {
                                         BindingResult binding,
                                         @PathVariable Long id,
                                         @PathVariable Long sectionId) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
-            model.addAttribute("updatedTask", new NotebookSectionDTO());
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error updating notebook section: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updatedNotebookSection", updatedSectionDTO);
@@ -176,11 +174,10 @@ public class NotebookSectionController {
     public String deleteNotebookSection(HttpSession httpSession,
                                         @PathVariable Long id,
                                         @PathVariable Long sectionId) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-
+        User loggedUser = (User) httpSession.getAttribute("user");
         notebookSectionService.deleteNotebookSectionById(sectionId);
         return "redirect:/notebooks/{id}";
     }

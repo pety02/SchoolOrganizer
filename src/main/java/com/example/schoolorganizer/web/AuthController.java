@@ -6,6 +6,7 @@ import com.example.schoolorganizer.adapter.Impl.RegisterUserAdapterImpl;
 import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.model.User;
+import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.Impl.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -49,6 +50,9 @@ public class AuthController {
                         Model model,
                         RedirectAttributes redirectAttributes,
                         HttpSession session) {
+        if (UserLoggedInValidator.hasUserLoggedIn(session)) {
+            session.invalidate();
+        }
         if (binding.hasErrors()) {
             log.error("Error logging user in: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("user", user);
@@ -83,7 +87,11 @@ public class AuthController {
     public String register(@Valid @ModelAttribute RegisterUserDTO user,
                            final BindingResult binding,
                            Model model,
+                           HttpSession session,
                            RedirectAttributes redirectAttributes) {
+        if (UserLoggedInValidator.hasUserLoggedIn(session)) {
+            session.invalidate();
+        }
         if (binding.hasErrors()) {
             log.error("Error registering user: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("user", user);

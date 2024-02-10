@@ -3,6 +3,7 @@ package com.example.schoolorganizer.web;
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.UpdateUserDataDTO;
 import com.example.schoolorganizer.model.User;
+import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -37,10 +38,10 @@ public class ProfileController {
     @GetMapping("/profile")
     public String getProfileForm(HttpSession httpSession,
                                  Model model) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
 
         model.addAttribute("updateUser", userDAO.fromEntityToDTO(loggedUser));
         return "profile";
@@ -52,11 +53,10 @@ public class ProfileController {
                                 Model model,
                                 RedirectAttributes redirectAttributes,
                                 HttpSession httpSession) {
-        User loggedUser = (User) httpSession.getAttribute("user");
-        if (loggedUser == null) {
-            model.addAttribute("updateUser", new UpdateUserDataDTO());
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
+        User loggedUser = (User) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
             log.error("Error updating user profile: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("updateUser", updatedUser);
