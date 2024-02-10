@@ -1,4 +1,4 @@
-package com.example.schoolorganizer.configuration;
+package com.example.schoolorganizer.security.configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,10 +10,12 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler)
             throws Exception {
-        if (!request.isUserInRole("STUDENT")) {
+        /*
+        if (!request.isUserInRole("USER")) {
             response.sendRedirect("/signin");
             return false;
         }
+        */
         return true;
     }
 

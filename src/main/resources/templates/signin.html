@@ -7,7 +7,8 @@
     <div class="form-row row align-items-center">
         <div class="form-group col-md-6">
             <label for="username" class="visually-hidden">Username</label>
-            <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Username"
+            <input type="text" class="form-control" id="username" name="username" th:field="*{username}"
+                   placeholder="Username"
                    required>
             <div th:if="${#fields.hasErrors('username')}"
                  class="alert alert-danger alert-dismissible fade show" data-err-alert>
@@ -17,7 +18,8 @@
         </div>
         <div class="form-group col-md-6 mt-2">
             <label for="password" class="visually-hidden">Password</label>
-            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password"
+            <input type="password" class="form-control" id="password" name="password" th:field="*{password}"
+                   placeholder="Password"
                    required>
             <div th:if="${#fields.hasErrors('password')}"
                  class="alert alert-danger alert-dismissible fade show" data-err-alert>

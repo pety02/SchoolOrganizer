@@ -11,6 +11,10 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,8 +30,18 @@ public class AuthController {
     private final IAdapter<User, LoginUserDTO> loginDAO;
     private final IAdapter<User, RegisterUserDTO> registerDAO;
 
+    private void authenticate(LoginUserDTO user, AuthenticationManager authManager) {
+        AuthenticationManager authenticationManager = authManager;
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        authentication.setAuthenticated(true);
+    }
+
     @Autowired
-    public AuthController(UserServiceImpl userService, LoginUserAdapterImpl loginDAO, RegisterUserAdapterImpl registerDAO) {
+    public AuthController(UserServiceImpl userService,
+                          LoginUserAdapterImpl loginDAO,
+                          RegisterUserAdapterImpl registerDAO) {
         this.userService = userService;
         this.loginDAO = loginDAO;
         this.registerDAO = registerDAO;
@@ -57,8 +71,11 @@ public class AuthController {
 
             var loggedInUser = userService.getUserById(user.getUserId()).orElseThrow();
             session.setAttribute("user", loggedInUser);
+
+            //authenticate(user);
             return "redirect:/home";
         } catch (Exception e) {
+            System.out.println("in catch clause");
             if (!model.containsAttribute("user")) {
                 model.addAttribute("user", user);
             }
