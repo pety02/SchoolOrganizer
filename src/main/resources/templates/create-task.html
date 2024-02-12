@@ -38,8 +38,8 @@
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="description" class="visually-hidden">Description</label>
-                <input type="text" class="form-control" id="description" name="description" th:field="*{description}"
-                       placeholder="Description">
+                <textarea class="form-control" id="description" name="description" th:field="*{description}"
+                          placeholder="Description"></textarea>
                 <div th:if="${#fields.hasErrors('description')}"
                      class="alert alert-danger alert-dismissible fade show" data-err-alert>
                     <span th:errors="*{description}" class="alert-danger"></span>

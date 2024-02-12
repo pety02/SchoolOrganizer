@@ -29,8 +29,8 @@
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="content" class="visually-hidden">Content</label>
-                <input type="text" class="form-control" id="content" name="content" th:field="*{content}"
-                       placeholder="Content">
+                <textarea class="form-control" id="content" name="content" th:field="*{content}"
+                          placeholder="Content"></textarea>
                 <div th:if="${#fields.hasErrors('content')}"
                      class="alert alert-danger alert-dismissible fade show" data-err-alert>
                     <span th:errors="*{content}" class="alert-danger"></span>

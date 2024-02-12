@@ -35,11 +35,11 @@ public class CalendarEvent {
     /**
      * General purpose constructor of CalendarEvent class.
      *
-     * @param title     - the title of the event.
-     * @param startDate - the start date of the event.
-     * @param endDate   - the end date of the event.
-     * @param color     - the color of the calendar badge for the event.
-     * @param createdBy - the creator of the event.
+     * @param title     the title of the event.
+     * @param startDate the start date of the event.
+     * @param endDate   the end date of the event.
+     * @param color     the color of the calendar badge for the event.
+     * @param createdBy the creator of the event.
      */
     public CalendarEvent(String title, LocalDate startDate, LocalDate endDate, String color, User createdBy) {
         setTitle(title);
@@ -62,7 +62,7 @@ public class CalendarEvent {
      * Set method for the CalendarEvent id. Used to set the id of the
      * CalendarEvent when Hibernate ORM generate it.
      *
-     * @param calendarEventId - the value of the CalendarEvent id.
+     * @param calendarEventId the value of the CalendarEvent id.
      */
     public void setCalendarEventId(Long calendarEventId) {
         this.calendarEventId = calendarEventId;
@@ -80,7 +80,7 @@ public class CalendarEvent {
     /**
      * Set method for the CalendarEvent title.
      *
-     * @param title - the CalendarEvent title.
+     * @param title the CalendarEvent title.
      */
     public void setTitle(String title) {
         this.title = title;
@@ -98,7 +98,7 @@ public class CalendarEvent {
     /**
      * Set method for the CalendarEvent start date.
      *
-     * @param startDate - the start date of the CalendarEvent.
+     * @param startDate the start date of the CalendarEvent.
      */
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
@@ -116,7 +116,7 @@ public class CalendarEvent {
     /**
      * Set method for the CalendarEvent end Date.
      *
-     * @param endDate - the CalendarEvent end date.
+     * @param endDate the CalendarEvent end date.
      */
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
@@ -134,7 +134,7 @@ public class CalendarEvent {
     /**
      * Set method for the CalendarEvent badge's color.
      *
-     * @param color - the CalendarEvent badge's color value.
+     * @param color the CalendarEvent badge's color value.
      */
     public void setColor(String color) {
         this.color = color;
@@ -152,7 +152,7 @@ public class CalendarEvent {
     /**
      * Set method for the CalendarEvent creator.
      *
-     * @param createdBy - the CalendarEvent creator.
+     * @param createdBy the CalendarEvent creator.
      */
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;

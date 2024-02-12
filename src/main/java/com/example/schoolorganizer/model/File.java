@@ -40,14 +40,14 @@ public class File {
     /**
      * General purpose constructor of the File class.
      *
-     * @param date                    - the creation or update date file.
-     * @param name                    - the original name of the file.
-     * @param extension               - the file's extension.
-     * @param artificialName          - the artificial name of the file.
-     * @param path                    - the full path of the file.
-     * @param addedInNotebookSections - the list of notebook sections
+     * @param date                    the creation or update date file.
+     * @param name                    the original name of the file.
+     * @param extension               the file's extension.
+     * @param artificialName          the artificial name of the file.
+     * @param path                    the full path of the file.
+     * @param addedInNotebookSections the list of notebook sections
      *                                where this file is added.
-     * @param addedInTask             - the lis of tasks where this file is added.
+     * @param addedInTask             the lis of tasks where this file is added.
      */
     public File(final LocalDate date, final String name, final String extension,
                 final String artificialName, final String path,
@@ -74,7 +74,7 @@ public class File {
      * Set method for the File id. Used to set the id of the file
      * when Hibernate ORM generate it.
      *
-     * @param fileId - the value of the File id.
+     * @param fileId the value of the File id.
      */
     public void setFileId(Long fileId) {
         this.fileId = fileId;
@@ -92,7 +92,7 @@ public class File {
     /**
      * Set method for the File creation date.
      *
-     * @param date - the File creation date.
+     * @param date the File creation date.
      */
     public void setDate(LocalDate date) {
         this.date = date;
@@ -110,7 +110,7 @@ public class File {
     /**
      * Set method for the File original name.
      *
-     * @param name - the File original name.
+     * @param name the File original name.
      */
     public void setName(String name) {
         this.name = name;
@@ -128,7 +128,7 @@ public class File {
     /**
      * Set method for the File extension.
      *
-     * @param extension - the File extension.
+     * @param extension the File extension.
      */
     public void setExtension(String extension) {
         this.extension = extension;
@@ -146,7 +146,7 @@ public class File {
     /**
      * Set method for the File artificial name.
      *
-     * @param artificialName - the File artificial name.
+     * @param artificialName the File artificial name.
      */
     public void setArtificialName(String artificialName) {
         this.artificialName = artificialName;
@@ -164,7 +164,7 @@ public class File {
     /**
      * Set method for the File full path.
      *
-     * @param path - the File full path.
+     * @param path the File full path.
      */
     public void setPath(String path) {
         this.path = path;
@@ -185,7 +185,7 @@ public class File {
      * Set method for the list of notebooks sections in which the File
      * is included.
      *
-     * @param addedInNotebookSections - the list of notebook sections in
+     * @param addedInNotebookSections the list of notebook sections in
      *                                which the File is included.
      */
     public void setAddedInNotebookSections(List<NotebookSection> addedInNotebookSections) {
@@ -204,7 +204,7 @@ public class File {
     /**
      * Set method for the list of tasks in which the File is included.
      *
-     * @param addedInTask - the list of tasks in which the File is included.
+     * @param addedInTask the list of tasks in which the File is included.
      */
     public void setAddedInTask(List<Task> addedInTask) {
         this.addedInTask = addedInTask;
