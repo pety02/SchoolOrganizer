@@ -15,7 +15,7 @@ import java.util.List;
 public class TaskDTO {
     @EqualsAndHashCode.Include
     private Long taskId;
-    @Pattern(regexp = "^[A-Z]([a-z]+\\s?)+$", message = "The title should starts with capital letter.")
+    //@Pattern(regexp = "^[A-Z]([a-z]+\\s?)+$", message = "The title should starts with capital letter.")
     @Size(min = 1, max = 200, message = "The title length should be between 1 and 200 letters.")
     private String title;
     @DateTimeFormat
