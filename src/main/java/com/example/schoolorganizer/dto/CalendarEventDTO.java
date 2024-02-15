@@ -1,5 +1,7 @@
 package com.example.schoolorganizer.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -8,8 +10,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class CalendarEventDTO {
@@ -29,4 +33,16 @@ public class CalendarEventDTO {
     @Size(min = 1, max = 200, message = "")
     private String color;
     private UserDTO createdBy;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"calendarEventId\": " + calendarEventId +
+                ", \"title\": \"" + title + '\"' +
+                ", \"startDate\": \"" + startDate + '\"' +
+                ", \"endDate\": \"" + endDate + '\"' +
+                ", \"color\": \"" + color + '\"' +
+                ", \"createdBy\": " + (createdBy != null ? "{}" : "null") +
+                '}';
+    }
 }

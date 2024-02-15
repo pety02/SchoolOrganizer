@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const close = document.querySelector('.btn-close');
 
     // TODO: to make an array from calendarEvents
-    const myEvents = document.getElementById('myEvents').innerText;
+    const myEvents = JSON.parse(document.getElementById('myEvents').innerText);
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         customButtons: {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
         unselectAuto: false,
         displayEventTime: false,
         events: myEvents,
-        eventRender: function (info) { // TODO: to render properly user's events.
+        eventRender: function (info) {
             info.el.addEventListener('contextmenu', function (e) {
                 e.preventDefault();
                 let existingMenu = document.querySelector('.context-menu');
@@ -59,88 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 menu.style.top = e.pageY + 'px';
                 menu.style.left = e.pageX + 'px';
 
-                // Edit context menu
-                menu.querySelector('li:first-child').addEventListener('click', function () {
-                    menu.remove();
 
-                    const editModal = new bootstrap.Modal(document.getElementById('form'));
-                    const modalTitle = document.getElementById('title');
-                    const titleInput = document.getElementById('title');
-                    const startDateInput = document.getElementById('startDate');
-                    const endDateInput = document.getElementById('endDate');
-                    const colorInput = document.getElementById('color');
-                    const submitButton = document.getElementById('submit-button');
-                    const cancelButton = document.getElementById('cancel-button');
-                    modalTitle.innerHTML = 'Edit Event';
-                    titleInput.value = info.event.title;
-                    startDateInput.value = moment(info.event.startDate).format('YYYY-MM-DD');
-                    endDateInput.value = moment(info.event.endDate, 'YYYY-MM-DD').subtract(1, 'day').format('YYYY-MM-DD');
-                    colorInput.value = info.event.color.value;
-                    submitButton.innerHTML = 'Save Changes';
-
-
-                    editModal.show();
-
-                    submitButton.classList.remove('btn-success')
-                    submitButton.classList.add('btn-primary')
-
-                    // Edit button
-                    submitButton.addEventListener('click', function () {
-                        const updatedEvents = {
-                            id: info.event.id,
-                            title: titleInput.value,
-                            start: startDateInput.value,
-                            end: moment(endDateInput.value, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD'),
-                            backgroundColor: colorInput.value
-                        }
-
-                        if (updatedEvents.end <= updatedEvents.start) { // add if statement to check end date
-                            dangerAlert.style.display = 'block';
-                            return;
-                        }
-
-                        const eventIndex = myEvents.findIndex(event => event.id === updatedEvents.id);
-                        myEvents.splice(eventIndex, 1, updatedEvents);
-
-                        localStorage.setItem('events', JSON.stringify(myEvents));
-
-                        // Update the event in the calendar
-                        const calendarEvent = calendar.getEventById(info.event.id);
-                        calendarEvent.setProp('title', updatedEvents.title);
-                        calendarEvent.setStart(updatedEvents.startDate);
-                        calendarEvent.setEnd(updatedEvents.endDate);
-                        calendarEvent.setProp('backgroundColor', updatedEvents.backgroundColor);
-
-
-                        editModal.hide();
-
-                    })
-                });
-
-                // Delete menu
-                menu.querySelector('li:last-child').addEventListener('click', function () {
-                    const deleteModal = new bootstrap.Modal(document.getElementById('delete-modal'));
-                    const modalBody = document.getElementById('delete-modal-body');
-                    const cancelModal = document.getElementById('cancel-button');
-                    modalBody.innerHTML = `Are you sure you want to delete <b>"${info.event.title}"</b>`
-                    deleteModal.show();
-
-                    const deleteButton = document.getElementById('delete-button');
-                    deleteButton.addEventListener('click', function () {
-                        myEvents.splice(eventIndex, 1);
-                        localStorage.setItem('events', JSON.stringify(myEvents));
-                        calendar.getEventById(info.event.id).remove();
-                        deleteModal.hide();
-                        menu.remove();
-
-                    });
-
-                    cancelModal.addEventListener('click', function () {
-                        deleteModal.hide();
-                    })
-
-
-                });
                 document.addEventListener('click', function () {
                     menu.remove();
                 });
@@ -165,6 +84,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
+    //document.getElementById('scheduler').addEventListener('onload', function () {
+
+    for (let i = 0; i < myEvents.length; i++) {
+        const ev = {
+            id: myEvents[i].calendarEventId,
+            title: myEvents[i].title,
+            start: myEvents[i].startDate,
+            end: myEvents[i].endDate,
+            allDay: false,
+            backgroundColor: myEvents[i].color
+        };
+        console.log(ev);
+
+        calendar.addEvent(ev);
+    }
+    //})
+
     calendar.on('select', function (info) {
 
         const startDateInput = document.getElementById('startDate');
@@ -179,6 +115,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     calendar.render();
+
+    const form = document.querySelector('form');
+
+    /*form.addEventListener('submit', function (event) {
+        event.preventDefault(); // prevent default form submission
+
+        // retrieve the form input values
+        const title = document.querySelector('#title').value;
+        const startDate = document.querySelector('#startDate').value;
+        const endDate = document.querySelector('#endDate').value;
+        const color = document.querySelector('#color').value;
+        const endDateFormatted = moment(endDate, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD');
+        const eventId = uuidv4();
+
+        console.log(eventId);
+
+        if (endDateFormatted <= startDate) { // add if statement to check end date
+            dangerAlert.style.display = 'block';
+            return;
+        }
+
+        const newEvent = {
+            id: eventId,
+            title: title,
+            start: startDate,
+            end: endDateFormatted,
+            allDay: false,
+            backgroundColor: color
+        };
+
+        // render the new event on the calendar
+        calendar.addEvent(newEvent);
+
+        myModal.hide();
+        form.reset();
+    });*/
 
     myModal._element.addEventListener('hide.bs.modal', function () {
         dangerAlert.style.display = 'none';

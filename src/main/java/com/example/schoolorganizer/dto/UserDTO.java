@@ -7,8 +7,10 @@ import lombok.*;
 import java.util.List;
 import java.util.Set;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+//@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserDTO {
@@ -29,4 +31,20 @@ public class UserDTO {
     private List<NotebookDTO> notebooks;
     private List<UserDTO> friends;
     private Set<UserRole> roles;
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", tasks=" + tasks +
+                ", notebooks=" + notebooks +
+                ", friends=" + friends +
+                ", roles=" + roles +
+                '}';
+    }
 }

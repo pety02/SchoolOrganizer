@@ -19,7 +19,7 @@
 <div th:replace="~{fragments/navigation::navigation}"></div>
 
 <!--$%adsense%$-->
-<main class="cd__main container mt-5" style="font-size:1rem;">
+<main class="cd__main container mt-5" style="font-size:1rem;" id="scheduler">
     <button onclick="clearAllEvents();" class="btn btn-danger">Clear events</button>
 
     <span th:text="${allEvents}" id="myEvents" class="visually-hidden"></span>
