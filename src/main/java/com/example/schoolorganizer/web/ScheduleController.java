@@ -1,5 +1,7 @@
 package com.example.schoolorganizer.web;
 
+import java.util.*;
+
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.CalendarEventDTO;
 import com.example.schoolorganizer.dto.UserDTO;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
@@ -39,29 +42,34 @@ public class ScheduleController {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
-        UserDTO loggedin = (UserDTO) httpSession.getAttribute("user");
+        UserDTO loggedIn = (UserDTO) httpSession.getAttribute("user");
 
         model.addAttribute("createdEvent", new CalendarEventDTO());
+        model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedIn.getUserId()));
         return "schedule";
     }
 
-    @PostMapping("/schedule")
+    @PostMapping("/schedule/create")
     public String createNewCalendarEvent(@Valid @ModelAttribute CalendarEventDTO calendarEvent,
                                          BindingResult binding,
                                          Model model,
                                          RedirectAttributes redirectAttributes,
                                          HttpSession httpSession) {
+        System.out.println("in adding events...");
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
+            System.out.println("maybe here");
             log.error("Error creating new task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdEvent", calendarEvent);
+            model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedUser.getUserId()));
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "createdEvent", binding);
             return "redirect:/schedule";
         }
         try {
+            System.out.println("or here in try clause");
             calendarEvent.setCreatedBy(loggedUser);
             if (calendarEvent.getEndDate() == null) {
                 calendarEvent.setEndDate(calendarEvent.getStartDate());
@@ -71,10 +79,13 @@ public class ScheduleController {
                 redirectAttributes.addFlashAttribute("createdEvent", createdEvent);
             }
             model.addAttribute("createdEvent", createdEvent);
+            model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedUser.getUserId()));
             return "redirect:/schedule";
         } catch (Exception e) {
+            System.out.println("or in catch clause");
             if (!redirectAttributes.containsAttribute("createdEvent")) {
                 redirectAttributes.addFlashAttribute("createdEvent", calendarEvent);
+                model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedUser.getUserId()));
             }
             log.error(LocalDate.now() + ": " + e.getMessage());
             return "redirect:/schedule";

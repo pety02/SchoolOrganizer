@@ -15,17 +15,17 @@
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.3.0/main.min.css'>
 </head>
 <body>
+
 <div th:replace="~{fragments/navigation::navigation}"></div>
 
 <!--$%adsense%$-->
 <main class="cd__main container mt-5" style="font-size:1rem;">
     <button onclick="clearAllEvents();" class="btn btn-danger">Clear events</button>
 
+    <span th:text="${allEvents}" id="myEvents" class="visually-hidden"></span>
     <!-- Start DEMO HTML (Use the following code into your project)-->
     <div id='calendar'></div>
-
     <!-- Add modal -->
-
     <div class="modal fade edit-form" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog" role="document">
             <div class="modal-content">
@@ -33,30 +33,30 @@
                     <h5 class="modal-title" id="modal-title">Add Event</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="myForm" th:object="${createdEvent}" th:action="@{/schedule}" th:method="POST">
+                <form id="myForm" th:object="${createdEvent}" th:action="@{/schedule/create}" th:method="POST">
                     <div class="modal-body">
                         <div class="alert alert-danger " role="alert" id="danger-alert" style="display: none;">
                             End date should be greater than start date.
                         </div>
                         <div class="form-group">
-                            <label for="event-title">Event name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="event-title" name="title"
+                            <label for="title">Event name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title" name="title"
                                    placeholder="Enter event title"
                                    th:field="*{title}" required>
                         </div>
                         <div class="form-group">
-                            <label for="start-date">Start date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="start-date" name="startDate"
+                            <label for="startDate">Start date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="startDate" name="startDate"
                                    th:field="*{startDate}" required>
                         </div>
                         <div class="form-group">
-                            <label for="end-date">End date - <small class="text-muted">Optional</small></label>
-                            <input type="date" class="form-control" id="end-date" name="endDate"
+                            <label for="endDate">End date - <small class="text-muted">Optional</small></label>
+                            <input type="date" class="form-control" id="endDate" name="endDate"
                                    th:field="*{endDate}">
                         </div>
                         <div class="form-group">
-                            <label for="event-color">Color</label>
-                            <input type="color" class="form-control" id="event-color" name="color" th:field="*{color}"
+                            <label for="color">Color</label>
+                            <input type="color" class="form-control" id="color" name="color" th:field="*{color}"
                                    value="#3788d8">
                         </div>
                     </div>
