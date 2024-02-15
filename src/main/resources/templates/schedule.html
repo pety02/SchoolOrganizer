@@ -20,11 +20,19 @@
 
 <!--$%adsense%$-->
 <main class="cd__main container mt-5" style="font-size:1rem;" id="scheduler">
-    <button onclick="clearAllEvents();" class="btn btn-danger">Clear events</button>
-
     <span th:text="${allEvents}" id="myEvents" class="visually-hidden"></span>
     <!-- Start DEMO HTML (Use the following code into your project)-->
-    <div id='calendar'></div>
+    <div class="flex-content">
+        <form th:action="@{/schedule/delete}"
+              th:method="GET">
+            <label for="delete-title" class="visually-hidden">Title</label>
+            <input id="delete-title" name="title" th:value="${title}" placeholder="Event title">
+            <button type="submit" class="btn btn-danger">Delete
+                Event
+            </button>
+        </form>
+        <div id='calendar'></div>
+    </div>
     <!-- Add modal -->
     <div class="modal fade edit-form" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog" role="document">
@@ -67,29 +75,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Delete Modal -->
-    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-title"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="delete-modal-title">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center" id="delete-modal-body">
-                    Are you sure you want to delete the event?
-                </div>
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-secondary rounded-sm" data-dismiss="modal" id="cancel-button">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-danger rounded-lg" id="delete-button">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END EDMO HTML (Happy Coding!)-->
 </main>
 <br>
 

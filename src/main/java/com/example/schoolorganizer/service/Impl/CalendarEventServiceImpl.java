@@ -55,4 +55,13 @@ public class CalendarEventServiceImpl implements CalendarEventService {
         return Optional.of(calendarEventAdapter
                 .fromEntityToDTO(eventRepository.save(event)));
     }
+
+    @Override
+    public void deleteEventsByTitle(String title, Long id) {
+        List<CalendarEvent> events = eventRepository.findAllByCreatedByUserIdAndTitle(id, title);
+        for (CalendarEvent e : events) {
+            System.out.println(e);
+        }
+        eventRepository.deleteAll(events);
+    }
 }

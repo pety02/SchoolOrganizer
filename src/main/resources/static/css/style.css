@@ -3,10 +3,12 @@
 body {
     font-family: "Montserrat", sans-serif;
 }
-.cd__main{
-   position: relative;
-   background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6) !important;
+
+.cd__main {
+    position: relative;
+    background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6) !important;
 }
+
 #calendar {
     max-width: 800px;
     margin: 40px auto;
@@ -35,30 +37,27 @@ body {
 .fc-customButton-button {
     font-size: 13px !important;
     position: absolute;
-    top:  0px;
+    top: 0px;
     left: 50%;
     transform: translateY(-50%);
 }
-
 
 
 .form-group {
     margin-bottom: 1rem;
 }
 
-.form-group>label {
+.form-group > label {
     margin-bottom: 10px;
 }
 
 #delete-modal .modal-footer > .btn {
 
-    border-radius: 3px !important; 
+    border-radius: 3px !important;
     padding: 0px 8px !important;
     font-size: 15px;
 
- }
-
-
+}
 
 
 .fc-scroller {
@@ -75,10 +74,6 @@ body {
     padding: 5px;
 }
 
-/* .context-menu.show {
-    display: block;
-  } */
-
 .context-menu ul {
     list-style-type: none;
     margin: 0;
@@ -86,9 +81,8 @@ body {
 
 }
 
-.context-menu ul>li {
-    display: block;
-    ;
+.context-menu ul > li {
+    display: block;;
     padding: 5px 15px;
     list-style-type: none;
     color: #333;
@@ -101,7 +95,7 @@ body {
 
 }
 
-.context-menu ul>li:hover {
+.context-menu ul > li:hover {
     color: #fff;
     background-color: #007bff;
     border-radius: 2px;
