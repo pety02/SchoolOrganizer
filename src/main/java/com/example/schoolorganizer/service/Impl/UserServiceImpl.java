@@ -11,6 +11,7 @@ import com.example.schoolorganizer.model.UserRole;
 import com.example.schoolorganizer.repository.PasswordRepository;
 import com.example.schoolorganizer.repository.UserRepository;
 import com.example.schoolorganizer.security.PasswordHasher;
+import com.example.schoolorganizer.service.EmailService;
 import com.example.schoolorganizer.service.LoginUserService;
 import com.example.schoolorganizer.service.RegisterUserService;
 import com.example.schoolorganizer.service.UserService;
@@ -19,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
@@ -34,17 +34,36 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     private final IAdapter<User, RegisterUserDTO> registerAdapter;
     private final IAdapter<User, UserDTO> userAdapter;
     private final IAdapter<User, UpdateUserDataDTO> updatedUserAdapter;
+    private final EmailService emailService;
+
+    // To think if you want to send messages via SMTP server. To find
+    // free and secure way of sending emails on user data update.
+    private void sendEmailMessage(User oldUser, UpdateUserDataDTO updated) {
+        if (oldUser == null || updated == null) {
+            return;
+        }
+        String to = oldUser.getEmail();
+        String subject = "User data updated:";
+        String message = "Dear, " + oldUser.getName() + " " + oldUser.getSurname()
+                + "\nYour personal data has been updated recently! If this was not you, " +
+                "do not hesitate to contact our support team at the following email: " +
+                "school_organizer@abv.bg!\n" + "\n" + "Best Regards,\n" +
+                "Petya Licheva - School Organizer support";
+
+        emailService.sendEmail(to, subject, message);
+    }
 
     @Autowired
     public UserServiceImpl(UserRepository userRepo,
                            PasswordRepository passwordRepo,
-                           IAdapter<User, LoginUserDTO> loginAdapter, IAdapter<User, RegisterUserDTO> registerDAO, IAdapter<User, UserDTO> userAdapter, IAdapter<User, UpdateUserDataDTO> updatedUserAdapter) {
+                           IAdapter<User, LoginUserDTO> loginAdapter, IAdapter<User, RegisterUserDTO> registerDAO, IAdapter<User, UserDTO> userAdapter, IAdapter<User, UpdateUserDataDTO> updatedUserAdapter, EmailService emailService) {
         this.userRepo = userRepo;
         this.passwordRepo = passwordRepo;
         this.loginAdapter = loginAdapter;
         this.registerAdapter = registerDAO;
         this.userAdapter = userAdapter;
         this.updatedUserAdapter = updatedUserAdapter;
+        this.emailService = emailService;
     }
 
     @Override
@@ -105,8 +124,14 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
                 oldPassword.setOwner(oldUser);
                 passwordRepo.save(oldPassword);
             }
-            return Optional.of(updatedUserAdapter
-                    .fromEntityToDTO(userRepo.save(oldUser)));
+            UpdateUserDataDTO updated = updatedUserAdapter
+                    .fromEntityToDTO(userRepo.save(oldUser));
+
+            /*
+            sendEmailMessage(oldUser, updated);
+             */
+
+            return Optional.of(updated);
         } catch (Exception e) {
             log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();

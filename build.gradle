@@ -29,7 +29,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0'
     implementation 'org.mindrot:jbcrypt:0.4'
-    
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     //implementation 'org.springframework.boot:spring-boot-starter-security:'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
