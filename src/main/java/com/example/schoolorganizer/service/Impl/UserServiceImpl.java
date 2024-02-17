@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -58,23 +56,18 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     }
 
     @Override
-    public Optional<LoginUserDTO> login(String username, String hashedPassword) {
-        String hash;
+    public Optional<LoginUserDTO> login(String username, String password) {
         try {
-            hash = PasswordHasher.hash(hashedPassword);
             if (userRepo.existsByUsername(username)) {
                 User loggedIn = userRepo.findByUsername(username).orElseThrow();
-                Collection<Password> passwords = passwordRepo.findByPasswordHash(hash);
-                Password pass = passwordRepo.findByOwner(loggedIn).orElse(null);
-                for (var p : passwords) {
-                    if (pass != null && p.getPasswordHash().equals(pass.getPasswordHash())) {
-                        return Optional.of(loginAdapter.fromEntityToDTO(loggedIn));
-                    }
+                Password currUserPassword = passwordRepo.findAllByOwnerUserId(loggedIn.getUserId());
+                if (PasswordHasher.verifyPassword(password, currUserPassword.getPasswordHash())) {
+                    return Optional.of(loginAdapter.fromEntityToDTO(loggedIn));
                 }
             } else {
                 throw new IllegalArgumentException("The username is incorrect.");
             }
-        } catch (NoSuchAlgorithmException | NoSuchElementException e) {
+        } catch (Exception e) {
             log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
         }
@@ -107,14 +100,14 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
                 oldUser.setUsername(userDTO.getNewUsername());
             }
             if (isPasswordChanged) {
-                oldPassword.setPasswordHash(PasswordHasher.hash(userDTO
+                oldPassword.setPasswordHash(PasswordHasher.hashPassword(userDTO
                         .getNewPassword()));
                 oldPassword.setOwner(oldUser);
                 passwordRepo.save(oldPassword);
             }
             return Optional.of(updatedUserAdapter
                     .fromEntityToDTO(userRepo.save(oldUser)));
-        } catch (NoSuchElementException | NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
         }
@@ -128,8 +121,8 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
             User registered = registerAdapter.fromDTOToEntity(userDTO);
             String hashedPassword;
             try {
-                hashedPassword = PasswordHasher.hash(userDTO.getPassword());
-            } catch (NoSuchAlgorithmException ex) {
+                hashedPassword = PasswordHasher.hashPassword(userDTO.getPassword());
+            } catch (Exception ex) {
                 hashedPassword = userDTO.getPassword();
             }
             registered.setRoles(Set.of(UserRole.STUDENT));

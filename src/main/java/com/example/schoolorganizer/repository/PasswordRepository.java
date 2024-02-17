@@ -16,5 +16,5 @@ public interface PasswordRepository extends JpaRepository<Password, Long> {
 
     boolean existsByPasswordHash(String hash);
 
-    Collection<Password> findByPasswordHash(String hash);
+    Password findAllByOwnerUserId(Long id);
 }
