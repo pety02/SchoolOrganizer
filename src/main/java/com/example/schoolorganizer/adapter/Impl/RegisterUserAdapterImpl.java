@@ -6,14 +6,19 @@ import com.example.schoolorganizer.model.User;
 import org.springframework.stereotype.Component;
 
 /**
+ * This class describes RegisteredUserAdapterImpl. A class that
+ * transforms a User to a RegisteredUserDTO and vice versa.
  *
+ * @author Petya Licheva
  */
 @Component
 public class RegisterUserAdapterImpl implements IAdapter<User, RegisterUserDTO> {
 
     /**
-     * @param entity
-     * @return
+     * This method transforms User entity object to RegisteredUserDTO object.
+     *
+     * @param entity a User entity object.
+     * @return a RegisteredUserDTO object.
      */
     @Override
     public RegisterUserDTO fromEntityToDTO(User entity) {
@@ -31,8 +36,10 @@ public class RegisterUserAdapterImpl implements IAdapter<User, RegisterUserDTO> 
     }
 
     /**
-     * @param registerUserDTO
-     * @return
+     * This method transforms a RegisteredUserDTO object to a User entity object.
+     *
+     * @param registerUserDTO a RegisteredUserDTO object.
+     * @return a User entity object.
      */
     @Override
     public User fromDTOToEntity(RegisterUserDTO registerUserDTO) {
