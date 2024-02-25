@@ -3,8 +3,15 @@ package com.example.schoolorganizer.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Data
+/**
+ * This class describes a UpdatedUserData DTO.
+ *
+ * @author Petya Licheva
+ */
+@Getter
+@Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UpdateUserDataDTO {
@@ -34,4 +41,21 @@ public class UpdateUserDataDTO {
     private String newPassword;
     @Pattern(regexp = "^[a-zA-Z0-9]{8,150}$", message = "The re-entered password should contains lowercase and uppercase.")
     private String reEnteredNewPassword;
+
+    /**
+     * @return a UpdateUserDataDTO object in JSON string format.
+     */
+    @Override
+    public String toString() {
+        return "{" +
+                "\"userId\": " + userId +
+                ", \"oldEmail\": " + oldEmail +
+                ", \"newEmail\": " + newEmail +
+                ", \"oldUsername\": " + oldUsername +
+                ", \"newUsername\": " + newUsername +
+                ", \"oldPassword\": " + oldPassword +
+                ", \"newPassword\": " + newPassword +
+                ", \"reEnteredNewPassword\": " + reEnteredNewPassword +
+                '}';
+    }
 }
