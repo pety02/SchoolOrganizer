@@ -4,12 +4,19 @@ import com.example.schoolorganizer.model.UserRole;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class describes a User DTO.
+ *
+ * @author Petya Licheva
+ */
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -32,19 +39,22 @@ public class UserDTO {
     private List<UserDTO> friends;
     private Set<UserRole> roles;
 
+    /**
+     * @return UserDTO in JSON string format.
+     */
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "userId=" + userId +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", tasks=" + tasks +
-                ", notebooks=" + notebooks +
-                ", friends=" + friends +
-                ", roles=" + roles +
+        return "{" +
+                "\"userId\": " + userId +
+                ", \"name\": " + name + '\'' +
+                ", \"surname\": " + surname + '\'' +
+                ", \"email\": " + email + '\'' +
+                ", \"username\": " + username + '\'' +
+                ", \"password\": " + password + '\'' +
+                ", \"tasks\": " + Arrays.toString(tasks.toArray()) +
+                ", \"notebooks\": " + Arrays.toString(notebooks.toArray()) +
+                ", \"friends\": " + Arrays.toString(friends.toArray()) +
+                ", \"roles\": " + Arrays.toString(roles.toArray()) +
                 '}';
     }
 }
