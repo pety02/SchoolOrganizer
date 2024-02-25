@@ -6,8 +6,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Data
+/**
+ * This class describes a file DTO.
+ */
+@Getter
+@Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class FileDTO {
@@ -34,4 +39,19 @@ public class FileDTO {
     @Pattern(regexp = "^.*[^\\w -.].*$", message = "The path contains words separated with \\.")
     @Size(min = 1, max = 1000, message = "The path length should be between 1 and 1000 characters.")
     private String path;
+
+    /**
+     * @return the file DTO object in JSON string format.
+     */
+    @Override
+    public String toString() {
+        return "{" +
+                "\"fileId\": " + fileId +
+                ", \"date\": " + date +
+                ", \"name\": " + name +
+                ", \"extension\": " + extension +
+                ", \"artificialName\": " + artificialName +
+                ", \"path\": " + path +
+                '}';
+    }
 }
