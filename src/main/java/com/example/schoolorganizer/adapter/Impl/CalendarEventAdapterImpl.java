@@ -31,8 +31,8 @@ public class CalendarEventAdapterImpl implements IAdapter<CalendarEvent, Calenda
     /**
      * Method that transforms calendar event entity to calendar event DTO.
      *
-     * @param entity calendar event entity.
-     * @return the calendar event DTO.
+     * @param entity calendar event entity object.
+     * @return the calendar event DTO object.
      */
     @Override
     public CalendarEventDTO fromEntityToDTO(CalendarEvent entity) {
@@ -52,8 +52,8 @@ public class CalendarEventAdapterImpl implements IAdapter<CalendarEvent, Calenda
     /**
      * Method that transforms from calendar event DTO to entity.
      *
-     * @param calendarEventDTO the calendar event DTO.
-     * @return the calendar event entity.
+     * @param calendarEventDTO the calendar event DTO object.
+     * @return the calendar event entity object.
      */
     @Override
     public CalendarEvent fromDTOToEntity(CalendarEventDTO calendarEventDTO) {

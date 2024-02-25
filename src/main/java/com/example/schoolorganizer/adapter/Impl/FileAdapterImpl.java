@@ -6,14 +6,19 @@ import com.example.schoolorganizer.model.File;
 import org.springframework.stereotype.Component;
 
 /**
+ * This class describes a FileAdapterImpl. A class that transforms
+ * a File to FileDTO and vice versa.
  *
+ * @author Petya Licheva
  */
 @Component
 public class FileAdapterImpl implements IAdapter<File, FileDTO> {
 
     /**
-     * @param entity
-     * @return
+     * Method that transforms from File entity to File DTO.
+     *
+     * @param entity the File entity object.
+     * @return the File DTO object.
      */
     @Override
     public FileDTO fromEntityToDTO(File entity) {
@@ -31,8 +36,10 @@ public class FileAdapterImpl implements IAdapter<File, FileDTO> {
     }
 
     /**
-     * @param fileDTO
-     * @return
+     * Method that transforms from File DTO to File entity.
+     *
+     * @param fileDTO the File DTO object.
+     * @return the File entity object.
      */
     @Override
     public File fromDTOToEntity(FileDTO fileDTO) {
