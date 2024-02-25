@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * This class describes NotebookAdapterImpl.
+ * This class describes NotebookAdapterImpl. A class that
+ * transforms a Notebook to a NotebookDTO and vice versa.
  *
  * @author Petya Licheva
  */
