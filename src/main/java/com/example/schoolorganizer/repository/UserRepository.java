@@ -6,6 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * This interface describes UserRepository with its functionality.
+ *
+ * @author Petya Licheva
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserId(Long id);
