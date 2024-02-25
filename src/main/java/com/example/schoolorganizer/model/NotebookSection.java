@@ -154,7 +154,7 @@ public class NotebookSection {
     /**
      * Set method for the Notebook in which the section is included.
      *
-     * @param addedInNotebook the the Notebook in which the section is included.
+     * @param addedInNotebook the Notebook in which the section is included.
      */
     public void setAddedInNotebook(Notebook addedInNotebook) {
         this.addedInNotebook = addedInNotebook;
