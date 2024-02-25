@@ -9,5 +9,9 @@ public interface CalendarEventService {
 
     Optional<CalendarEventDTO> createEventByUserId(Long id, CalendarEventDTO eventDTO);
 
+    List<CalendarEventDTO> searchByTitle(Long id, String title);
+
     void deleteEventsByTitle(String title, Long id);
+
+    void deleteByID(Long id);
 }

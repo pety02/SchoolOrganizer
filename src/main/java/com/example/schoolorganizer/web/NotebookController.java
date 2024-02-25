@@ -46,6 +46,7 @@ public class NotebookController {
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         List<NotebookDTO> userNotebookDTOs = notebookService.getAllNotebooksByUserId(loggedUser.getUserId());
         model.addAttribute("notebooks", userNotebookDTOs);
+        httpSession.setAttribute("foundEvents", null);
         return "notebooks";
     }
 

@@ -51,6 +51,7 @@ public class ProfileController {
 
         UpdateUserDataDTO updatingUser = fromLoggedUserToUpdateUser(loggedUser);
         model.addAttribute("updateUser", updatingUser);
+        httpSession.setAttribute("foundEvents", null);
         return "profile";
     }
 

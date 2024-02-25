@@ -127,10 +127,7 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
             UpdateUserDataDTO updated = updatedUserAdapter
                     .fromEntityToDTO(userRepo.save(oldUser));
 
-            /*
-            sendEmailMessage(oldUser, updated);
-             */
-
+            // sendEmailMessage(oldUser, updated);
             return Optional.of(updated);
         } catch (Exception e) {
             log.error(LocalDate.now() + ": " + e.getMessage());

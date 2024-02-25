@@ -39,6 +39,7 @@ public class MainController {
         if (UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
             model.addAttribute("user", loggedUser);
+            httpSession.setAttribute("foundEvents", null);
             return "home";
         }
 

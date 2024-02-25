@@ -65,7 +65,6 @@ public class AuthController {
             //authenticate(user);
             return "redirect:/home";
         } catch (Exception e) {
-            System.out.println("in catch clause");
             if (!model.containsAttribute("user")) {
                 model.addAttribute("user", user);
             }

@@ -57,11 +57,25 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     }
 
     @Override
+    public List<CalendarEventDTO> searchByTitle(Long id, String title) {
+        List<CalendarEvent> events = eventRepository.findAllByCreatedByUserIdAndTitle(id, title);
+        List<CalendarEventDTO> eventsDTOs = new ArrayList<>();
+        for (CalendarEvent currentEvent : events) {
+            eventsDTOs.add(calendarEventAdapter.fromEntityToDTO(currentEvent));
+            System.out.println(currentEvent.getTitle());
+        }
+
+        return eventsDTOs;
+    }
+
+    @Override
     public void deleteEventsByTitle(String title, Long id) {
         List<CalendarEvent> events = eventRepository.findAllByCreatedByUserIdAndTitle(id, title);
-        for (CalendarEvent e : events) {
-            System.out.println(e);
-        }
         eventRepository.deleteAll(events);
+    }
+
+    @Override
+    public void deleteByID(Long id) {
+        eventRepository.deleteById(id);
     }
 }

@@ -38,6 +38,7 @@ public class TaskController {
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         List<TaskDTO> userTasksDTOs = taskService.getAllTasksByUserId(loggedUser.getUserId());
         model.addAttribute("tasks", userTasksDTOs);
+        httpSession.setAttribute("foundEvents", null);
         return "tasks";
     }
 

@@ -41,6 +41,8 @@ public class ScheduleController {
         }
         UserDTO loggedIn = (UserDTO) httpSession.getAttribute("user");
 
+        List<CalendarEventDTO> events = (List<CalendarEventDTO>) httpSession.getAttribute("foundEvents");
+        model.addAttribute("foundEvents", events);
         model.addAttribute("createdEvent", new CalendarEventDTO());
         model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedIn.getUserId()));
         return "schedule";
@@ -52,13 +54,11 @@ public class ScheduleController {
                                          Model model,
                                          RedirectAttributes redirectAttributes,
                                          HttpSession httpSession) {
-        System.out.println("in adding events...");
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
         UserDTO loggedUser = (UserDTO) httpSession.getAttribute("user");
         if (binding.hasErrors()) {
-            System.out.println("maybe here");
             log.error("Error creating new task: {}", binding.getAllErrors());
             redirectAttributes.addFlashAttribute("createdEvent", calendarEvent);
             model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedUser.getUserId()));
@@ -66,7 +66,6 @@ public class ScheduleController {
             return "redirect:/schedule";
         }
         try {
-            System.out.println("or here in try clause");
             calendarEvent.setCreatedBy(loggedUser);
             if (calendarEvent.getEndDate() == null) {
                 calendarEvent.setEndDate(calendarEvent.getStartDate());
@@ -79,7 +78,6 @@ public class ScheduleController {
             model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedUser.getUserId()));
             return "redirect:/schedule";
         } catch (Exception e) {
-            System.out.println("or in catch clause");
             if (!redirectAttributes.containsAttribute("createdEvent")) {
                 redirectAttributes.addFlashAttribute("createdEvent", calendarEvent);
                 model.addAttribute("allEvents", calendarService.getAllEventsByUserId(loggedUser.getUserId()));
@@ -89,14 +87,29 @@ public class ScheduleController {
         }
     }
 
-    @GetMapping("/schedule/delete")
-    public String deleteEvent(@RequestParam("title") String title,
+    @GetMapping("/schedule/search")
+    public String searchEvents(@RequestParam("title") String title,
+                               HttpSession httpSession,
+                               Model model) {
+        if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
+            return "redirect:/signin";
+        }
+        UserDTO loggedInUser = (UserDTO) httpSession.getAttribute("user");
+        List<CalendarEventDTO> events = calendarService.searchByTitle(loggedInUser.getUserId(), title);
+
+        httpSession.setAttribute("foundEvents", events);
+        return "redirect:/schedule";
+    }
+
+    @GetMapping("/schedule/delete/{id}")
+    public String deleteEvent(@PathVariable Long id,
                               HttpSession httpSession) {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
             return "redirect:/signin";
         }
         UserDTO loggedInUser = (UserDTO) httpSession.getAttribute("user");
-        calendarService.deleteEventsByTitle(title, loggedInUser.getUserId());
+        calendarService.deleteByID(id);
+        httpSession.setAttribute("foundEvents", null);
         return "redirect:/schedule";
     }
 }
