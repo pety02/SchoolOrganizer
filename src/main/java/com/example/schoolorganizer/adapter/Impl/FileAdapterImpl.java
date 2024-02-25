@@ -5,9 +5,16 @@ import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.model.File;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ */
 @Component
 public class FileAdapterImpl implements IAdapter<File, FileDTO> {
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public FileDTO fromEntityToDTO(File entity) {
         if (entity == null) {
@@ -23,6 +30,10 @@ public class FileAdapterImpl implements IAdapter<File, FileDTO> {
         return dto;
     }
 
+    /**
+     * @param fileDTO
+     * @return
+     */
     @Override
     public File fromDTOToEntity(FileDTO fileDTO) {
         if (fileDTO == null) {

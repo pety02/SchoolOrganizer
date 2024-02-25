@@ -6,18 +6,30 @@ import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ *
+ */
 @Component
 public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
     private final IAdapter<User, UserDTO> userDAO;
 
+    /**
+     * @param userDAO
+     */
+    @Autowired
     public TaskAdapterImpl(IAdapter<User, UserDTO> userDAO) {
         this.userDAO = userDAO;
     }
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public TaskDTO fromEntityToDTO(Task entity) {
         if (entity == null) {
@@ -37,6 +49,10 @@ public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
         return dto;
     }
 
+    /**
+     * @param taskDTO
+     * @return
+     */
     @Override
     public Task fromDTOToEntity(TaskDTO taskDTO) {
         if (taskDTO == null) {

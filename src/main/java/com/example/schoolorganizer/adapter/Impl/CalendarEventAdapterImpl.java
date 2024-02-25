@@ -8,15 +8,25 @@ import com.example.schoolorganizer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ */
 @Component
 public class CalendarEventAdapterImpl implements IAdapter<CalendarEvent, CalendarEventDTO> {
     private final IAdapter<User, UserDTO> userAdapter;
 
+    /**
+     * @param userAdapter
+     */
     @Autowired
     public CalendarEventAdapterImpl(IAdapter<User, UserDTO> userAdapter) {
         this.userAdapter = userAdapter;
     }
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public CalendarEventDTO fromEntityToDTO(CalendarEvent entity) {
         if (entity == null) {
@@ -32,6 +42,10 @@ public class CalendarEventAdapterImpl implements IAdapter<CalendarEvent, Calenda
         return dto;
     }
 
+    /**
+     * @param calendarEventDTO
+     * @return
+     */
     @Override
     public CalendarEvent fromDTOToEntity(CalendarEventDTO calendarEventDTO) {
         if (calendarEventDTO == null) {

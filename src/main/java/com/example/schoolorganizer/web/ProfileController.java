@@ -21,11 +21,18 @@ import java.util.NoSuchElementException;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
+/**
+ *
+ */
 @Controller
 @Slf4j
 public class ProfileController {
     private final UserService userService;
 
+    /**
+     * @param loggedUser
+     * @return
+     */
     private UpdateUserDataDTO fromLoggedUserToUpdateUser(UserDTO loggedUser) {
         UpdateUserDataDTO updatingUser = new UpdateUserDataDTO();
         updatingUser.setUserId(loggedUser.getUserId());
@@ -35,12 +42,19 @@ public class ProfileController {
         return updatingUser;
     }
 
+    /**
+     * @param userService
+     */
     @Autowired
     public ProfileController(UserService userService) {
         this.userService = userService;
     }
 
-
+    /**
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/profile")
     public String getProfileForm(HttpSession httpSession,
                                  Model model) {
@@ -55,6 +69,14 @@ public class ProfileController {
         return "profile";
     }
 
+    /**
+     * @param updatedUser
+     * @param binding
+     * @param model
+     * @param redirectAttributes
+     * @param httpSession
+     * @return
+     */
     @PostMapping("/profile/update")
     public String updateProfile(@Valid @ModelAttribute UpdateUserDataDTO updatedUser,
                                 BindingResult binding,

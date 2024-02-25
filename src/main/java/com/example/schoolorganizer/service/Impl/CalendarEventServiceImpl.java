@@ -15,12 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *
+ */
 @Service
 public class CalendarEventServiceImpl implements CalendarEventService {
     private final CalendarEventRepository eventRepository;
     private final UserRepository userRepo;
     private final IAdapter<CalendarEvent, CalendarEventDTO> calendarEventAdapter;
 
+    /**
+     * @param eventRepository
+     * @param userRepo
+     * @param calendarEventAdapter
+     */
     @Autowired
     public CalendarEventServiceImpl(CalendarEventRepository eventRepository,
                                     UserRepository userRepo,
@@ -31,6 +39,10 @@ public class CalendarEventServiceImpl implements CalendarEventService {
         this.calendarEventAdapter = calendarEventAdapter;
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Override
     public List<CalendarEventDTO> getAllEventsByUserId(Long id) {
         List<CalendarEvent> events = eventRepository.findAllByCreatedByUserId(id);
@@ -43,6 +55,11 @@ public class CalendarEventServiceImpl implements CalendarEventService {
         return eventsDTOs;
     }
 
+    /**
+     * @param id
+     * @param eventDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<CalendarEventDTO> createEventByUserId(Long id, CalendarEventDTO eventDTO) {
@@ -56,6 +73,11 @@ public class CalendarEventServiceImpl implements CalendarEventService {
                 .fromEntityToDTO(eventRepository.save(event)));
     }
 
+    /**
+     * @param id
+     * @param title
+     * @return
+     */
     @Override
     public List<CalendarEventDTO> searchByTitle(Long id, String title) {
         List<CalendarEvent> events = eventRepository.findAllByCreatedByUserIdAndTitle(id, title);
@@ -68,12 +90,19 @@ public class CalendarEventServiceImpl implements CalendarEventService {
         return eventsDTOs;
     }
 
+    /**
+     * @param title
+     * @param id
+     */
     @Override
     public void deleteEventsByTitle(String title, Long id) {
         List<CalendarEvent> events = eventRepository.findAllByCreatedByUserIdAndTitle(id, title);
         eventRepository.deleteAll(events);
     }
 
+    /**
+     * @param id
+     */
     @Override
     public void deleteByID(Long id) {
         eventRepository.deleteById(id);

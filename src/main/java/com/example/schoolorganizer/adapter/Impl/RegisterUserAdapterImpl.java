@@ -5,9 +5,16 @@ import com.example.schoolorganizer.dto.RegisterUserDTO;
 import com.example.schoolorganizer.model.User;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ */
 @Component
 public class RegisterUserAdapterImpl implements IAdapter<User, RegisterUserDTO> {
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public RegisterUserDTO fromEntityToDTO(User entity) {
         if (entity == null) {
@@ -23,6 +30,10 @@ public class RegisterUserAdapterImpl implements IAdapter<User, RegisterUserDTO> 
         return dto;
     }
 
+    /**
+     * @param registerUserDTO
+     * @return
+     */
     @Override
     public User fromDTOToEntity(RegisterUserDTO registerUserDTO) {
         if (registerUserDTO == null) {

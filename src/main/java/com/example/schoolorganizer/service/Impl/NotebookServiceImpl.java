@@ -16,18 +16,29 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ *
+ */
 @Service
 @Slf4j
 public class NotebookServiceImpl implements NotebookService {
     private final NotebookRepository notebookRepo;
     private final IAdapter<Notebook, NotebookDTO> notebookAdapter;
 
+    /**
+     * @param notebookRepo
+     * @param notebookAdapter
+     */
     @Autowired
     public NotebookServiceImpl(NotebookRepository notebookRepo, IAdapter<Notebook, NotebookDTO> notebookAdapter) {
         this.notebookRepo = notebookRepo;
         this.notebookAdapter = notebookAdapter;
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Override
     public List<NotebookDTO> getAllNotebooksByUserId(Long id) {
 
@@ -41,6 +52,11 @@ public class NotebookServiceImpl implements NotebookService {
         return notebookDTOs;
     }
 
+    /**
+     * @param userId
+     * @param notebookId
+     * @return
+     */
     @Override
     public Optional<NotebookDTO> getNotebookByNotebookId(Long userId, Long notebookId) {
         return Optional.of(notebookAdapter
@@ -49,6 +65,10 @@ public class NotebookServiceImpl implements NotebookService {
                                 notebookId).orElseThrow()));
     }
 
+    /**
+     * @param notebookDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<NotebookDTO> createNewNotebook(NotebookDTO notebookDTO) {
@@ -61,6 +81,11 @@ public class NotebookServiceImpl implements NotebookService {
                 .fromEntityToDTO(notebookRepo.save(notebook)));
     }
 
+    /**
+     * @param id
+     * @param notebookDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<NotebookDTO> updateNotebookById(Long id, NotebookDTO notebookDTO) {
@@ -80,6 +105,9 @@ public class NotebookServiceImpl implements NotebookService {
         return Optional.empty();
     }
 
+    /**
+     * @param id
+     */
     @Transactional
     @Override
     public void deleteNotebookById(Long id) {

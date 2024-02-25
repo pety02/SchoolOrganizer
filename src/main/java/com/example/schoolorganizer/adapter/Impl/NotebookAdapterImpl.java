@@ -10,15 +10,25 @@ import com.example.schoolorganizer.model.NotebookSection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ */
 @Component
 public class NotebookAdapterImpl implements IAdapter<Notebook, NotebookDTO> {
     private final UserAdapterImpl userAdapter;
 
+    /**
+     * @param userAdapter
+     */
     @Autowired
     public NotebookAdapterImpl(UserAdapterImpl userAdapter) {
         this.userAdapter = userAdapter;
     }
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public NotebookDTO fromEntityToDTO(Notebook entity) {
         if (entity == null) {
@@ -38,6 +48,10 @@ public class NotebookAdapterImpl implements IAdapter<Notebook, NotebookDTO> {
         return dto;
     }
 
+    /**
+     * @param notebookDTO
+     * @return
+     */
     @Override
     public Notebook fromDTOToEntity(NotebookDTO notebookDTO) {
         if (notebookDTO == null) {

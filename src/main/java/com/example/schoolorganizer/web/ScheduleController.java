@@ -22,18 +22,31 @@ import java.time.LocalDate;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
+/**
+ *
+ */
 @Controller
 @Slf4j
 public class ScheduleController {
     private final IAdapter<CalendarEvent, CalendarEventDTO> eventAdapter;
     private final CalendarEventService calendarService;
 
+    /**
+     * @param eventService
+     * @param eventAdapter
+     * @param calendarService
+     */
     @Autowired
     public ScheduleController(CalendarEventService eventService, IAdapter<CalendarEvent, CalendarEventDTO> eventAdapter, CalendarEventService calendarService) {
         this.eventAdapter = eventAdapter;
         this.calendarService = calendarService;
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/schedule")
     public String getSchedule(HttpSession httpSession, Model model) {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
@@ -48,6 +61,14 @@ public class ScheduleController {
         return "schedule";
     }
 
+    /**
+     * @param calendarEvent
+     * @param binding
+     * @param model
+     * @param redirectAttributes
+     * @param httpSession
+     * @return
+     */
     @PostMapping("/schedule/create")
     public String createNewCalendarEvent(@Valid @ModelAttribute CalendarEventDTO calendarEvent,
                                          BindingResult binding,
@@ -87,6 +108,12 @@ public class ScheduleController {
         }
     }
 
+    /**
+     * @param title
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/schedule/search")
     public String searchEvents(@RequestParam("title") String title,
                                HttpSession httpSession,
@@ -101,6 +128,11 @@ public class ScheduleController {
         return "redirect:/schedule";
     }
 
+    /**
+     * @param id
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/schedule/delete/{id}")
     public String deleteEvent(@PathVariable Long id,
                               HttpSession httpSession) {

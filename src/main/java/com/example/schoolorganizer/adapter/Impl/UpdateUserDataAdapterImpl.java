@@ -7,9 +7,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
 
+/**
+ *
+ */
 @Component
 public class UpdateUserDataAdapterImpl implements IAdapter<User, UpdateUserDataDTO> {
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public UpdateUserDataDTO fromEntityToDTO(User entity) {
         if (entity == null) {
@@ -31,6 +38,10 @@ public class UpdateUserDataAdapterImpl implements IAdapter<User, UpdateUserDataD
         }
     }
 
+    /**
+     * @param updateUserDataDTO
+     * @return
+     */
     @Override
     public User fromDTOToEntity(UpdateUserDataDTO updateUserDataDTO) {
         if (updateUserDataDTO == null) {

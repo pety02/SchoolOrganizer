@@ -24,6 +24,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ *
+ */
 @Service
 @Slf4j
 public class UserServiceImpl implements RegisterUserService, LoginUserService, UserService {
@@ -36,8 +39,15 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     private final IAdapter<User, UpdateUserDataDTO> updatedUserAdapter;
     private final EmailService emailService;
 
-    // To think if you want to send messages via SMTP server. To find
-    // free and secure way of sending emails on user data update.
+    /**
+     * @param oldUser
+     * @param updated
+     */
+
+    /*
+       TODO: To think if you want to send messages via SMTP server. To find
+        free and secure way of sending emails on user data update.
+     */
     private void sendEmailMessage(User oldUser, UpdateUserDataDTO updated) {
         if (oldUser == null || updated == null) {
             return;
@@ -53,6 +63,15 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
         emailService.sendEmail(to, subject, message);
     }
 
+    /**
+     * @param userRepo
+     * @param passwordRepo
+     * @param loginAdapter
+     * @param registerDAO
+     * @param userAdapter
+     * @param updatedUserAdapter
+     * @param emailService
+     */
     @Autowired
     public UserServiceImpl(UserRepository userRepo,
                            PasswordRepository passwordRepo,
@@ -66,6 +85,10 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
         this.emailService = emailService;
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Override
     public Optional<UserDTO> getUserById(Long id) {
         return Optional.of(userAdapter
@@ -74,6 +97,11 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
                         .orElseThrow()));
     }
 
+    /**
+     * @param username
+     * @param password
+     * @return
+     */
     @Override
     public Optional<LoginUserDTO> login(String username, String password) {
         try {
@@ -94,6 +122,11 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
         return Optional.empty();
     }
 
+    /**
+     * @param id
+     * @param userDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<UpdateUserDataDTO> updateData(Long id, UpdateUserDataDTO userDTO) {
@@ -135,6 +168,10 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
         }
     }
 
+    /**
+     * @param userDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<RegisterUserDTO> register(RegisterUserDTO userDTO) {

@@ -16,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
+/**
+ *
+ */
 @Controller
 @Slf4j
 public class AuthController {
@@ -29,11 +32,22 @@ public class AuthController {
         authentication.setAuthenticated(true);
     }*/
 
+    /**
+     * @param userService
+     */
     @Autowired
     public AuthController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
+    /**
+     * @param user
+     * @param binding
+     * @param model
+     * @param redirectAttributes
+     * @param session
+     * @return
+     */
     @PostMapping("/signin")
     public String login(@Valid @ModelAttribute LoginUserDTO user,
                         final BindingResult binding,
@@ -72,6 +86,14 @@ public class AuthController {
         }
     }
 
+    /**
+     * @param user
+     * @param binding
+     * @param model
+     * @param session
+     * @param redirectAttributes
+     * @return
+     */
     @PostMapping("/signup")
     public String register(@Valid @ModelAttribute RegisterUserDTO user,
                            final BindingResult binding,

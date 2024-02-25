@@ -25,12 +25,19 @@ import java.util.List;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
+/**
+ *
+ */
 @Controller
 @Slf4j
 public class NotebookController {
     private final NotebookService notebookService;
     private final NotebookSectionService notebookSectionService;
 
+    /**
+     * @param notebookService
+     * @param notebookSectionService
+     */
     @Autowired
     public NotebookController(NotebookService notebookService,
                               NotebookSectionService notebookSectionService) {
@@ -38,6 +45,11 @@ public class NotebookController {
         this.notebookSectionService = notebookSectionService;
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/notebooks")
     public String getAllUserNotebooks(HttpSession httpSession, Model model) {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
@@ -50,6 +62,12 @@ public class NotebookController {
         return "notebooks";
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @param id
+     * @return
+     */
     @GetMapping("/notebooks/{id}")
     public String viewNotebook(HttpSession httpSession,
                                Model model,
@@ -68,6 +86,11 @@ public class NotebookController {
         }
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/notebooks/create")
     public String getNewNotebookForm(HttpSession httpSession, Model model) {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
@@ -78,6 +101,14 @@ public class NotebookController {
         return "create-notebook";
     }
 
+    /**
+     * @param notebookDTO
+     * @param binding
+     * @param model
+     * @param redirectAttributes
+     * @param httpSession
+     * @return
+     */
     @PostMapping("/notebooks/create")
     public String creteNewNotebook(@Valid @ModelAttribute NotebookDTO notebookDTO,
                                    BindingResult binding,
@@ -109,6 +140,12 @@ public class NotebookController {
         }
     }
 
+    /**
+     * @param id
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/notebooks/update/{id}")
     public String getUpdateNotebookForm(@PathVariable Long id,
                                         HttpSession httpSession,
@@ -130,6 +167,15 @@ public class NotebookController {
         }
     }
 
+    /**
+     * @param id
+     * @param notebookDTO
+     * @param binding
+     * @param model
+     * @param redirectAttributes
+     * @param httpSession
+     * @return
+     */
     @PostMapping("/notebooks/update/{id}")
     public String updateNotebook(@PathVariable Long id,
                                  @Valid @ModelAttribute NotebookDTO notebookDTO,
@@ -170,6 +216,11 @@ public class NotebookController {
         }
     }
 
+    /**
+     * @param id
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/notebooks/delete/{id}")
     public String deleteNotebook(@PathVariable Long id,
                                  HttpSession httpSession) {

@@ -9,9 +9,16 @@ import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.model.NotebookSection;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ */
 @Component
 public class NotebookSectionAdapterImpl implements IAdapter<NotebookSection, NotebookSectionDTO> {
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public NotebookSectionDTO fromEntityToDTO(NotebookSection entity) {
         if (entity == null) {
@@ -30,6 +37,10 @@ public class NotebookSectionAdapterImpl implements IAdapter<NotebookSection, Not
         return dto;
     }
 
+    /**
+     * @param notebookSectionDTO
+     * @return
+     */
     @Override
     public NotebookSection fromDTOToEntity(NotebookSectionDTO notebookSectionDTO) {
         if (notebookSectionDTO == null) {

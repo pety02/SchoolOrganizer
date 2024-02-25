@@ -19,17 +19,28 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
+/**
+ *
+ */
 @Controller
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
 
+    /**
+     * @param taskService
+     */
     @Autowired
     public TaskController(TaskService taskService) {
 
         this.taskService = taskService;
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/tasks")
     public String getAllUserTasksForm(HttpSession httpSession, Model model) {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
@@ -42,6 +53,12 @@ public class TaskController {
         return "tasks";
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @param id
+     * @return
+     */
     @GetMapping("/tasks/{id}")
     public String getUserTaskByItsId(HttpSession httpSession,
                                      Model model,
@@ -61,6 +78,11 @@ public class TaskController {
         }
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/tasks/create")
     public String getCreateNewTaskForm(HttpSession httpSession, Model model) {
         if (!UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
@@ -71,6 +93,14 @@ public class TaskController {
         return "create-task";
     }
 
+    /**
+     * @param task
+     * @param binding
+     * @param model
+     * @param redirectAttributes
+     * @param httpSession
+     * @return
+     */
     @PostMapping("/tasks/create")
     public String createNewTask(@Valid @ModelAttribute TaskDTO task,
                                 BindingResult binding,
@@ -104,6 +134,12 @@ public class TaskController {
         }
     }
 
+    /**
+     * @param id
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/tasks/update/{id}")
     public String getUpdateNewTaskForm(@PathVariable Long id,
                                        HttpSession httpSession,
@@ -126,6 +162,15 @@ public class TaskController {
         }
     }
 
+    /**
+     * @param id
+     * @param task
+     * @param binding
+     * @param model
+     * @param redirectAttributes
+     * @param httpSession
+     * @return
+     */
     @PostMapping("/tasks/update/{id}")
     public String updateTaskById(@PathVariable Long id,
                                  @Valid @ModelAttribute TaskDTO task,
@@ -163,6 +208,11 @@ public class TaskController {
         }
     }
 
+    /**
+     * @param id
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/tasks/delete/{id}")
     public String deleteTaskById(@PathVariable Long id,
                                  HttpSession httpSession) {

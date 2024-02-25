@@ -8,6 +8,5 @@ import jakarta.transaction.Transactional;
 import java.util.Optional;
 
 public interface RegisterUserService {
-
     Optional<RegisterUserDTO> register(RegisterUserDTO userDTO);
 }

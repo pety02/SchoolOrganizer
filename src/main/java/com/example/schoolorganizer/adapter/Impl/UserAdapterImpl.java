@@ -5,18 +5,30 @@ import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Password;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.repository.PasswordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
 
+/**
+ *
+ */
 @Component
 public class UserAdapterImpl implements IAdapter<User, UserDTO> {
     private final PasswordRepository passwordRepo;
 
+    /**
+     * @param passwordRepo
+     */
+    @Autowired
     public UserAdapterImpl(PasswordRepository passwordRepo) {
         this.passwordRepo = passwordRepo;
     }
 
+    /**
+     * @param entity
+     * @return
+     */
     @Override
     public UserDTO fromEntityToDTO(User entity) {
         if (entity == null) {
@@ -38,6 +50,10 @@ public class UserAdapterImpl implements IAdapter<User, UserDTO> {
         }
     }
 
+    /**
+     * @param userDTO
+     * @return
+     */
     @Override
     public User fromDTOToEntity(UserDTO userDTO) {
         if (userDTO == null) {

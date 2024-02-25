@@ -23,12 +23,19 @@ import java.util.NoSuchElementException;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
+/**
+ *
+ */
 @Controller
 @Slf4j
 public class NotebookSectionController {
     private final NotebookSectionService notebookSectionService;
     private final NotebookService notebookService;
 
+    /**
+     * @param notebookSectionService
+     * @param notebookService
+     */
     @Autowired
     public NotebookSectionController(NotebookSectionService notebookSectionService,
                                      NotebookService notebookService) {
@@ -36,6 +43,12 @@ public class NotebookSectionController {
         this.notebookService = notebookService;
     }
 
+    /**
+     * @param id
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/notebooks/{id}/create")
     public String getNewNotebookSectionForm(@PathVariable Long id,
                                             HttpSession httpSession,
@@ -48,6 +61,15 @@ public class NotebookSectionController {
         return "new-notebook-section";
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @param createdSectionDTO
+     * @param redirectAttributes
+     * @param binding
+     * @param id
+     * @return
+     */
     @PostMapping("/notebooks/{id}/create")
     public String createNewNotebookSection(HttpSession httpSession,
                                            Model model,
@@ -81,6 +103,14 @@ public class NotebookSectionController {
         }
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @param notebookSectionDTO
+     * @param id
+     * @param sectionId
+     * @return
+     */
     @GetMapping("/notebooks/{id}/update/{sectionId}")
     public String getUpdateNotebookSectionForm(HttpSession httpSession,
                                                Model model,
@@ -104,6 +134,16 @@ public class NotebookSectionController {
         }
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @param redirectAttributes
+     * @param updatedSectionDTO
+     * @param binding
+     * @param id
+     * @param sectionId
+     * @return
+     */
     @PostMapping("/notebooks/{id}/update/{sectionId}")
     public String updateNotebookSection(HttpSession httpSession,
                                         Model model,
@@ -144,6 +184,12 @@ public class NotebookSectionController {
         }
     }
 
+    /**
+     * @param httpSession
+     * @param id
+     * @param sectionId
+     * @return
+     */
     @GetMapping("/notebooks/{id}/delete/{sectionId}")
     public String deleteNotebookSection(HttpSession httpSession,
                                         @PathVariable Long id,

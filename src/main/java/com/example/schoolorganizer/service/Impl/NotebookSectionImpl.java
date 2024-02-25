@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ *
+ */
 @Service
 @Slf4j
 public class NotebookSectionImpl implements NotebookSectionService {
@@ -25,6 +28,11 @@ public class NotebookSectionImpl implements NotebookSectionService {
     private final IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter;
     private final NotebookRepository notebookRepo;
 
+    /**
+     * @param notebookSectionRepo
+     * @param notebookSectionAdapter
+     * @param notebookRepo
+     */
     @Autowired
     public NotebookSectionImpl(NotebookSectionRepository notebookSectionRepo, IAdapter<NotebookSection, NotebookSectionDTO> notebookSectionAdapter, NotebookRepository notebookRepo) {
         this.notebookSectionRepo = notebookSectionRepo;
@@ -32,6 +40,10 @@ public class NotebookSectionImpl implements NotebookSectionService {
         this.notebookRepo = notebookRepo;
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Override
     public List<NotebookSectionDTO> getAllNotebookSectionsByNotebookId(Long id) {
         List<NotebookSection> notebookSections = notebookSectionRepo.findAllByAddedInNotebookNotebookId(id);
@@ -44,6 +56,11 @@ public class NotebookSectionImpl implements NotebookSectionService {
         return notebookSectionDTOs;
     }
 
+    /**
+     * @param notebookId
+     * @param sectionId
+     * @return
+     */
     @Override
     public Optional<NotebookSectionDTO> getNotebookSectionByNotebookIdAndSectionId(Long notebookId, Long sectionId) {
         return Optional.of(notebookSectionAdapter
@@ -52,6 +69,11 @@ public class NotebookSectionImpl implements NotebookSectionService {
                         .orElseThrow()));
     }
 
+    /**
+     * @param id
+     * @param notebookSectionDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<NotebookSectionDTO> createNewNotebookSectionByNotebookId(Long id, NotebookSectionDTO notebookSectionDTO) {
@@ -69,6 +91,11 @@ public class NotebookSectionImpl implements NotebookSectionService {
         }
     }
 
+    /**
+     * @param id
+     * @param notebookSectionDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<NotebookSectionDTO> updateNotebookSectionById(Long id, NotebookSectionDTO notebookSectionDTO) {
@@ -88,6 +115,9 @@ public class NotebookSectionImpl implements NotebookSectionService {
         }
     }
 
+    /**
+     * @param id
+     */
     @Transactional
     @Override
     public void deleteNotebookSectionById(Long id) {

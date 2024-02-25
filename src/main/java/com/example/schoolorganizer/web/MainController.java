@@ -10,8 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ *
+ */
 @Controller
 public class MainController {
+    /**
+     * @param model
+     * @param session
+     * @return
+     */
     @GetMapping("/signup")
     public String getRegistrationForm(Model model, HttpSession session) {
         if (UserLoggedInValidator.hasUserLoggedIn(session)) {
@@ -23,6 +31,11 @@ public class MainController {
         return "signup";
     }
 
+    /**
+     * @param model
+     * @param session
+     * @return
+     */
     @GetMapping("/signin")
     public String getLoginForm(Model model, HttpSession session) {
         if (UserLoggedInValidator.hasUserLoggedIn(session)) {
@@ -34,6 +47,11 @@ public class MainController {
         return "signin";
     }
 
+    /**
+     * @param httpSession
+     * @param model
+     * @return
+     */
     @GetMapping("/home")
     public String getHomeForm(HttpSession httpSession, Model model) {
         if (UserLoggedInValidator.hasUserLoggedIn(httpSession)) {
@@ -46,12 +64,19 @@ public class MainController {
         return "redirect:/signin";
     }
 
+    /**
+     * @param session
+     * @return
+     */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/signin";
     }
 
+    /**
+     * @return
+     */
     @GetMapping("/error")
     public String getErrorPage() {
         return "error-page";

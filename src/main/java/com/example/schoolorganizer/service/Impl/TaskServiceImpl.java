@@ -16,18 +16,29 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ *
+ */
 @Service
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository tasksRepo;
     private final IAdapter<Task, TaskDTO> taskDAO;
 
+    /**
+     * @param tasksRepo
+     * @param taskDAO
+     */
     @Autowired
     public TaskServiceImpl(TaskRepository tasksRepo, IAdapter<Task, TaskDTO> taskDAO) {
         this.tasksRepo = tasksRepo;
         this.taskDAO = taskDAO;
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Override
     public List<TaskDTO> getAllTasksByUserId(Long id) {
         List<Task> tasks = tasksRepo.getTasksByCreatedByUserId(id);
@@ -40,6 +51,11 @@ public class TaskServiceImpl implements TaskService {
         return tasksDTOs;
     }
 
+    /**
+     * @param userId
+     * @param taskId
+     * @return
+     */
     @Override
     public Optional<TaskDTO> getUserTaskByTaskId(Long userId, Long taskId) {
         return Optional.of(taskDAO.
@@ -48,6 +64,10 @@ public class TaskServiceImpl implements TaskService {
                         .orElseThrow()));
     }
 
+    /**
+     * @param taskDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<TaskDTO> createNewTask(TaskDTO taskDTO) {
@@ -61,6 +81,11 @@ public class TaskServiceImpl implements TaskService {
         return Optional.empty();
     }
 
+    /**
+     * @param id
+     * @param taskDTO
+     * @return
+     */
     @Transactional
     @Override
     public Optional<TaskDTO> updateTaskById(Long id, TaskDTO taskDTO) {
@@ -81,6 +106,9 @@ public class TaskServiceImpl implements TaskService {
         return Optional.empty();
     }
 
+    /**
+     * @param id
+     */
     @Transactional
     @Override
     public void deleteTaskById(Long id) {
