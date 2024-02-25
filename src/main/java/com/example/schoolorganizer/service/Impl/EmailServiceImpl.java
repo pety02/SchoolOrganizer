@@ -7,14 +7,18 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 /**
+ * This class describes an EmailServiceImpl.
  *
+ * @author Petya Licheva
  */
 @Service
 public class EmailServiceImpl implements EmailService {
     private JavaMailSender emailSender;
 
     /**
-     * @param emailSender
+     * General purpose constructor of EmailServiceImpl class.
+     *
+     * @param emailSender an email sender object.
      */
     @Autowired
     public EmailServiceImpl(JavaMailSender emailSender) {
@@ -22,9 +26,12 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
-     * @param to
-     * @param subject
-     * @param message
+     * This method sends emails from the application administration email to a
+     * definite user's email with a definite subject and a definite message.
+     *
+     * @param to      the email's receiver.
+     * @param subject the email's subject.
+     * @param message the email's message.
      */
     @Override
     public void sendEmail(String to, String subject, String message) {
