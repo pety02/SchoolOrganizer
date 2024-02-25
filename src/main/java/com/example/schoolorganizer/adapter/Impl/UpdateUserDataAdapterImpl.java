@@ -8,14 +8,19 @@ import org.springframework.stereotype.Component;
 import java.util.NoSuchElementException;
 
 /**
+ * This class describes UpdateUserDataAdapterImpl. A class that
+ * transforms a User to a UpdateUserDataDTO and vice versa.
  *
+ * @author Petya Licheva
  */
 @Component
 public class UpdateUserDataAdapterImpl implements IAdapter<User, UpdateUserDataDTO> {
 
     /**
-     * @param entity
-     * @return
+     * This method transforms a User entity object to a UpdateUserDataDTO object.
+     *
+     * @param entity a User entity object.
+     * @return a UpdateUserDataDTO object.
      */
     @Override
     public UpdateUserDataDTO fromEntityToDTO(User entity) {
@@ -39,8 +44,10 @@ public class UpdateUserDataAdapterImpl implements IAdapter<User, UpdateUserDataD
     }
 
     /**
-     * @param updateUserDataDTO
-     * @return
+     * This method transforms a UpdateUserDataDTO object to a User entity object.
+     *
+     * @param updateUserDataDTO a UpdateUserDataDTO object.
+     * @return a User entity object.
      */
     @Override
     public User fromDTOToEntity(UpdateUserDataDTO updateUserDataDTO) {
