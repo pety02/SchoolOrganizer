@@ -11,14 +11,19 @@ import org.springframework.stereotype.Component;
 import java.util.NoSuchElementException;
 
 /**
+ * This class describes UserAdapterImpl. A class that
+ * transforms a User to a UserDTO and vice versa.
  *
+ * @author Petya Licheva
  */
 @Component
 public class UserAdapterImpl implements IAdapter<User, UserDTO> {
     private final PasswordRepository passwordRepo;
 
     /**
-     * @param passwordRepo
+     * General purpose constructor of UserAdapterImpl class.
+     *
+     * @param passwordRepo a password repository.
      */
     @Autowired
     public UserAdapterImpl(PasswordRepository passwordRepo) {
@@ -26,8 +31,10 @@ public class UserAdapterImpl implements IAdapter<User, UserDTO> {
     }
 
     /**
-     * @param entity
-     * @return
+     * This class transforms a User entity object to a UserDTO object.
+     *
+     * @param entity a User entity object.
+     * @return a UserDTO object.
      */
     @Override
     public UserDTO fromEntityToDTO(User entity) {
@@ -51,8 +58,10 @@ public class UserAdapterImpl implements IAdapter<User, UserDTO> {
     }
 
     /**
-     * @param userDTO
-     * @return
+     * This method transforms a UserDTO object to a User entity object.
+     *
+     * @param userDTO a UserDTO object.
+     * @return a User entity object.
      */
     @Override
     public User fromDTOToEntity(UserDTO userDTO) {
