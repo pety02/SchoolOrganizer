@@ -3,7 +3,11 @@ package com.example.schoolorganizer.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Data
+/**
+ * This class describes registered user DTO.
+ */
+@Getter
+@Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -38,4 +42,20 @@ public class RegisterUserDTO {
     @Pattern(regexp = "^[a-z,A-Z,0-9]{8,150}$", message = "The re-entered password should contains lowercase and uppercase.")
     @Size(min = 8, max = 150, message = "The re-entered password length should be between 8 and 150 characters.")
     private String reEnteredPassword;
+
+    /**
+     * @return the RegisteredUserDTO object in JSON string format.
+     */
+    @Override
+    public String toString() {
+        return "{" +
+                "\"userId\": " + userId +
+                ", \"name\": " + name +
+                ", \"surname\": " + surname +
+                ", \"email\": " + email +
+                ", \"username\": " + username +
+                ", \"password\": " + password +
+                ", \"reEnteredPassword\": " + reEnteredPassword +
+                '}';
+    }
 }
