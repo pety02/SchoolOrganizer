@@ -5,9 +5,14 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
-@Data
+/**
+ * This class describes notebook section DTO.
+ */
+@Getter
+@Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -19,10 +24,23 @@ public class NotebookSectionDTO {
     @NonNull
     @DateTimeFormat
     private LocalDate date;
-    //@Pattern(regexp = "^[A-Z]([a-z]+\\s?)+$", message = "The title should starts with capital letter.")
     @Size(min = 1, max = 100, message = "The title length should be between 1 and 100 letters.")
     private String title;
     @Size(min = 1, max = 100000, message = "The content should be between 1 and 10000 letters.")
     private String content;
     private List<FileDTO> files;
+
+    /**
+     * @return NotebookSectionDTO object in JSON string format.
+     */
+    @Override
+    public String toString() {
+        return "{" +
+                "\"notebookSectionId\": " + notebookSectionId +
+                ", \"date\": " + date +
+                ", \"title\": " + title +
+                ", \"content\": " + content +
+                ", \"files\": " + Arrays.toString(files.toArray()) +
+                '}';
+    }
 }
