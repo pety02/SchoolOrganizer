@@ -11,14 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * This class describes NotebookAdapterImpl.
  *
+ * @author Petya Licheva
  */
 @Component
 public class NotebookAdapterImpl implements IAdapter<Notebook, NotebookDTO> {
     private final UserAdapterImpl userAdapter;
 
     /**
-     * @param userAdapter
+     * Genral purpose constructor for NotebookAdapterImpl class.
+     *
+     * @param userAdapter user adapter object.
      */
     @Autowired
     public NotebookAdapterImpl(UserAdapterImpl userAdapter) {
@@ -26,8 +30,10 @@ public class NotebookAdapterImpl implements IAdapter<Notebook, NotebookDTO> {
     }
 
     /**
-     * @param entity
-     * @return
+     * This method transforms Notebook entity to NotebookDTO object.
+     *
+     * @param entity Notebook entity object.
+     * @return NotebookDTO object.
      */
     @Override
     public NotebookDTO fromEntityToDTO(Notebook entity) {
@@ -49,8 +55,10 @@ public class NotebookAdapterImpl implements IAdapter<Notebook, NotebookDTO> {
     }
 
     /**
-     * @param notebookDTO
-     * @return
+     * This method transforms NotebookDTO object tot Notebook entity object.
+     *
+     * @param notebookDTO NotebookDTO object.
+     * @return Notebook entity object.
      */
     @Override
     public Notebook fromDTOToEntity(NotebookDTO notebookDTO) {
