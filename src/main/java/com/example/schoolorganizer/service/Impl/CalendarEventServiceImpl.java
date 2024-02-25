@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * This class describes CalendarEventServiceImpl class
  *
+ * @author Petya Licheva
  */
 @Service
 public class CalendarEventServiceImpl implements CalendarEventService {
@@ -25,9 +27,11 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     private final IAdapter<CalendarEvent, CalendarEventDTO> calendarEventAdapter;
 
     /**
-     * @param eventRepository
-     * @param userRepo
-     * @param calendarEventAdapter
+     * General purpose constructor of CalendarEventServiceImpl class.
+     *
+     * @param eventRepository      an event repository.
+     * @param userRepo             a user repository.
+     * @param calendarEventAdapter a calendar event adapter.
      */
     @Autowired
     public CalendarEventServiceImpl(CalendarEventRepository eventRepository,
@@ -40,8 +44,10 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     }
 
     /**
-     * @param id
-     * @return
+     * This method gets all events by definite user's id.
+     *
+     * @param id a user id.
+     * @return a list of calendar events dto objects.
      */
     @Override
     public List<CalendarEventDTO> getAllEventsByUserId(Long id) {
@@ -56,13 +62,19 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     }
 
     /**
-     * @param id
-     * @param eventDTO
-     * @return
+     * This method creates a calendar event by definite user's id.
+     *
+     * @param id       a definite user's id.
+     * @param eventDTO a calendar event dto object.
+     * @return an optional type of CalendarEventDTO object.
+     * @throws IllegalArgumentException if the start date of the event is after
+     *                                  the finish date of the event the method throws an IllegalArgumentException
+     *                                  with a definite message.
      */
     @Transactional
     @Override
-    public Optional<CalendarEventDTO> createEventByUserId(Long id, CalendarEventDTO eventDTO) {
+    public Optional<CalendarEventDTO> createEventByUserId(Long id, CalendarEventDTO eventDTO)
+            throws IllegalArgumentException {
         if (eventDTO.getEndDate().isBefore(eventDTO.getStartDate())) {
             throw new IllegalArgumentException("The start date of the event should be before the end date.");
         }
@@ -74,9 +86,12 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     }
 
     /**
-     * @param id
-     * @param title
-     * @return
+     * This method finds all calendar events with a same title and created by
+     * same user.
+     *
+     * @param id    a definite user's id.
+     * @param title a title to search for.
+     * @return a list of CalendarEventsDTO matches these criteria.
      */
     @Override
     public List<CalendarEventDTO> searchByTitle(Long id, String title) {
@@ -91,17 +106,9 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     }
 
     /**
-     * @param title
-     * @param id
-     */
-    @Override
-    public void deleteEventsByTitle(String title, Long id) {
-        List<CalendarEvent> events = eventRepository.findAllByCreatedByUserIdAndTitle(id, title);
-        eventRepository.deleteAll(events);
-    }
-
-    /**
-     * @param id
+     * This method deletes a calendar event by its id.
+     *
+     * @param id the calendar event's id.
      */
     @Override
     public void deleteByID(Long id) {
