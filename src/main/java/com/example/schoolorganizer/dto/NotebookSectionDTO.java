@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * This class describes notebook section DTO.
+ *
+ * @author Petya Licheva
  */
 @Getter
 @Setter
