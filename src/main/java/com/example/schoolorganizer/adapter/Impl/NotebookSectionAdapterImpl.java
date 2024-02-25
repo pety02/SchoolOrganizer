@@ -10,14 +10,19 @@ import com.example.schoolorganizer.model.NotebookSection;
 import org.springframework.stereotype.Component;
 
 /**
+ * This class describes NotebookSectionAdapterImpl. A class that
+ * transforms a NotebookSection to a NotebookSectionDTO and vice versa.
  *
+ * @author Petya Licheva
  */
 @Component
 public class NotebookSectionAdapterImpl implements IAdapter<NotebookSection, NotebookSectionDTO> {
 
     /**
-     * @param entity
-     * @return
+     * This method transforms a NotebookSection entity object to a NotebookSectionDTO object.
+     *
+     * @param entity a NotebookSection entity object.
+     * @return a NotebookSectionDTO object.
      */
     @Override
     public NotebookSectionDTO fromEntityToDTO(NotebookSection entity) {
@@ -38,8 +43,10 @@ public class NotebookSectionAdapterImpl implements IAdapter<NotebookSection, Not
     }
 
     /**
-     * @param notebookSectionDTO
-     * @return
+     * This method transforms NotebookSectionDTO object to NotebookSection entity object.
+     *
+     * @param notebookSectionDTO a NotebookSectionDTO object.
+     * @return a NotebookSection entity object.
      */
     @Override
     public NotebookSection fromDTOToEntity(NotebookSectionDTO notebookSectionDTO) {
