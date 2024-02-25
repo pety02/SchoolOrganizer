@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserDTO {
@@ -46,15 +46,15 @@ public class UserDTO {
     public String toString() {
         return "{" +
                 "\"userId\": " + userId +
-                ", \"name\": " + name + '\'' +
-                ", \"surname\": " + surname + '\'' +
-                ", \"email\": " + email + '\'' +
-                ", \"username\": " + username + '\'' +
-                ", \"password\": " + password + '\'' +
-                ", \"tasks\": " + Arrays.toString(tasks.toArray()) +
-                ", \"notebooks\": " + Arrays.toString(notebooks.toArray()) +
-                ", \"friends\": " + Arrays.toString(friends.toArray()) +
-                ", \"roles\": " + Arrays.toString(roles.toArray()) +
+                ", \"name\": \"" + name + '\"' +
+                ", \"surname\": \"" + surname + '\"' +
+                ", \"email\": \"" + email + '\"' +
+                ", \"username\": \"" + username + '\"' +
+                ", \"password\": \"" + password + '\"' +
+                ", \"tasks\": " + (tasks != null ? Arrays.toString(tasks.toArray()) : "null") +
+                ", \"notebooks\": " + (notebooks != null ? Arrays.toString(notebooks.toArray()) : "null") +
+                ", \"friends\": " + (friends != null ? Arrays.toString(friends.toArray()) : "null") +
+                ", \"roles\": " + "null" +
                 '}';
     }
 }
