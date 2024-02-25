@@ -7,6 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+/**
+ * This interface describes TaskRepository with its functionality.
+ *
+ * @author Petya Licheva
+ */
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> getTasksByCreatedByUserId(Long id);
 
