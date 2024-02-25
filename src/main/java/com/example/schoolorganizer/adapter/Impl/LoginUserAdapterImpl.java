@@ -6,14 +6,19 @@ import com.example.schoolorganizer.model.User;
 import org.springframework.stereotype.Component;
 
 /**
+ * This class describes a LoginUserAdapterImpl. A class that transforms
+ * a User to LoginUserDTO and vice versa.
  *
+ * @author Petya Licheva
  */
 @Component
 public class LoginUserAdapterImpl implements IAdapter<User, LoginUserDTO> {
 
     /**
-     * @param entity
-     * @return
+     * Method that transforms User entity to LoginUserDTO object.
+     *
+     * @param entity User entity object.
+     * @return LoginUserDTO object.
      */
     @Override
     public LoginUserDTO fromEntityToDTO(User entity) {
@@ -28,8 +33,10 @@ public class LoginUserAdapterImpl implements IAdapter<User, LoginUserDTO> {
     }
 
     /**
-     * @param loginUserDTO
-     * @return
+     * Method that transforms LoginUserDTO object to User entity object.
+     *
+     * @param loginUserDTO LoginUserDTO object.
+     * @return User entity object.
      */
     @Override
     public User fromDTOToEntity(LoginUserDTO loginUserDTO) {
