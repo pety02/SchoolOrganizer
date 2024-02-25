@@ -1,7 +1,6 @@
 package com.example.schoolorganizer.adapter.Impl;
 
 import com.example.schoolorganizer.adapter.IAdapter;
-import com.example.schoolorganizer.dto.LoginUserDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.Task;
@@ -12,23 +11,30 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 /**
+ * This class describes TaskAdapterImpl. A class that
+ * transforms a Task to a TaskDTO and vice versa.
  *
+ * @author Petya Licheva
  */
 @Component
 public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
-    private final IAdapter<User, UserDTO> userDAO;
+    private final IAdapter<User, UserDTO> userAdapter;
 
     /**
-     * @param userDAO
+     * General purpose constructor of TaskAdapterImpl class.
+     *
+     * @param userAdapter a user adapter object.
      */
     @Autowired
-    public TaskAdapterImpl(IAdapter<User, UserDTO> userDAO) {
-        this.userDAO = userDAO;
+    public TaskAdapterImpl(IAdapter<User, UserDTO> userAdapter) {
+        this.userAdapter = userAdapter;
     }
 
     /**
-     * @param entity
-     * @return
+     * This method transforms a Task entity object to a TaskDTO object.
+     *
+     * @param entity a Task entity object.
+     * @return a TaskDTO object.
      */
     @Override
     public TaskDTO fromEntityToDTO(Task entity) {
@@ -43,15 +49,17 @@ public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
         dto.setFiles(new ArrayList<>());
         dto.setStartDate(entity.getStartDate());
         dto.setFinishDate(entity.getFinishDate());
-        dto.setCreatedBy(userDAO.fromEntityToDTO(entity.getCreatedBy()));
+        dto.setCreatedBy(userAdapter.fromEntityToDTO(entity.getCreatedBy()));
         dto.setIsFinished(entity.getFinished());
 
         return dto;
     }
 
     /**
-     * @param taskDTO
-     * @return
+     * This method transforms a TaskDTO object to a Task entity object.
+     *
+     * @param taskDTO a TaskDTO object.
+     * @return a Task entity object.
      */
     @Override
     public Task fromDTOToEntity(TaskDTO taskDTO) {
@@ -67,7 +75,7 @@ public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
         entity.setFinishDate(taskDTO.getFinishDate());
         entity.setFinished(taskDTO.getIsFinished());
         entity.setFiles(new ArrayList<>());
-        entity.setCreatedBy(userDAO.fromDTOToEntity(taskDTO.getCreatedBy()));
+        entity.setCreatedBy(userAdapter.fromDTOToEntity(taskDTO.getCreatedBy()));
 
         return entity;
     }
