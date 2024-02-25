@@ -5,6 +5,8 @@ import lombok.*;
 
 /**
  * This class describes a login user DTO.
+ *
+ * @author Petya Licheva
  */
 @Getter
 @Setter

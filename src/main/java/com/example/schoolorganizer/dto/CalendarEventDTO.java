@@ -10,6 +10,8 @@ import java.time.LocalDate;
 
 /**
  * This class describes a calendar event DTO.
+ *
+ * @author Petya Licheva
  */
 @Getter
 @Setter

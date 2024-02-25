@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 /**
  * This class describes a file DTO.
+ *
+ * @author Petya Licheva
  */
 @Getter
 @Setter
