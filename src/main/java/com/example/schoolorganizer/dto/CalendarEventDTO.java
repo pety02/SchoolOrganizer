@@ -10,6 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+/**
+ * This class describes a calendar event DTO.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,6 +37,9 @@ public class CalendarEventDTO {
     private String color;
     private UserDTO createdBy;
 
+    /**
+     * @return the calendar event DTO object in JSON string format.
+     */
     @Override
     public String toString() {
         return "{" +
@@ -42,7 +48,7 @@ public class CalendarEventDTO {
                 ", \"startDate\": \"" + startDate + '\"' +
                 ", \"endDate\": \"" + endDate + '\"' +
                 ", \"color\": \"" + color + '\"' +
-                ", \"createdBy\": " + (createdBy != null ? "{}" : "null") +
+                ", \"createdBy\": " + (createdBy != null ? createdBy : "null") +
                 '}';
     }
 }
