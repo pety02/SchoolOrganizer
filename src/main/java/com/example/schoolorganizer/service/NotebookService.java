@@ -9,7 +9,8 @@ import jakarta.transaction.Transactional;
 public interface NotebookService {
     List<NotebookDTO> getAllNotebooksByUserId(Long id);
 
-    Optional<NotebookDTO> getNotebookByNotebookId(Long userId, Long notebookId);
+    Optional<NotebookDTO> getNotebookByNotebookId(Long userId, Long notebookId)
+            throws NoSuchElementException;
 
     Optional<NotebookDTO> createNewNotebook(NotebookDTO notebookDTO);
 
