@@ -17,7 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 /**
+ * This class describes an AuthController. A controller class
+ * that is used to manage with users' authentication and authorization.
  *
+ * @author Petya Licheva
  */
 @Controller
 @Slf4j
@@ -33,7 +36,9 @@ public class AuthController {
     }*/
 
     /**
-     * @param userService
+     * General purpose constructor of AuthController class.
+     *
+     * @param userService the user's service object.
      */
     @Autowired
     public AuthController(UserServiceImpl userService) {
@@ -41,12 +46,17 @@ public class AuthController {
     }
 
     /**
-     * @param user
-     * @param binding
-     * @param model
-     * @param redirectAttributes
-     * @param session
-     * @return
+     * This method login a user in the application if its
+     * credentials are in valid state and if in the database
+     * there is a user with them.
+     *
+     * @param user               the user credentials object.
+     * @param binding            the binding result object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param session            the http session object.
+     * @return a html page via its title or redirect to other page
+     * in case of login problems.
      */
     @PostMapping("/signin")
     public String login(@Valid @ModelAttribute LoginUserDTO user,
@@ -87,19 +97,24 @@ public class AuthController {
     }
 
     /**
-     * @param user
-     * @param binding
-     * @param model
-     * @param session
-     * @param redirectAttributes
-     * @return
+     * This method register a user in the application if its
+     * credentials are in valid state and if in the database
+     * there is not a user with them.
+     *
+     * @param user               the user credentials object.
+     * @param binding            the binding result object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param session            the http session object.
+     * @return a html page via its title or redirect to other page
+     * in case of registration problems.
      */
     @PostMapping("/signup")
     public String register(@Valid @ModelAttribute RegisterUserDTO user,
                            final BindingResult binding,
                            Model model,
-                           HttpSession session,
-                           RedirectAttributes redirectAttributes) {
+                           RedirectAttributes redirectAttributes,
+                           HttpSession session) {
         if (UserLoggedInValidator.hasUserLoggedIn(session)) {
             session.invalidate();
         }
