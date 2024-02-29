@@ -21,11 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
 /**
+ * This class describes an UserServiceImpl.
  *
+ * @author Petya Licheva
  */
 @Service
 @Slf4j
@@ -40,8 +43,12 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     private final EmailService emailService;
 
     /**
-     * @param oldUser
-     * @param updated
+     * This method send email messages from the application administrative
+     * email to a user's email with definite subject and text message on
+     * user's profile data update.
+     *
+     * @param oldUser the old user data before the update.
+     * @param updated the updated user data after update.
      */
 
     /*
@@ -52,7 +59,7 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
         if (oldUser == null || updated == null) {
             return;
         }
-        String to = oldUser.getEmail();
+        String to = updated.getNewEmail();
         String subject = "User data updated:";
         String message = "Dear, " + oldUser.getName() + " " + oldUser.getSurname()
                 + "\nYour personal data has been updated recently! If this was not you, " +
@@ -64,33 +71,45 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     }
 
     /**
-     * @param userRepo
-     * @param passwordRepo
-     * @param loginAdapter
-     * @param registerDAO
-     * @param userAdapter
-     * @param updatedUserAdapter
-     * @param emailService
+     * General purpose constructor of UserServiceImpl class.
+     *
+     * @param userRepo           the user repository.
+     * @param passwordRepo       the password repository.
+     * @param loginAdapter       the login adapter.
+     * @param registerAdapter    the register adapter.
+     * @param userAdapter        the user adapter.
+     * @param updatedUserAdapter the update adapter.
+     * @param emailService       the email service.
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepo,
-                           PasswordRepository passwordRepo,
-                           IAdapter<User, LoginUserDTO> loginAdapter, IAdapter<User, RegisterUserDTO> registerDAO, IAdapter<User, UserDTO> userAdapter, IAdapter<User, UpdateUserDataDTO> updatedUserAdapter, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepo, PasswordRepository passwordRepo,
+                           IAdapter<User, LoginUserDTO> loginAdapter,
+                           IAdapter<User, RegisterUserDTO> registerAdapter,
+                           IAdapter<User, UserDTO> userAdapter,
+                           IAdapter<User, UpdateUserDataDTO> updatedUserAdapter,
+                           EmailService emailService) {
         this.userRepo = userRepo;
         this.passwordRepo = passwordRepo;
         this.loginAdapter = loginAdapter;
-        this.registerAdapter = registerDAO;
+        this.registerAdapter = registerAdapter;
         this.userAdapter = userAdapter;
         this.updatedUserAdapter = updatedUserAdapter;
         this.emailService = emailService;
     }
 
     /**
-     * @param id
-     * @return
+     * This method gets a user by its id.
+     *
+     * @param id the user's id.
+     * @return an optional type of UserDTO if
+     * a user with this id exists in the database.
+     * @throws NoSuchElementException if a user with
+     *                                this id does not exist in the database the method
+     *                                throws a NoSuchElementException.
      */
     @Override
-    public Optional<UserDTO> getUserById(Long id) {
+    public Optional<UserDTO> getUserById(Long id)
+            throws NoSuchElementException {
         return Optional.of(userAdapter
                 .fromEntityToDTO(userRepo
                         .findByUserId(id)
@@ -98,9 +117,15 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     }
 
     /**
-     * @param username
-     * @param password
-     * @return
+     * This method logging in a user with definite
+     * credentials if these credentials are correct
+     * and there is a user with them in the database.
+     *
+     * @param username the username of the user.
+     * @param password the password of the user.
+     * @return an optional type of LoginUserDTO if logging
+     * in the application is successful and Optional.empty()
+     * in all other situations.
      */
     @Override
     public Optional<LoginUserDTO> login(String username, String password) {
@@ -114,7 +139,7 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
             } else {
                 throw new IllegalArgumentException("The username is incorrect.");
             }
-        } catch (Exception e) {
+        } catch (NoSuchElementException | IllegalArgumentException e) {
             log.error(LocalDate.now() + ": " + e.getMessage());
             return Optional.empty();
         }
@@ -123,9 +148,14 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     }
 
     /**
-     * @param id
-     * @param userDTO
-     * @return
+     * This method updates a definite user data by its own id and
+     * sends email messages to the updated user email about this
+     * activity in its personal profile.
+     *
+     * @param id      the definite user id.
+     * @param userDTO the data needed for the update.
+     * @return an optional of type UpdateUserDTO if the update is
+     * successful and Optional.empty() in all other situations.
      */
     @Transactional
     @Override
@@ -169,8 +199,12 @@ public class UserServiceImpl implements RegisterUserService, LoginUserService, U
     }
 
     /**
-     * @param userDTO
-     * @return
+     * This method registers a new user in the application after
+     * all needed personal data checks for validity.
+     *
+     * @param userDTO the definite user data.
+     * @return an optional type of RegisterUserDTO if the registration
+     * is successful and Optional.empty() in all other situations.
      */
     @Transactional
     @Override
