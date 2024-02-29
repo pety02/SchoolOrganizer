@@ -24,7 +24,10 @@ import java.util.NoSuchElementException;
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 /**
+ * This class describes a NotebookSectionController class.
+ * A class that manages with definite user's notebooks' sections.
  *
+ * @author Petya Licheva
  */
 @Controller
 @Slf4j
@@ -33,8 +36,10 @@ public class NotebookSectionController {
     private final NotebookService notebookService;
 
     /**
-     * @param notebookSectionService
-     * @param notebookService
+     * General purpose constructor of the class NotebookSectionController.
+     *
+     * @param notebookSectionService the notebook sections' service.
+     * @param notebookService        the notebook's service.
      */
     @Autowired
     public NotebookSectionController(NotebookSectionService notebookSectionService,
@@ -44,10 +49,12 @@ public class NotebookSectionController {
     }
 
     /**
-     * @param id
-     * @param httpSession
-     * @param model
-     * @return
+     * This method shows a new notebook section form.
+     *
+     * @param id          the definite notebook's id.
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks/{id}/create")
     public String getNewNotebookSectionForm(@PathVariable Long id,
@@ -62,13 +69,15 @@ public class NotebookSectionController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @param createdSectionDTO
-     * @param redirectAttributes
-     * @param binding
-     * @param id
-     * @return
+     * This method creates a new notebook section and save it in the database.
+     *
+     * @param httpSession        the http session object.
+     * @param model              the model object.
+     * @param createdSectionDTO  the created section dto object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param binding            the binding result object.
+     * @param id                 the definite notebook's id.
+     * @return a html page via the result of the http request.
      */
     @PostMapping("/notebooks/{id}/create")
     public String createNewNotebookSection(HttpSession httpSession,
@@ -104,12 +113,14 @@ public class NotebookSectionController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @param notebookSectionDTO
-     * @param id
-     * @param sectionId
-     * @return
+     * This method shows an update definite notebook's section form.
+     *
+     * @param httpSession        the http session object.
+     * @param model              the model object.
+     * @param notebookSectionDTO the notebook section dto object.
+     * @param id                 the definite notebook's id.
+     * @param sectionId          the definite notebook section's id.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks/{id}/update/{sectionId}")
     public String getUpdateNotebookSectionForm(HttpSession httpSession,
@@ -135,14 +146,16 @@ public class NotebookSectionController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @param redirectAttributes
-     * @param updatedSectionDTO
-     * @param binding
-     * @param id
-     * @param sectionId
-     * @return
+     * This method updates a definite notebook's section and save it in the database.
+     *
+     * @param httpSession        the http session object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param updatedSectionDTO  the updated section dto object.
+     * @param binding            the binding result objecr.
+     * @param id                 the definite notebook's id.
+     * @param sectionId          the definite notebook section's id.
+     * @return a html page via the result of the http request.
      */
     @PostMapping("/notebooks/{id}/update/{sectionId}")
     public String updateNotebookSection(HttpSession httpSession,
@@ -185,10 +198,12 @@ public class NotebookSectionController {
     }
 
     /**
-     * @param httpSession
-     * @param id
-     * @param sectionId
-     * @return
+     * This method deletes a definite notebook's section.
+     *
+     * @param httpSession the http session object.
+     * @param id          the definite notebook's id.
+     * @param sectionId   the definite notebook section's id.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks/{id}/delete/{sectionId}")
     public String deleteNotebookSection(HttpSession httpSession,
