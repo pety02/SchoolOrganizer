@@ -20,13 +20,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 /**
+ * This class describes a NotebookController. A class that manage with
+ * users' tasks.
  *
+ * @author Petya Licheva
  */
 @Controller
 @Slf4j
@@ -35,8 +37,10 @@ public class NotebookController {
     private final NotebookSectionService notebookSectionService;
 
     /**
-     * @param notebookService
-     * @param notebookSectionService
+     * General purpose constructor of the NotebookController class.
+     *
+     * @param notebookService        the notebook service object.
+     * @param notebookSectionService the notebook sections service object.
      */
     @Autowired
     public NotebookController(NotebookService notebookService,
@@ -46,9 +50,11 @@ public class NotebookController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @return
+     * This method gets user's all notebooks.
+     *
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks")
     public String getAllUserNotebooks(HttpSession httpSession, Model model) {
@@ -63,10 +69,12 @@ public class NotebookController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @param id
-     * @return
+     * This method view a definite notebook's details.
+     *
+     * @param httpSession the http session object.
+     * @param model       the http model object.
+     * @param id          the notebook's id.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks/{id}")
     public String viewNotebook(HttpSession httpSession,
@@ -87,9 +95,11 @@ public class NotebookController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @return
+     * This method opens a new notebook form.
+     *
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks/create")
     public String getNewNotebookForm(HttpSession httpSession, Model model) {
@@ -102,12 +112,14 @@ public class NotebookController {
     }
 
     /**
-     * @param notebookDTO
-     * @param binding
-     * @param model
-     * @param redirectAttributes
-     * @param httpSession
-     * @return
+     * This method creates a new notebook.
+     *
+     * @param notebookDTO        the notebook dto object.
+     * @param binding            the binding result object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param httpSession        the http session object.
+     * @return a html page via the result of the http request.
      */
     @PostMapping("/notebooks/create")
     public String creteNewNotebook(@Valid @ModelAttribute NotebookDTO notebookDTO,
@@ -141,10 +153,12 @@ public class NotebookController {
     }
 
     /**
-     * @param id
-     * @param httpSession
-     * @param model
-     * @return
+     * This method opens update a definite notebook's form.
+     *
+     * @param id          the notebook's id.
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks/update/{id}")
     public String getUpdateNotebookForm(@PathVariable Long id,
@@ -168,13 +182,15 @@ public class NotebookController {
     }
 
     /**
-     * @param id
-     * @param notebookDTO
-     * @param binding
-     * @param model
-     * @param redirectAttributes
-     * @param httpSession
-     * @return
+     * This method updates a definite notebook.
+     *
+     * @param id                 the notebook's id.
+     * @param notebookDTO        the notebook dto object.
+     * @param binding            the binding result object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param httpSession        the http session object.
+     * @return a html page via the result of the http request.
      */
     @PostMapping("/notebooks/update/{id}")
     public String updateNotebook(@PathVariable Long id,
@@ -217,9 +233,11 @@ public class NotebookController {
     }
 
     /**
-     * @param id
-     * @param httpSession
-     * @return
+     * This method deletes a definite notebook via its id.
+     *
+     * @param id          the notebook's id.
+     * @param httpSession the http session object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/notebooks/delete/{id}")
     public String deleteNotebook(@PathVariable Long id,
