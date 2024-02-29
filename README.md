@@ -2,9 +2,9 @@
 ## Sign Up Form
 ![signup](https://github.com/pety02/SchoolOrganizer/assets/47276102/c20a2523-f1d4-4ff0-86b8-a07528433d92)
 ## Sign In Form
-![signin](https://github.com/pety02/SchoolOrganizer/assets/47276102/a0670cbc-ad20-4511-9488-d1c12b893386)
+![signin](https://github.com/pety02/SchoolOrganizer/assets/47276102/fa15c4ed-7ad2-4b4b-bf69-89faf2825e5a)
 ## Home Form
-![home](https://github.com/pety02/SchoolOrganizer/assets/47276102/7fa5870d-33e6-4c34-8f1f-0647d778a369)
+![home](https://github.com/pety02/SchoolOrganizer/assets/47276102/a17ca340-ef28-40d0-8f68-94dd0ddbd26a)
 ## Schedule Form - no events with thi title
 ![no_events_with_this_title](https://github.com/pety02/SchoolOrganizer/assets/47276102/ee9e9444-2b59-46be-ac65-9cd18558c66b)
 ## Schedule Form - events with this title information
@@ -24,4 +24,4 @@
 ## Notebooks Form - sections
 ![notebook_sections](https://github.com/pety02/SchoolOrganizer/assets/47276102/7a3b8116-4805-4ecd-9287-233b6f8483fe)
 ## Profile Form - personal information
-![edit_profile_data](https://github.com/pety02/SchoolOrganizer/assets/47276102/fea1159c-c49d-4bec-b8cf-f4cf1bd738ed)
+![edit_profile_data](https://github.com/pety02/SchoolOrganizer/assets/47276102/33e0ff2e-a7f7-4eb9-afb1-e1b75c252bd6)
