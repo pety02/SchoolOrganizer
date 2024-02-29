@@ -10,41 +10,47 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
+ * This class describes a TaskServiceImpl.
  *
+ * @author Petya Licheva
  */
 @Service
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository tasksRepo;
-    private final IAdapter<Task, TaskDTO> taskDAO;
+    private final IAdapter<Task, TaskDTO> taskAdapter;
 
     /**
-     * @param tasksRepo
-     * @param taskDAO
+     * General purpose constructor of TaskServiceImpl class.
+     *
+     * @param tasksRepo   the tasks repository object.
+     * @param taskAdapter the task adapter object.
      */
     @Autowired
-    public TaskServiceImpl(TaskRepository tasksRepo, IAdapter<Task, TaskDTO> taskDAO) {
+    public TaskServiceImpl(TaskRepository tasksRepo, IAdapter<Task, TaskDTO> taskAdapter) {
         this.tasksRepo = tasksRepo;
-        this.taskDAO = taskDAO;
+        this.taskAdapter = taskAdapter;
     }
 
     /**
-     * @param id
-     * @return
+     * This method gets all tasks by their owner's id.
+     *
+     * @param id the owner's id.
+     * @return a list of TaskDTO objects that represents
+     * all tasks of definite user.
      */
     @Override
     public List<TaskDTO> getAllTasksByUserId(Long id) {
         List<Task> tasks = tasksRepo.getTasksByCreatedByUserId(id);
         List<TaskDTO> tasksDTOs = new ArrayList<>();
         for (var currentTask : tasks) {
-            TaskDTO currentTaskDTO = taskDAO.fromEntityToDTO(currentTask);
+            TaskDTO currentTaskDTO = taskAdapter.fromEntityToDTO(currentTask);
             tasksDTOs.add(currentTaskDTO);
         }
 
@@ -52,21 +58,34 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * @param userId
-     * @param taskId
-     * @return
+     * This method gets a definite user's task by its
+     * owner's id and its own id.
+     *
+     * @param userId the owner's id.
+     * @param taskId the task's id.
+     * @return an optional type of TaskDTO if in the database
+     * there is a task with exact id and this owner's id.
+     * @throws NoSuchElementException if there is a problem
+     *                                with finding this definite task the method throws a
+     *                                NoSuchElementException with an appropriate message.
      */
     @Override
-    public Optional<TaskDTO> getUserTaskByTaskId(Long userId, Long taskId) {
-        return Optional.of(taskDAO.
+    public Optional<TaskDTO> getUserTaskByTaskId(Long userId, Long taskId)
+            throws NoSuchElementException {
+        return Optional.of(taskAdapter.
                 fromEntityToDTO(tasksRepo.
                         getTaskByCreatedByUserIdAndTaskId(userId, taskId)
                         .orElseThrow()));
     }
 
     /**
-     * @param taskDTO
-     * @return
+     * This method creates a new task with this method's
+     * parameter's data.
+     *
+     * @param taskDTO the task dto object.
+     * @return an optional type of TaskDTO if the task
+     * is created successfully in the database and an
+     * Optional.empty() object in all other situations.
      */
     @Transactional
     @Override
@@ -75,16 +94,21 @@ public class TaskServiceImpl implements TaskService {
             return Optional.empty();
         }
         if (taskDTO.getStartDate().isBefore(taskDTO.getFinishDate())) {
-            Task task = taskDAO.fromDTOToEntity(taskDTO);
-            return Optional.of(taskDAO.fromEntityToDTO(tasksRepo.save(task)));
+            Task task = taskAdapter.fromDTOToEntity(taskDTO);
+            return Optional.of(taskAdapter.fromEntityToDTO(tasksRepo.save(task)));
         }
         return Optional.empty();
     }
 
     /**
-     * @param id
-     * @param taskDTO
-     * @return
+     * This method updates a task with a definite id and with definite
+     * data fields' values.
+     *
+     * @param id      the definite task's id.
+     * @param taskDTO the fields' values to be updated with.
+     * @return an optional type of TaskDTO if the task is
+     * updated successfully in the database and an Optional.empty()
+     * object in all other situations.
      */
     @Transactional
     @Override
@@ -93,21 +117,18 @@ public class TaskServiceImpl implements TaskService {
             return Optional.empty();
         }
         if (taskDTO.getStartDate().isBefore(taskDTO.getFinishDate())) {
-            Task task = taskDAO.fromDTOToEntity(taskDTO);
+            Task task = taskAdapter.fromDTOToEntity(taskDTO);
             if (tasksRepo.existsById(id)) {
-                try {
-                    return Optional.of(taskDAO.fromEntityToDTO(tasksRepo.save(task)));
-                } catch (NoSuchElementException e) {
-                    log.error(LocalDate.now() + ": " + e.getMessage());
-                    return Optional.empty();
-                }
+                return Optional.of(taskAdapter.fromEntityToDTO(tasksRepo.save(task)));
             }
         }
         return Optional.empty();
     }
 
     /**
-     * @param id
+     * This method deletes a task with a definite id.
+     *
+     * @param id the definite task's id.
      */
     @Transactional
     @Override
