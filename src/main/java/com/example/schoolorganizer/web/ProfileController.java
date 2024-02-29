@@ -22,7 +22,10 @@ import java.util.NoSuchElementException;
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 /**
+ * This class describes a ProfileController. A class that manage with
+ * personal profile changes.
  *
+ * @author Petya Licheva
  */
 @Controller
 @Slf4j
@@ -30,8 +33,12 @@ public class ProfileController {
     private final UserService userService;
 
     /**
-     * @param loggedUser
-     * @return
+     * This method adapts a UserDTO object to UpdateUserDataDTO because in this
+     * controller class there is a need of work with two different type User DTO
+     * object.
+     *
+     * @param loggedUser the logged user, represented by UserDTO class object.
+     * @return the UpdateUserDataDTO object.
      */
     private UpdateUserDataDTO fromLoggedUserToUpdateUser(UserDTO loggedUser) {
         UpdateUserDataDTO updatingUser = new UpdateUserDataDTO();
@@ -43,7 +50,9 @@ public class ProfileController {
     }
 
     /**
-     * @param userService
+     * General purpose constructor of the ProfileController class.
+     *
+     * @param userService the user service object.
      */
     @Autowired
     public ProfileController(UserService userService) {
@@ -51,9 +60,11 @@ public class ProfileController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @return
+     * This method shows a profile form.
+     *
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/profile")
     public String getProfileForm(HttpSession httpSession,
@@ -70,12 +81,14 @@ public class ProfileController {
     }
 
     /**
-     * @param updatedUser
-     * @param binding
-     * @param model
-     * @param redirectAttributes
-     * @param httpSession
-     * @return
+     * This method updates the definite user's data.
+     *
+     * @param updatedUser        the update user object.
+     * @param binding            the binding result object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param httpSession        the http session object.
+     * @return a html page via the result of the http request.
      */
     @PostMapping("/profile/update")
     public String updateProfile(@Valid @ModelAttribute UpdateUserDataDTO updatedUser,
