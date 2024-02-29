@@ -26,7 +26,7 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 /**
  * This class describes a NotebookController. A class that manage with
- * users' tasks.
+ * users' notebooks.
  *
  * @author Petya Licheva
  */
