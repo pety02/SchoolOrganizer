@@ -20,7 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 /**
+ * This class describes a TaskController. A class
+ * that manages with users' tasks.
  *
+ * @author Petya Licheva
  */
 @Controller
 @Slf4j
@@ -28,7 +31,9 @@ public class TaskController {
     private final TaskService taskService;
 
     /**
-     * @param taskService
+     * General purpose constructor of the TaskController class.
+     *
+     * @param taskService the task service object.
      */
     @Autowired
     public TaskController(TaskService taskService) {
@@ -37,9 +42,11 @@ public class TaskController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @return
+     * This method gets all user's tasks.
+     *
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/tasks")
     public String getAllUserTasksForm(HttpSession httpSession, Model model) {
@@ -54,10 +61,12 @@ public class TaskController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @param id
-     * @return
+     * This method shows a definite user's task form by the task's id.
+     *
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @param id          the definite task's id.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/tasks/{id}")
     public String getUserTaskByItsId(HttpSession httpSession,
@@ -79,9 +88,11 @@ public class TaskController {
     }
 
     /**
-     * @param httpSession
-     * @param model
-     * @return
+     * This method shows new task form.
+     *
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/tasks/create")
     public String getCreateNewTaskForm(HttpSession httpSession, Model model) {
@@ -94,12 +105,14 @@ public class TaskController {
     }
 
     /**
-     * @param task
-     * @param binding
-     * @param model
-     * @param redirectAttributes
-     * @param httpSession
-     * @return
+     * This method creates new user's task and save it in the database.
+     *
+     * @param task               the definite task's object.
+     * @param binding            the binding result object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param httpSession        the http session object.
+     * @return a html page via the result of the http request.
      */
     @PostMapping("/tasks/create")
     public String createNewTask(@Valid @ModelAttribute TaskDTO task,
@@ -135,10 +148,12 @@ public class TaskController {
     }
 
     /**
-     * @param id
-     * @param httpSession
-     * @param model
-     * @return
+     * This method show a definite task's updating form by the task's id.
+     *
+     * @param id          the definite task's id.
+     * @param httpSession the http session object.
+     * @param model       the model object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/tasks/update/{id}")
     public String getUpdateNewTaskForm(@PathVariable Long id,
@@ -163,13 +178,15 @@ public class TaskController {
     }
 
     /**
-     * @param id
-     * @param task
-     * @param binding
-     * @param model
-     * @param redirectAttributes
-     * @param httpSession
-     * @return
+     * This method updates a definite task by its own id.
+     *
+     * @param id                 the definite task's id.
+     * @param task               the definite task object.
+     * @param binding            the binding result object.
+     * @param model              the model object.
+     * @param redirectAttributes the redirect attributes object.
+     * @param httpSession        the http session object.
+     * @return a html page via the result of the http request.
      */
     @PostMapping("/tasks/update/{id}")
     public String updateTaskById(@PathVariable Long id,
@@ -209,9 +226,11 @@ public class TaskController {
     }
 
     /**
-     * @param id
-     * @param httpSession
-     * @return
+     * This method delete a definite task by its own id.
+     *
+     * @param id          the definite task's id.
+     * @param httpSession the http session object.
+     * @return a html page via the result of the http request.
      */
     @GetMapping("/tasks/delete/{id}")
     public String deleteTaskById(@PathVariable Long id,
