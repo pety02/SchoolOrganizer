@@ -146,9 +146,6 @@ public class CalendarEventServiceImpl implements CalendarEventService {
             eventRepository.delete(event);
             return;
         }
-        Task task = taskRepo.findById(id).orElse(null);
-        if (task != null) {
-            taskRepo.delete(task);
-        }
+        taskRepo.findById(id).ifPresent(taskRepo::delete);
     }
 }
