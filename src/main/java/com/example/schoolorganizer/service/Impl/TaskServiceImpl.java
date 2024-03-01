@@ -58,6 +58,24 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
+     * This method gets all unfinished user's tasks.
+     *
+     * @param id the id of the user.
+     * @return a list of all unfinished user's tasks.
+     */
+    @Override
+    public List<TaskDTO> getAllUnfinishedTasksByUserId(Long id) {
+        List<Task> tasks = tasksRepo.getAllByFinishedNotAndCreatedBy_UserId(id);
+        List<TaskDTO> tasksDTOs = new ArrayList<>();
+        for (var currentTask : tasks) {
+            TaskDTO currentTaskDTO = taskAdapter.fromEntityToDTO(currentTask);
+            tasksDTOs.add(currentTaskDTO);
+        }
+
+        return tasksDTOs;
+    }
+
+    /**
      * This method gets a definite user's task by its
      * owner's id and its own id.
      *

@@ -1,10 +1,14 @@
 package com.example.schoolorganizer.service.Impl;
 
 import com.example.schoolorganizer.adapter.IAdapter;
+import com.example.schoolorganizer.adapter.Impl.TaskToEventAdapterImpl;
 import com.example.schoolorganizer.dto.CalendarEventDTO;
+import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.CalendarEvent;
+import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.repository.CalendarEventRepository;
+import com.example.schoolorganizer.repository.TaskRepository;
 import com.example.schoolorganizer.repository.UserRepository;
 import com.example.schoolorganizer.service.CalendarEventService;
 import jakarta.transaction.Transactional;
@@ -12,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,23 +28,32 @@ import java.util.Optional;
 public class CalendarEventServiceImpl implements CalendarEventService {
     private final CalendarEventRepository eventRepository;
     private final UserRepository userRepo;
+    private final TaskRepository taskRepo;
     private final IAdapter<CalendarEvent, CalendarEventDTO> calendarEventAdapter;
+    private final TaskToEventAdapterImpl taskToEventAdapter;
+    private final IAdapter<Task, TaskDTO> taskAdapter;
 
     /**
      * General purpose constructor of CalendarEventServiceImpl class.
      *
      * @param eventRepository      an event repository.
      * @param userRepo             a user repository.
+     * @param taskRepo             a task repository.
      * @param calendarEventAdapter a calendar event adapter.
+     * @param taskToEventAdapter   a task to event adapter.
+     * @param taskAdapter          a task adapter.
      */
     @Autowired
     public CalendarEventServiceImpl(CalendarEventRepository eventRepository,
                                     UserRepository userRepo,
-                                    IAdapter<CalendarEvent, CalendarEventDTO>
-                                            calendarEventAdapter) {
+                                    TaskRepository taskRepo, IAdapter<CalendarEvent, CalendarEventDTO>
+                                            calendarEventAdapter, TaskToEventAdapterImpl taskToEventAdapter, IAdapter<Task, TaskDTO> taskAdapter) {
         this.eventRepository = eventRepository;
         this.userRepo = userRepo;
+        this.taskRepo = taskRepo;
         this.calendarEventAdapter = calendarEventAdapter;
+        this.taskToEventAdapter = taskToEventAdapter;
+        this.taskAdapter = taskAdapter;
     }
 
     /**
@@ -53,9 +65,19 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     @Override
     public List<CalendarEventDTO> getAllEventsByUserId(Long id) {
         List<CalendarEvent> events = eventRepository.findAllByCreatedByUserId(id);
+        List<Task> tasks = taskRepo.getAllByFinishedNotAndCreatedBy_UserId(id);
+        List<TaskDTO> taskDTOs = new ArrayList<>();
         List<CalendarEventDTO> eventsDTOs = new ArrayList<>();
+        for (Task task : tasks) {
+            taskDTOs.add(taskAdapter.fromEntityToDTO(task));
+        }
+
         for (var currentEvent : events) {
             CalendarEventDTO currentEventDTO = calendarEventAdapter.fromEntityToDTO(currentEvent);
+            eventsDTOs.add(currentEventDTO);
+        }
+        for (TaskDTO taskDTO : taskDTOs) {
+            CalendarEventDTO currentEventDTO = taskToEventAdapter.fromEntityToDTO(taskDTO);
             eventsDTOs.add(currentEventDTO);
         }
         return eventsDTOs;

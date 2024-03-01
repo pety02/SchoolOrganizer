@@ -7,6 +7,8 @@ import com.example.schoolorganizer.dto.TaskDTO;
 public interface TaskService {
     List<TaskDTO> getAllTasksByUserId(Long id);
 
+    List<TaskDTO> getAllUnfinishedTasksByUserId(Long id);
+
     Optional<TaskDTO> getUserTaskByTaskId(Long userId, Long taskId)
             throws NoSuchElementException;
 
