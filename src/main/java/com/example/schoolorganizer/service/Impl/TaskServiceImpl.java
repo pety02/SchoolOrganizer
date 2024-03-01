@@ -166,6 +166,9 @@ public class TaskServiceImpl implements TaskService {
                         java.io.File dirFile = new java.io.File(f.getPath());
 
                         boolean isDeleted = dirFile.delete();
+                        if (!isDeleted) {
+                            throw new Exception("Problem with deleting a file from its absolute path.");
+                        }
                         fileRepo.delete(f);
                     }
                 } catch (Exception ex) {
