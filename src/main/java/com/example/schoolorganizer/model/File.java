@@ -1,6 +1,7 @@
 package com.example.schoolorganizer.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 @Entity
 @Table
+@Builder
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +24,6 @@ public class File {
     private String name;
     @Column(nullable = false, length = 20)
     private String extension;
-    @Column(nullable = false, length = 100)
-    private String artificialName;
     @Column(nullable = false, length = 1000)
     private String path;
     @ManyToMany
@@ -43,22 +43,39 @@ public class File {
      * @param date                    the creation or update date file.
      * @param name                    the original name of the file.
      * @param extension               the file's extension.
-     * @param artificialName          the artificial name of the file.
      * @param path                    the full path of the file.
      * @param addedInNotebookSections the list of notebook sections
      *                                where this file is added.
      * @param addedInTask             the lis of tasks where this file is added.
      */
-    public File(final LocalDate date, final String name, final String extension,
-                final String artificialName, final String path,
-                final List<NotebookSection> addedInNotebookSections, final List<Task> addedInTask) {
+    public File(LocalDate date, String name, String extension,
+                String path, List<NotebookSection> addedInNotebookSections,
+                List<Task> addedInTask) {
         setDate(date);
         setName(name);
         setExtension(extension);
-        setArtificialName(artificialName);
         setPath(path);
         setAddedInNotebookSections(addedInNotebookSections);
         setAddedInTask(addedInTask);
+    }
+
+    /**
+     * @param fileId
+     * @param date
+     * @param name
+     * @param extension
+     * @param path
+     * @param addedInNotebookSections
+     * @param addedInTask
+     */
+    public File(Long fileId, LocalDate date, String name, String extension, String path, List<NotebookSection> addedInNotebookSections, List<Task> addedInTask) {
+        this.fileId = fileId;
+        this.date = date;
+        this.name = name;
+        this.extension = extension;
+        this.path = path;
+        this.addedInNotebookSections = addedInNotebookSections;
+        this.addedInTask = addedInTask;
     }
 
     /**
@@ -132,24 +149,6 @@ public class File {
      */
     public void setExtension(String extension) {
         this.extension = extension;
-    }
-
-    /**
-     * Get method for the File artificial name.
-     *
-     * @return the File artificial name.
-     */
-    public String getArtificialName() {
-        return artificialName;
-    }
-
-    /**
-     * Set method for the File artificial name.
-     *
-     * @param artificialName the File artificial name.
-     */
-    public void setArtificialName(String artificialName) {
-        this.artificialName = artificialName;
     }
 
     /**

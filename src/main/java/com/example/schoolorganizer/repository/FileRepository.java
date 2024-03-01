@@ -1,6 +1,7 @@
 package com.example.schoolorganizer.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.schoolorganizer.model.File;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Petya Licheva
  */
 public interface FileRepository extends JpaRepository<File, Long> {
-    List<File> getAllByAddedInTask(Long taskId);
+    Optional<File> findByName(String name);
 }

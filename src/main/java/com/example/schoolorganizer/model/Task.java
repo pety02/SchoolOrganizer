@@ -26,7 +26,7 @@ public class Task {
     private String description;
     @Column(nullable = false)
     private Boolean isFinished;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<File> files;
     @ManyToOne
     private User createdBy;

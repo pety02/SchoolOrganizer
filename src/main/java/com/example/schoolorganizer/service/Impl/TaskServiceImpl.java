@@ -2,7 +2,9 @@ package com.example.schoolorganizer.service.Impl;
 
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.TaskDTO;
+import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.model.Task;
+import com.example.schoolorganizer.repository.FileRepository;
 import com.example.schoolorganizer.repository.TaskRepository;
 import com.example.schoolorganizer.service.TaskService;
 import jakarta.transaction.Transactional;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,17 +27,20 @@ import java.util.Optional;
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository tasksRepo;
+    private final FileRepository fileRepo;
     private final IAdapter<Task, TaskDTO> taskAdapter;
 
     /**
      * General purpose constructor of TaskServiceImpl class.
      *
      * @param tasksRepo   the tasks repository object.
+     * @param fileRepo
      * @param taskAdapter the task adapter object.
      */
     @Autowired
-    public TaskServiceImpl(TaskRepository tasksRepo, IAdapter<Task, TaskDTO> taskAdapter) {
+    public TaskServiceImpl(TaskRepository tasksRepo, FileRepository fileRepo, IAdapter<Task, TaskDTO> taskAdapter) {
         this.tasksRepo = tasksRepo;
+        this.fileRepo = fileRepo;
         this.taskAdapter = taskAdapter;
     }
 
@@ -151,6 +157,22 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Override
     public void deleteTaskById(Long id) {
-        tasksRepo.deleteById(id);
+        if (tasksRepo.existsById(id)) {
+            Task t = tasksRepo.findById(id).orElseThrow();
+            if (t.getFiles() != null || !t.getFiles().isEmpty()) {
+                try {
+                    for (File f : t.getFiles()) {
+                        f.setAddedInTask(null);
+                        java.io.File dirFile = new java.io.File(f.getPath());
+
+                        boolean isDeleted = dirFile.delete();
+                        fileRepo.delete(f);
+                    }
+                } catch (Exception ex) {
+                    log.error(LocalDate.now() + ": " + ex.getMessage());
+                }
+                tasksRepo.delete(t);
+            }
+        }
     }
 }

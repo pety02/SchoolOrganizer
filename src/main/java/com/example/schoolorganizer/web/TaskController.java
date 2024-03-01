@@ -1,12 +1,16 @@
 package com.example.schoolorganizer.web;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 
+import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
+import com.example.schoolorganizer.service.FileService;
 import com.example.schoolorganizer.service.TaskService;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
@@ -26,19 +31,24 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
  * @author Petya Licheva
  */
 @Controller
+@CrossOrigin("http://localhost:8080")
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
+    private final FileService fileService;
+
 
     /**
      * General purpose constructor of the TaskController class.
      *
      * @param taskService the task service object.
+     * @param fileService
      */
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, FileService fileService) {
 
         this.taskService = taskService;
+        this.fileService = fileService;
     }
 
     /**
@@ -116,6 +126,7 @@ public class TaskController {
      */
     @PostMapping("/tasks/create")
     public String createNewTask(@Valid @ModelAttribute TaskDTO task,
+                                @RequestParam("file") MultipartFile file,
                                 BindingResult binding,
                                 Model model,
                                 RedirectAttributes redirectAttributes,
@@ -133,6 +144,8 @@ public class TaskController {
         try {
             task.setCreatedBy(loggedUser);
             TaskDTO createdTask = taskService.createNewTask(task).orElseThrow();
+            FileDTO uploaded = fileService.uploadFile(file, createdTask.getTaskId());
+            model.addAttribute("uploadedFile", uploaded);
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", createdTask);
             }

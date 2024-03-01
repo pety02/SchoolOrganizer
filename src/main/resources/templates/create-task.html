@@ -19,7 +19,7 @@
 <div class="container mt-5" style="font-size:1rem;">
     <a th:href="@{/tasks}" class="btn btn-light">Back</a>
     <br>
-    <form th:object="${createdTask}" th:method="POST" th:action="@{/tasks/create}">
+    <form th:object="${createdTask}" th:method="POST" th:action="@{/tasks/create}" enctype="multipart/form-data">
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="title" class="visually-hidden">Title</label>
@@ -70,6 +70,11 @@
                 <label for="isFinished">Status (finished/active)</label>
                 <input type="checkbox" id="isFinished" name="isFinished" th:field="*{isFinished}">
             </div>
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <label for="file" class="visually-hidden">File</label>
+            <input type="file" id="file" name="file" th:value="${file}">
         </div>
         <br>
         <button type="submit" class="btn btn-primary">Save</button>

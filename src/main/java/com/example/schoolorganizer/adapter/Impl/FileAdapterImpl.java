@@ -30,7 +30,6 @@ public class FileAdapterImpl implements IAdapter<File, FileDTO> {
         dto.setDate(entity.getDate());
         dto.setName(entity.getName());
         dto.setPath(entity.getPath());
-        dto.setArtificialName(entity.getArtificialName());
         dto.setExtension(entity.getExtension());
         return dto;
     }
@@ -51,7 +50,6 @@ public class FileAdapterImpl implements IAdapter<File, FileDTO> {
         entity.setDate(fileDTO.getDate());
         entity.setName(fileDTO.getName());
         entity.setPath(fileDTO.getPath());
-        entity.setArtificialName(fileDTO.getArtificialName());
         entity.setExtension(fileDTO.getExtension());
         return entity;
     }

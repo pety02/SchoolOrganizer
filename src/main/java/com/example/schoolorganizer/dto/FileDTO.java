@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 /**
  * This class describes a file DTO.
@@ -31,11 +32,8 @@ public class FileDTO {
     @Pattern(regexp = "^.+[a-z,A-Z]$", message = "The extension must starts with . and continues with lowercase or uppercase.")
     @Size(min = 1, max = 20, message = "The extension length is between 1 and 20 characters.")
     private String extension;
-    @NonNull
-    @NotBlank(message = "The artificialName is required.")
-    @Pattern(regexp = "^[A-Z]+([ '-][a-zA-Z]+)*$", message = "The artificialName contains lowercase, uppercase and special symbols.")
-    @Size(min = 1, max = 100, message = "The artificialName length is between 1 and 100 characters.")
-    private String artificialName;
+    @Size(min = 1, max = 1000)
+    private byte[] data;
     @NonNull
     @NotBlank(message = "The path is required.")
     @Pattern(regexp = "^.*[^\\w -.].*$", message = "The path contains words separated with \\.")
@@ -52,7 +50,7 @@ public class FileDTO {
                 ", \"date\": " + date +
                 ", \"name\": " + name +
                 ", \"extension\": " + extension +
-                ", \"artificialName\": " + artificialName +
+                ", \"data\": " + Arrays.toString(data) +
                 ", \"path\": " + path +
                 '}';
     }
