@@ -118,10 +118,17 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     @Override
     public List<CalendarEventDTO> searchByTitle(Long id, String title) {
         List<CalendarEvent> events = eventRepository.findAllByCreatedByUserIdAndTitle(id, title);
+        List<Task> tasksEvents = taskRepo.getAllByCreatedBy_UserIdAndTitle(id, title);
         List<CalendarEventDTO> eventsDTOs = new ArrayList<>();
+        List<TaskDTO> taskEventsDTOs = new ArrayList<>();
+        for (Task task : tasksEvents) {
+            taskEventsDTOs.add(taskAdapter.fromEntityToDTO(task));
+        }
         for (CalendarEvent currentEvent : events) {
             eventsDTOs.add(calendarEventAdapter.fromEntityToDTO(currentEvent));
-            System.out.println(currentEvent.getTitle());
+        }
+        for (TaskDTO currentTaskEvent : taskEventsDTOs) {
+            eventsDTOs.add(taskToEventAdapter.fromEntityToDTO(currentTaskEvent));
         }
 
         return eventsDTOs;
@@ -134,6 +141,14 @@ public class CalendarEventServiceImpl implements CalendarEventService {
      */
     @Override
     public void deleteByID(Long id) {
-        eventRepository.deleteById(id);
+        CalendarEvent event = eventRepository.findById(id).orElse(null);
+        if (event != null) {
+            eventRepository.delete(event);
+            return;
+        }
+        Task task = taskRepo.findById(id).orElse(null);
+        if (task != null) {
+            taskRepo.delete(task);
+        }
     }
 }

@@ -20,5 +20,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query(value = "SELECT * FROM Task t WHERE t.is_finished = false AND t.created_by_user_id = :id", nativeQuery = true)
     List<Task> getAllByFinishedNotAndCreatedBy_UserId(@Param("id") Long id);
 
+    List<Task> getAllByCreatedBy_UserIdAndTitle(Long id, String title);
+
     Optional<Task> getTaskByCreatedByUserIdAndTaskId(Long userId, Long id);
 }
