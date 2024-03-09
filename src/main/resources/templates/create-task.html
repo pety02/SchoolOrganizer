@@ -19,7 +19,7 @@
 <div class="container mt-5" style="font-size:1rem;">
     <a th:href="@{/tasks}" class="btn btn-light">Back</a>
     <br>
-    <form th:object="${createdTask}" th:method="POST" th:action="@{/tasks/create}" enctype="multipart/form-data">
+    <form th:object="${createdTask}" th:method="POST" th:action="@{/tasks/create}">
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="title" class="visually-hidden">Title</label>
@@ -72,23 +72,28 @@
             </div>
         </div>
         <br>
-        <div class="form-row row align-items-center">
-            <label for="file" class="visually-hidden">File</label>
-            <input type="file" id="file" name="file" th:value="${file}">
-        </div>
+        <button type="button" onclick="showAddNewFileDialog();" class="btn btn-primary">Add File</button>
         <br>
-        <div class="form-row row align-items-center">
-            <div class="form-group col-md-6">
-                <label for="fileName" class="visually-hidden">File</label>
-                <input type="text" id="fileName" name="fileName" th:value="${file}"
-                       placeholder="File Name">
+        <form id="addFileForm" th:action="@{/tasks/{id}/add-file(id=${createdTask.taskId})}" th:method="POST"
+              enctype="multipart/form-data">
+            <div class="form-row row align-items-center">
+                <label for="file" class="visually-hidden">File</label>
+                <input type="file" id="file" name="file" th:value="${file}">
             </div>
-        </div>
+            <br>
+            <div class="form-row row align-items-center">
+                <div class="form-group col-md-6">
+                    <label for="fileName" class="visually-hidden">File Name</label>
+                    <input type="text" id="fileName" name="fileName" th:value="${file}"
+                           placeholder="File Name">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save File</button>
+            <button type="button" onclick="closeNewFileDialog();" class="btn btn-light">Cancel</button>
+        </form>
         <br>
-        <div class="form-row row align-items-center">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a th:href="@{/tasks}" class="btn btn-light">Cancel</a>
-        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/tasks}" class="btn btn-light">Cancel</a>
     </form>
 </div>
 <br>

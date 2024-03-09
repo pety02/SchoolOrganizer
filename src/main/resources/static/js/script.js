@@ -70,3 +70,13 @@ document.addEventListener('DOMContentLoaded', function () {
         form.reset();
     });
 });
+
+function showAddNewFileDialog() {
+    const newFileForm = document.getElementById('addFileForm');
+    newFileForm.style.display = "block";
+}
+
+function closeNewFileDialog() {
+    const newFileForm = document.getElementById('addFileForm');
+    newFileForm.style.display = "none";
+}

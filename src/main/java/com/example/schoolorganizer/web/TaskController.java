@@ -1,6 +1,5 @@
 package com.example.schoolorganizer.web;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -127,8 +126,6 @@ public class TaskController {
      */
     @PostMapping("/tasks/create")
     public String createNewTask(@Valid @ModelAttribute TaskDTO task,
-                                @RequestParam("file") MultipartFile file,
-                                @RequestParam("fileName") String fileArtificialName,
                                 BindingResult binding,
                                 Model model,
                                 RedirectAttributes redirectAttributes,
@@ -145,9 +142,11 @@ public class TaskController {
         }
         try {
             task.setCreatedBy(loggedUser);
+            List<FileDTO> uploadedFiles = (List<FileDTO>) httpSession.getAttribute("uploadeds");
+            if (uploadedFiles != null) {
+                task.setFiles(uploadedFiles);
+            }
             TaskDTO createdTask = taskService.createNewTask(task).orElseThrow();
-            FileDTO uploaded = fileService.uploadFile(file, createdTask.getTaskId(), fileArtificialName);
-            model.addAttribute("uploadedFile", uploaded);
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", createdTask);
             }
@@ -206,6 +205,8 @@ public class TaskController {
     @PostMapping("/tasks/update/{id}")
     public String updateTaskById(@PathVariable Long id,
                                  @Valid @ModelAttribute TaskDTO task,
+                                 @RequestParam("file") MultipartFile file,
+                                 @RequestParam("fileName") String fileArtificialName,
                                  BindingResult binding,
                                  Model model,
                                  RedirectAttributes redirectAttributes,

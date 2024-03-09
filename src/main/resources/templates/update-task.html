@@ -19,7 +19,8 @@
 <div class="container mt-5" style="font-size:1rem;">
     <a th:href="@{/tasks}" class="btn btn-light">Back</a>
     <br>
-    <form th:object="${updatedTask}" th:method="POST" th:action="@{/tasks/update/{id}(id=${updatedTask.taskId})}">
+    <form th:object="${updatedTask}" th:method="POST" th:action="@{/tasks/update/{id}(id=${updatedTask.taskId})}"
+          enctype="multipart/form-data">
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="title" class="visually-hidden">Title</label>

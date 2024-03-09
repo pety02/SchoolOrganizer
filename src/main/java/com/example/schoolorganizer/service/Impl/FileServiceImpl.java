@@ -44,7 +44,7 @@ public class FileServiceImpl implements FileService {
     @Transactional
     @Override
     public FileDTO uploadFile(MultipartFile file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException {
-        Task taskParent = taskRepo.findById(taskId).orElseThrow();
+        Task taskParent = taskRepo.findById(taskId).orElse(null);
 
         File saved = fileRepo.save(File.builder()
                 .fileId(null)
@@ -69,7 +69,9 @@ public class FileServiceImpl implements FileService {
         Path destPath = Paths.get(filePath);
         Files.copy(file.getInputStream(), destPath);
         FileDTO f = fileAdapter.fromEntityToDTO(saved);
-        taskParent.getFiles().add(saved);
+        if (taskParent != null) {
+            taskParent.getFiles().add(saved);
+        }
         saved.getAddedInTask().add(taskParent);
         saved.setPath(filePath);
         fileRepo.save(saved);
