@@ -10,5 +10,5 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public interface FileService {
-    FileDTO uploadFile(MultipartFile file, Long taskId) throws IOException, NoSuchElementException;
+    FileDTO uploadFile(MultipartFile file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException;
 }

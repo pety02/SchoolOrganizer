@@ -127,6 +127,7 @@ public class TaskController {
     @PostMapping("/tasks/create")
     public String createNewTask(@Valid @ModelAttribute TaskDTO task,
                                 @RequestParam("file") MultipartFile file,
+                                @RequestParam("fileName") String fileArtificialName,
                                 BindingResult binding,
                                 Model model,
                                 RedirectAttributes redirectAttributes,
@@ -144,7 +145,7 @@ public class TaskController {
         try {
             task.setCreatedBy(loggedUser);
             TaskDTO createdTask = taskService.createNewTask(task).orElseThrow();
-            FileDTO uploaded = fileService.uploadFile(file, createdTask.getTaskId());
+            FileDTO uploaded = fileService.uploadFile(file, createdTask.getTaskId(), fileArtificialName);
             model.addAttribute("uploadedFile", uploaded);
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", createdTask);

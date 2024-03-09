@@ -5,16 +5,20 @@ import com.example.schoolorganizer.adapter.Impl.TaskToEventAdapterImpl;
 import com.example.schoolorganizer.dto.CalendarEventDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.CalendarEvent;
+import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
 import com.example.schoolorganizer.repository.CalendarEventRepository;
+import com.example.schoolorganizer.repository.FileRepository;
 import com.example.schoolorganizer.repository.TaskRepository;
 import com.example.schoolorganizer.repository.UserRepository;
 import com.example.schoolorganizer.service.CalendarEventService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +29,12 @@ import java.util.Optional;
  * @author Petya Licheva
  */
 @Service
+@Slf4j
 public class CalendarEventServiceImpl implements CalendarEventService {
     private final CalendarEventRepository eventRepository;
     private final UserRepository userRepo;
     private final TaskRepository taskRepo;
+    private final FileRepository fileRepo;
     private final IAdapter<CalendarEvent, CalendarEventDTO> calendarEventAdapter;
     private final TaskToEventAdapterImpl taskToEventAdapter;
     private final IAdapter<Task, TaskDTO> taskAdapter;
@@ -39,6 +45,7 @@ public class CalendarEventServiceImpl implements CalendarEventService {
      * @param eventRepository      an event repository.
      * @param userRepo             a user repository.
      * @param taskRepo             a task repository.
+     * @param fileRepo
      * @param calendarEventAdapter a calendar event adapter.
      * @param taskToEventAdapter   a task to event adapter.
      * @param taskAdapter          a task adapter.
@@ -46,11 +53,12 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     @Autowired
     public CalendarEventServiceImpl(CalendarEventRepository eventRepository,
                                     UserRepository userRepo,
-                                    TaskRepository taskRepo, IAdapter<CalendarEvent, CalendarEventDTO>
+                                    TaskRepository taskRepo, FileRepository fileRepo, IAdapter<CalendarEvent, CalendarEventDTO>
                                             calendarEventAdapter, TaskToEventAdapterImpl taskToEventAdapter, IAdapter<Task, TaskDTO> taskAdapter) {
         this.eventRepository = eventRepository;
         this.userRepo = userRepo;
         this.taskRepo = taskRepo;
+        this.fileRepo = fileRepo;
         this.calendarEventAdapter = calendarEventAdapter;
         this.taskToEventAdapter = taskToEventAdapter;
         this.taskAdapter = taskAdapter;
@@ -139,6 +147,7 @@ public class CalendarEventServiceImpl implements CalendarEventService {
      *
      * @param id the calendar event's id.
      */
+    @Transactional
     @Override
     public void deleteByID(Long id) {
         CalendarEvent event = eventRepository.findById(id).orElse(null);
@@ -146,6 +155,24 @@ public class CalendarEventServiceImpl implements CalendarEventService {
             eventRepository.delete(event);
             return;
         }
-        taskRepo.findById(id).ifPresent(taskRepo::delete);
+
+        Task t = taskRepo.findById(id).orElseThrow();
+        if (t.getFiles() != null || !t.getFiles().isEmpty()) {
+            try {
+                for (File f : t.getFiles()) {
+                    f.setAddedInTask(null);
+                    java.io.File dirFile = new java.io.File(f.getPath());
+
+                    boolean isDeleted = dirFile.delete();
+                    if (!isDeleted) {
+                        throw new Exception("Problem with deleting a file from its absolute path.");
+                    }
+                    fileRepo.delete(f);
+                }
+            } catch (Exception ex) {
+                log.error(LocalDate.now() + ": //" + ex.getMessage());
+            }
+            taskRepo.delete(t);
+        }
     }
 }

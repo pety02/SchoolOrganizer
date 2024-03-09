@@ -20,8 +20,10 @@ public class File {
     private Long fileId;
     @Column(nullable = false)
     private LocalDate date;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String name;
+    @Column(length = 100)
+    private String artificialName;
     @Column(nullable = false, length = 20)
     private String extension;
     @Column(nullable = false, length = 1000)
@@ -48,15 +50,10 @@ public class File {
      *                                where this file is added.
      * @param addedInTask             the lis of tasks where this file is added.
      */
-    public File(LocalDate date, String name, String extension,
+    public File(LocalDate date, String name, String artificialName, String extension,
                 String path, List<NotebookSection> addedInNotebookSections,
                 List<Task> addedInTask) {
-        setDate(date);
-        setName(name);
-        setExtension(extension);
-        setPath(path);
-        setAddedInNotebookSections(addedInNotebookSections);
-        setAddedInTask(addedInTask);
+        this(null, date, name, artificialName, extension, path, addedInNotebookSections, addedInTask);
     }
 
     /**
@@ -68,14 +65,15 @@ public class File {
      * @param addedInNotebookSections
      * @param addedInTask
      */
-    public File(Long fileId, LocalDate date, String name, String extension, String path, List<NotebookSection> addedInNotebookSections, List<Task> addedInTask) {
-        this.fileId = fileId;
-        this.date = date;
-        this.name = name;
-        this.extension = extension;
-        this.path = path;
-        this.addedInNotebookSections = addedInNotebookSections;
-        this.addedInTask = addedInTask;
+    public File(Long fileId, LocalDate date, String name, String artificialName, String extension, String path, List<NotebookSection> addedInNotebookSections, List<Task> addedInTask) {
+        setFileId(fileId);
+        setDate(date);
+        setName(name);
+        setArtificialName(artificialName);
+        setExtension(extension);
+        setPath(path);
+        setAddedInNotebookSections(addedInNotebookSections);
+        setAddedInTask(addedInTask);
     }
 
     /**
@@ -131,6 +129,14 @@ public class File {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getArtificialName() {
+        return artificialName;
+    }
+
+    public void setArtificialName(String artificialName) {
+        this.artificialName = artificialName;
     }
 
     /**

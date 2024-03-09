@@ -148,6 +148,7 @@ public class ScheduleController {
             return "redirect:/signin";
         }
         UserDTO loggedInUser = (UserDTO) httpSession.getAttribute("user");
+
         calendarService.deleteByID(id);
         httpSession.setAttribute("foundEvents", null);
         return "redirect:/schedule";

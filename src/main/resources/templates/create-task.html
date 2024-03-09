@@ -77,8 +77,15 @@
             <input type="file" id="file" name="file" th:value="${file}">
         </div>
         <br>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a th:href="@{/tasks}" class="btn btn-light">Cancel</a>
+        <div class="form-row row align-items-center">
+            <label for="fileName" class="visually-hidden">File</label>
+            <input type="text" id="fileName" name="fileName" th:value="${file}">
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/tasks}" class="btn btn-light">Cancel</a>
+        </div>
     </form>
 </div>
 <br>

@@ -172,7 +172,7 @@ public class TaskServiceImpl implements TaskService {
                         fileRepo.delete(f);
                     }
                 } catch (Exception ex) {
-                    log.error(LocalDate.now() + ": " + ex.getMessage());
+                    log.error(LocalDate.now() + ": //" + ex.getMessage());
                 }
                 tasksRepo.delete(t);
             }
