@@ -78,8 +78,11 @@
         </div>
         <br>
         <div class="form-row row align-items-center">
-            <label for="fileName" class="visually-hidden">File</label>
-            <input type="text" id="fileName" name="fileName" th:value="${file}">
+            <div class="form-group col-md-6">
+                <label for="fileName" class="visually-hidden">File</label>
+                <input type="text" id="fileName" name="fileName" th:value="${file}"
+                       placeholder="File Name">
+            </div>
         </div>
         <br>
         <div class="form-row row align-items-center">

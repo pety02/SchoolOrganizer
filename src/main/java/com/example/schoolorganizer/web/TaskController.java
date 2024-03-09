@@ -10,7 +10,6 @@ import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.FileService;
 import com.example.schoolorganizer.service.TaskService;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +88,9 @@ public class TaskController {
 
         try {
             TaskDTO currentTaskDTO = taskService.getUserTaskByTaskId(loggedUser.getUserId(), id).orElseThrow();
+            List<FileDTO> userFiles = fileService.getAllTaskFiles(id);
             model.addAttribute("currentTask", currentTaskDTO);
+            model.addAttribute("currentTaskFiles", userFiles);
             return "task";
         } catch (NoSuchElementException e) {
             log.error(LocalDate.now() + ": " + e.getMessage());

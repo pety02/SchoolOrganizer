@@ -11,4 +11,8 @@ import java.util.Optional;
 
 public interface FileService {
     FileDTO uploadFile(MultipartFile file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException;
+
+    List<FileDTO> getAllTaskFiles(Long id);
+
+    void deleteFile(Long id, Long fileId);
 }

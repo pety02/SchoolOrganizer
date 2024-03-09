@@ -51,6 +51,18 @@
             </td>
         </tr>
         <tr>
+            <th scope="row" style="color:orange;">Files</th>
+            <td>
+                <div class="container mt-4 mb-4">
+                    <span th:if="${currentTaskFiles == null || currentTaskFiles.size() == 0}" style="color:red;">NO FILES</span>
+                    <div class="form-group" th:each="cfile : ${currentTaskFiles}">
+                        <img th:src="${cfile.path}" th:alt="${cfile.artificialName}">
+                        <a th:href="@{/tasks/{id}/delete/{fileId}(id=${currentTask.taskId}, fileId=${cfile.fileId})}">X</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
             <th scope="row" style="color:orange;">Status</th>
             <td th:if="${currentTask.isFinished == true}" th:text="Finished" style="color:green;"></td>
             <td th:if="${currentTask.isFinished == false}" th:text="Active" style="color:red;"></td>

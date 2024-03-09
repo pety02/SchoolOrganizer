@@ -7,6 +7,8 @@ import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.repository.FileRepository;
 import com.example.schoolorganizer.repository.TaskRepository;
 import com.example.schoolorganizer.service.FileService;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,12 +19,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
  *
  */
 @Service
+@Slf4j
 public class FileServiceImpl implements FileService {
     private final FileRepository fileRepo;
     private final IAdapter<File, FileDTO> fileAdapter;
@@ -37,6 +41,7 @@ public class FileServiceImpl implements FileService {
         this.taskRepo = taskRepo;
     }
 
+    @Transactional
     @Override
     public FileDTO uploadFile(MultipartFile file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException {
         Task taskParent = taskRepo.findById(taskId).orElseThrow();
@@ -73,5 +78,35 @@ public class FileServiceImpl implements FileService {
         fileRepo.save(saved);
 
         return fileAdapter.fromEntityToDTO(saved);
+    }
+
+    @Override
+    public List<FileDTO> getAllTaskFiles(Long id) {
+        List<File> files = fileRepo.findAllByAddedInTask(id);
+        List<FileDTO> filesDTOs = new ArrayList<>();
+        for (File f : files) {
+            filesDTOs.add(fileAdapter.fromEntityToDTO(f));
+        }
+
+        return filesDTOs;
+    }
+
+    @Transactional
+    @Override
+    public void deleteFile(Long id, Long fileId) {
+        File f = fileRepo.findById(fileId).orElseThrow();
+        try {
+            Task taskParent = taskRepo.findById(id).orElseThrow();
+            taskParent.setFiles(null);
+            java.io.File dirFile = new java.io.File(f.getPath());
+
+            boolean isDeleted = dirFile.delete();
+            if (!isDeleted) {
+                throw new Exception("Problem with deleting a file from its absolute path.");
+            }
+            fileRepo.delete(f);
+        } catch (Exception ex) {
+            log.error(LocalDate.now() + ": //" + ex.getMessage());
+        }
     }
 }
