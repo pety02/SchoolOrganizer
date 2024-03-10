@@ -6,6 +6,7 @@ import java.util.*;
 import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
+import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.FileService;
 import com.example.schoolorganizer.service.TaskService;
@@ -126,6 +127,8 @@ public class TaskController {
      */
     @PostMapping("/tasks/create")
     public String createNewTask(@Valid @ModelAttribute TaskDTO task,
+                                @RequestParam("file") MultipartFile file,
+                                @RequestParam("fileName") String fileArtificialName,
                                 BindingResult binding,
                                 Model model,
                                 RedirectAttributes redirectAttributes,
@@ -142,11 +145,8 @@ public class TaskController {
         }
         try {
             task.setCreatedBy(loggedUser);
-            List<FileDTO> uploadedFiles = (List<FileDTO>) httpSession.getAttribute("uploadeds");
-            if (uploadedFiles != null) {
-                task.setFiles(uploadedFiles);
-            }
             TaskDTO createdTask = taskService.createNewTask(task).orElseThrow();
+            FileDTO createdFile = fileService.uploadFile(file, createdTask.getTaskId(), fileArtificialName);
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", createdTask);
             }
