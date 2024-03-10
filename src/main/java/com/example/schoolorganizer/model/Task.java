@@ -26,7 +26,7 @@ public class Task {
     private String description;
     @Column(nullable = false)
     private Boolean isFinished;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<File> files;
     @ManyToOne
     private User createdBy;
@@ -48,9 +48,9 @@ public class Task {
      * @param files       the list of Files connected with the Task.
      * @param createdBy   the creator of the Task.
      */
-    public Task(final String title, final LocalDate startDate, final LocalDate finishDate,
-                final String description, final Boolean isFinished, final List<File> files,
-                final User createdBy) {
+    public Task(String title, LocalDate startDate, LocalDate finishDate,
+                String description, Boolean isFinished, List<File> files,
+                User createdBy) {
         setTitle(title);
         setStartDate(startDate);
         setFinishDate(finishDate);

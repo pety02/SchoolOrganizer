@@ -158,23 +158,24 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTaskById(Long id) {
         if (tasksRepo.existsById(id)) {
-            Task t = tasksRepo.findById(id).orElseThrow();
-            if (t.getFiles() != null || !t.getFiles().isEmpty()) {
+            Task currentTask = tasksRepo.findById(id).orElseThrow();
+            if (currentTask.getFiles() != null) {
                 try {
-                    for (File f : t.getFiles()) {
-                        f.setAddedInTask(null);
-                        java.io.File dirFile = new java.io.File(f.getPath());
+                    List<File> filesList = currentTask.getFiles();
+                    for (File currentFile : filesList) {
+                        currentFile.setAddedInTasks(null);
+                        java.io.File dirFile = new java.io.File(currentFile.getPath());
 
                         boolean isDeleted = dirFile.delete();
                         if (!isDeleted) {
                             throw new Exception("Problem with deleting a file from its absolute path.");
                         }
-                        fileRepo.delete(f);
+                        fileRepo.delete(currentFile);
                     }
                 } catch (Exception ex) {
                     log.error(LocalDate.now() + ": //" + ex.getMessage());
                 }
-                tasksRepo.delete(t);
+                tasksRepo.delete(currentTask);
             }
         }
     }

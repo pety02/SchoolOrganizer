@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TaskDTO {

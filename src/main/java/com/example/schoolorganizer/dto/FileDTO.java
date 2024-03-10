@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class describes a file DTO.
@@ -42,6 +43,7 @@ public class FileDTO {
     @Pattern(regexp = "^.*[^\\w -.].*$", message = "The path contains words separated with \\.")
     @Size(min = 1, max = 1000, message = "The path length should be between 1 and 1000 characters.")
     private String path;
+    private List<TaskDTO> addedInTasks;
 
     /**
      * @return the file DTO object in JSON string format.
@@ -55,6 +57,7 @@ public class FileDTO {
                 ", \"extension\": " + extension +
                 ", \"data\": " + Arrays.toString(data) +
                 ", \"path\": " + path +
+                ", \"addedInTasks\": " + addedInTasks +
                 '}';
     }
 }

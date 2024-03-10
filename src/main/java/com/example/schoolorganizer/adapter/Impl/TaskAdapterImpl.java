@@ -1,10 +1,13 @@
 package com.example.schoolorganizer.adapter.Impl;
 
 import com.example.schoolorganizer.adapter.IAdapter;
+import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
+import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
+import jakarta.validation.OverridesAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,15 +22,18 @@ import java.util.*;
 @Component
 public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
     private final IAdapter<User, UserDTO> userAdapter;
+    private final IAdapter<File, FileDTO> filesAdapter;
 
     /**
      * General purpose constructor of TaskAdapterImpl class.
      *
-     * @param userAdapter a user adapter object.
+     * @param userAdapter  a user adapter object.
+     * @param filesAdapter
      */
     @Autowired
-    public TaskAdapterImpl(IAdapter<User, UserDTO> userAdapter) {
+    public TaskAdapterImpl(IAdapter<User, UserDTO> userAdapter, IAdapter<File, FileDTO> filesAdapter) {
         this.userAdapter = userAdapter;
+        this.filesAdapter = filesAdapter;
     }
 
     /**
@@ -46,7 +52,8 @@ public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
         dto.setTaskId(entity.getTaskId());
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
-        dto.setFiles(new ArrayList<>());
+        List<FileDTO> filesDTOsList = new ArrayList<>();
+        dto.setFiles(filesDTOsList);
         dto.setStartDate(entity.getStartDate());
         dto.setFinishDate(entity.getFinishDate());
         dto.setCreatedBy(userAdapter.fromEntityToDTO(entity.getCreatedBy()));
@@ -74,7 +81,8 @@ public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
         entity.setStartDate(taskDTO.getStartDate());
         entity.setFinishDate(taskDTO.getFinishDate());
         entity.setFinished(taskDTO.getIsFinished());
-        entity.setFiles(new ArrayList<>());
+        List<File> filesList = new ArrayList<>();
+        entity.setFiles(filesList);
         entity.setCreatedBy(userAdapter.fromDTOToEntity(taskDTO.getCreatedBy()));
 
         return entity;

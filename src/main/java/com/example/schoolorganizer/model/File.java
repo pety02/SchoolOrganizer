@@ -28,10 +28,10 @@ public class File {
     private String extension;
     @Column(nullable = false, length = 1000)
     private String path;
-    @ManyToMany
+    @OneToMany
     private List<NotebookSection> addedInNotebookSections;
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Task> addedInTask;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Task> addedInTasks;
 
     /**
      * Default constructor of the File class.
@@ -48,12 +48,12 @@ public class File {
      * @param path                    the full path of the file.
      * @param addedInNotebookSections the list of notebook sections
      *                                where this file is added.
-     * @param addedInTask             the lis of tasks where this file is added.
+     * @param addedInTasks            the lis of tasks where this file is added.
      */
     public File(LocalDate date, String name, String artificialName, String extension,
                 String path, List<NotebookSection> addedInNotebookSections,
-                List<Task> addedInTask) {
-        this(null, date, name, artificialName, extension, path, addedInNotebookSections, addedInTask);
+                List<Task> addedInTasks) {
+        this(null, date, name, artificialName, extension, path, addedInNotebookSections, addedInTasks);
     }
 
     /**
@@ -63,9 +63,9 @@ public class File {
      * @param extension
      * @param path
      * @param addedInNotebookSections
-     * @param addedInTask
+     * @param addedInTasks
      */
-    public File(Long fileId, LocalDate date, String name, String artificialName, String extension, String path, List<NotebookSection> addedInNotebookSections, List<Task> addedInTask) {
+    public File(Long fileId, LocalDate date, String name, String artificialName, String extension, String path, List<NotebookSection> addedInNotebookSections, List<Task> addedInTasks) {
         setFileId(fileId);
         setDate(date);
         setName(name);
@@ -73,7 +73,7 @@ public class File {
         setExtension(extension);
         setPath(path);
         setAddedInNotebookSections(addedInNotebookSections);
-        setAddedInTask(addedInTask);
+        setAddedInTasks(addedInTasks);
     }
 
     /**
@@ -202,16 +202,16 @@ public class File {
      *
      * @return the list of the tasks in which the File is included.
      */
-    public List<Task> getAddedInTask() {
-        return addedInTask;
+    public List<Task> getAddedInTasks() {
+        return addedInTasks;
     }
 
     /**
      * Set method for the list of tasks in which the File is included.
      *
-     * @param addedInTask the list of tasks in which the File is included.
+     * @param addedInTasks the list of tasks in which the File is included.
      */
-    public void setAddedInTask(List<Task> addedInTask) {
-        this.addedInTask = addedInTask;
+    public void setAddedInTasks(List<Task> addedInTasks) {
+        this.addedInTasks = addedInTasks;
     }
 }

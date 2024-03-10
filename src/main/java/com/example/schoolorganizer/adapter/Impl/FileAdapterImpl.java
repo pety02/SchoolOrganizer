@@ -2,7 +2,13 @@ package com.example.schoolorganizer.adapter.Impl;
 
 import com.example.schoolorganizer.adapter.IAdapter;
 import com.example.schoolorganizer.dto.FileDTO;
+import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.model.File;
+import com.example.schoolorganizer.model.Task;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,6 +38,9 @@ public class FileAdapterImpl implements IAdapter<File, FileDTO> {
         dto.setArtificialName(entity.getArtificialName());
         dto.setPath(entity.getPath());
         dto.setExtension(entity.getExtension());
+        List<TaskDTO> tasksDTOsList = new ArrayList<>();
+        dto.setAddedInTasks(tasksDTOsList);
+
         return dto;
     }
 
@@ -53,6 +62,9 @@ public class FileAdapterImpl implements IAdapter<File, FileDTO> {
         entity.setArtificialName(fileDTO.getArtificialName());
         entity.setPath(fileDTO.getPath());
         entity.setExtension(fileDTO.getExtension());
+        List<Task> tasksList = new ArrayList<>();
+        entity.setAddedInTasks(tasksList);
+
         return entity;
     }
 }

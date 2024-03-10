@@ -53,7 +53,7 @@ public class FileServiceImpl implements FileService {
                 .artificialName(fileArtificialName)
                 .extension(file.getContentType())
                 .path(UPLOAD_DIR + file.getOriginalFilename())
-                .addedInTask(new ArrayList<>())
+                .addedInTasks(new ArrayList<>())
                 .addedInNotebookSections(new ArrayList<>())
                 .build());
         String shortExtenstion = "";
@@ -68,14 +68,14 @@ public class FileServiceImpl implements FileService {
         String filePath = UPLOAD_DIR + saved.getArtificialName() + shortExtenstion;
         Path destPath = Paths.get(filePath);
         Files.copy(file.getInputStream(), destPath);
-        FileDTO f = fileAdapter.fromEntityToDTO(saved);
-        taskParent.getFiles().add(saved);
-        saved.getAddedInTask().add(taskParent);
+        List<File> files = new ArrayList<>();
+        files.add(saved);
+        taskParent.setFiles(files);
         saved.setPath(filePath);
-        fileRepo.save(saved);
+        saved.getAddedInTasks().add(taskParent);
 
-        taskRepo.save(taskParent);
         fileRepo.save(saved);
+        taskRepo.save(taskParent);
 
         return fileAdapter.fromEntityToDTO(saved);
     }
