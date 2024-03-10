@@ -6,7 +6,6 @@ import java.util.*;
 import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.dto.TaskDTO;
 import com.example.schoolorganizer.dto.UserDTO;
-import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
 import com.example.schoolorganizer.service.FileService;
 import com.example.schoolorganizer.service.TaskService;
@@ -41,7 +40,7 @@ public class TaskController {
      * General purpose constructor of the TaskController class.
      *
      * @param taskService the task service object.
-     * @param fileService
+     * @param fileService the file Service
      */
     @Autowired
     public TaskController(TaskService taskService, FileService fileService) {

@@ -7,7 +7,6 @@ import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.model.File;
 import com.example.schoolorganizer.model.Task;
 import com.example.schoolorganizer.model.User;
-import jakarta.validation.OverridesAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,18 +21,15 @@ import java.util.*;
 @Component
 public class TaskAdapterImpl implements IAdapter<Task, TaskDTO> {
     private final IAdapter<User, UserDTO> userAdapter;
-    private final IAdapter<File, FileDTO> filesAdapter;
 
     /**
      * General purpose constructor of TaskAdapterImpl class.
      *
-     * @param userAdapter  a user adapter object.
-     * @param filesAdapter
+     * @param userAdapter a user adapter object.
      */
     @Autowired
-    public TaskAdapterImpl(IAdapter<User, UserDTO> userAdapter, IAdapter<File, FileDTO> filesAdapter) {
+    public TaskAdapterImpl(IAdapter<User, UserDTO> userAdapter) {
         this.userAdapter = userAdapter;
-        this.filesAdapter = filesAdapter;
     }
 
     /**
