@@ -19,7 +19,8 @@
 <div class="container mt-5" style="font-size:1rem;">
     <a th:href="@{/notebooks/{id}(id=${id})}" class="btn btn-light">Back</a>
     <br>
-    <form th:object="${newNotebookSection}" th:method="POST" th:action="@{/notebooks/{id}/create(id=${id})}">
+    <form th:object="${newNotebookSection}" th:method="POST" th:action="@{/notebooks/{id}/create(id=${id})}"
+          enctype="multipart/form-data">
         <div class="form-row row align-items-center">
             <div class="form-group col-md-6">
                 <label for="title" class="visually-hidden">Title</label>
@@ -56,8 +57,23 @@
             </div>
         </div>
         <br>
-        <button class="btn btn-primary" type="submit">Save</button>
-        <a th:href="@{/notebooks/{id}(id=${id})}" class="btn btn-light">Cancel</a>
+        <div class="form-row row align-items-center">
+            <label for="file" class="visually-hidden">File</label>
+            <input type="file" id="file" name="file" th:value="${file}">
+        </div>
+        <br>
+        <div class="form-row row align-items-center">
+            <div class="form-group col-md-6">
+                <label for="fileName" class="visually-hidden">File</label>
+                <input type="text" id="fileName" name="fileName" th:value="${fileName}"
+                       placeholder="File Name">
+            </div>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a th:href="@{/notebooks/{id}(id=${id})}" class="btn btn-light">Cancel</a>
+        </div>
     </form>
 </div>
 <script>

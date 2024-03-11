@@ -1,9 +1,11 @@
 package com.example.schoolorganizer.web;
 
+import com.example.schoolorganizer.dto.FileDTO;
 import com.example.schoolorganizer.dto.NotebookDTO;
 import com.example.schoolorganizer.dto.NotebookSectionDTO;
 import com.example.schoolorganizer.dto.UserDTO;
 import com.example.schoolorganizer.security.UserLoggedInValidator;
+import com.example.schoolorganizer.service.FileService;
 import com.example.schoolorganizer.service.NotebookSectionService;
 import com.example.schoolorganizer.service.NotebookService;
 import jakarta.servlet.http.HttpSession;
@@ -12,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
@@ -34,18 +34,21 @@ import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 public class NotebookSectionController {
     private final NotebookSectionService notebookSectionService;
     private final NotebookService notebookService;
+    private final FileService fileService;
 
     /**
      * General purpose constructor of the class NotebookSectionController.
      *
      * @param notebookSectionService the notebook sections' service.
      * @param notebookService        the notebook's service.
+     * @param fileService
      */
     @Autowired
     public NotebookSectionController(NotebookSectionService notebookSectionService,
-                                     NotebookService notebookService) {
+                                     NotebookService notebookService, FileService fileService) {
         this.notebookSectionService = notebookSectionService;
         this.notebookService = notebookService;
+        this.fileService = fileService;
     }
 
     /**
@@ -83,6 +86,8 @@ public class NotebookSectionController {
     public String createNewNotebookSection(HttpSession httpSession,
                                            Model model,
                                            @ModelAttribute NotebookSectionDTO createdSectionDTO,
+                                           @RequestParam("file") MultipartFile file,
+                                           @RequestParam("fileName") String fileArtificialName,
                                            RedirectAttributes redirectAttributes,
                                            BindingResult binding,
                                            @PathVariable Long id) {
@@ -98,6 +103,7 @@ public class NotebookSectionController {
         }
         try {
             NotebookSectionDTO createdSection = notebookSectionService.createNewNotebookSectionByNotebookId(id, createdSectionDTO).orElseThrow();
+            FileDTO createdFile = fileService.uploadFileInNotebookSection(file, createdSection.getNotebookSectionId(), fileArtificialName);
             if (!redirectAttributes.containsAttribute("createdNotebookSection")) {
                 redirectAttributes.addFlashAttribute("createdNotebookSection", createdSection);
             }

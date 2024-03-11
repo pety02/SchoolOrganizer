@@ -145,7 +145,7 @@ public class TaskController {
         try {
             task.setCreatedBy(loggedUser);
             TaskDTO createdTask = taskService.createNewTask(task).orElseThrow();
-            FileDTO createdFile = fileService.uploadFile(file, createdTask.getTaskId(), fileArtificialName);
+            FileDTO createdFile = fileService.uploadFileInTask(file, createdTask.getTaskId(), fileArtificialName);
             if (!redirectAttributes.containsAttribute("createdTask")) {
                 redirectAttributes.addFlashAttribute("createdTask", createdTask);
             }
