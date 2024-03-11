@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public interface FileService {
-    FileDTO uploadFileInTask(MultipartFile file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException;
+    List<FileDTO> uploadFileInTask(MultipartFile[] file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException;
 
     FileDTO uploadFileInNotebookSection(MultipartFile file, Long notebookSectionId, String fileArtificialName) throws IOException, NoSuchElementException;
 

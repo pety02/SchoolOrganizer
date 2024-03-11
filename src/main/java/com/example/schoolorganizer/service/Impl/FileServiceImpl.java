@@ -47,42 +47,48 @@ public class FileServiceImpl implements FileService {
 
     @Transactional
     @Override
-    public FileDTO uploadFileInTask(MultipartFile file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException {
+    public List<FileDTO> uploadFileInTask(MultipartFile[] file, Long taskId, String fileArtificialName) throws IOException, NoSuchElementException {
         Task taskParent = taskRepo.findById(taskId).orElseThrow();
-
-        File saved = fileRepo.save(File.builder()
-                .fileId(null)
-                .date(LocalDate.now())
-                .name(file.getOriginalFilename())
-                .artificialName(fileArtificialName)
-                .extension("")
-                .path(UPLOAD_DIR + file.getOriginalFilename())
-                .addedInTasks(new ArrayList<>())
-                .addedInNotebookSections(new ArrayList<>())
-                .build());
-        String shortExtenstion = "";
-        String ext = saved.getPath();
-        for (int i = ext.length() - 1; i >= 0; --i) {
-            char currentChar = ext.charAt(i);
-            if (currentChar == '.') {
-                shortExtenstion = ext.substring(i);
-                break;
-            }
-        }
-        String filePath = UPLOAD_DIR + saved.getArtificialName() + shortExtenstion;
-        Path destPath = Paths.get(filePath);
-        Files.copy(file.getInputStream(), destPath);
         List<File> files = new ArrayList<>();
-        files.add(saved);
-        taskParent.setFiles(files);
-        saved.setExtension(shortExtenstion);
-        saved.setPath(filePath);
-        saved.getAddedInTasks().add(taskParent);
+        List<FileDTO> filesDTOs = new ArrayList<>();
 
-        fileRepo.save(saved);
+        for (MultipartFile f : file) {
+            File saved = fileRepo.save(File.builder()
+                    .fileId(null)
+                    .date(LocalDate.now())
+                    .name(f.getOriginalFilename())
+                    .artificialName(f.getOriginalFilename())
+                    .extension("")
+                    .path(UPLOAD_DIR + f.getOriginalFilename())
+                    .addedInTasks(new ArrayList<>())
+                    .addedInNotebookSections(new ArrayList<>())
+                    .build());
+            String shortExtenstion = "";
+            String ext = saved.getPath();
+
+            for (int i = ext.length() - 1; i >= 0; --i) {
+                char currentChar = ext.charAt(i);
+                if (currentChar == '.') {
+                    shortExtenstion = ext.substring(i);
+                    break;
+                }
+            }
+            String filePath = UPLOAD_DIR + saved.getArtificialName() /*+ shortExtenstion*/;
+            Path destPath = Paths.get(filePath);
+            Files.copy(f.getInputStream(), destPath);
+            saved.setExtension(shortExtenstion);
+            //saved.setPath(filePath);
+            saved.getAddedInTasks().add(taskParent);
+            files.add(saved);
+
+            fileRepo.save(saved);
+            files.add(saved);
+            filesDTOs.add(fileAdapter.fromEntityToDTO(saved));
+        }
+        taskParent.setFiles(files);
         taskRepo.save(taskParent);
 
-        return fileAdapter.fromEntityToDTO(saved);
+        return filesDTOs;
     }
 
     @Override
