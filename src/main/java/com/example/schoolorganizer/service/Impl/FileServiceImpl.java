@@ -35,7 +35,7 @@ public class FileServiceImpl implements FileService {
     private final TaskRepository taskRepo;
     private final NotebookSectionRepository notebookSectionRepo;
 
-    private static final String UPLOAD_DIR = "C:\\Users\\User\\OneDrive\\Documents\\University\\2kurs_3semestur\\Spring Boot\\SchoolOrganizer\\uploads\\";
+    private static final String UPLOAD_DIR = "C:\\Users\\User\\OneDrive\\Documents\\University\\2kurs_3semestur\\Spring Boot\\SchoolOrganizer\\src\\main\\resources\\static\\uploads\\";
 
     @Autowired
     public FileServiceImpl(FileRepository fileRepo, IAdapter<File, FileDTO> fileAdapter, TaskRepository taskRepo, NotebookSectionRepository notebookSectionRepo) {
@@ -55,7 +55,7 @@ public class FileServiceImpl implements FileService {
                 .date(LocalDate.now())
                 .name(file.getOriginalFilename())
                 .artificialName(fileArtificialName)
-                .extension(file.getContentType())
+                .extension("")
                 .path(UPLOAD_DIR + file.getOriginalFilename())
                 .addedInTasks(new ArrayList<>())
                 .addedInNotebookSections(new ArrayList<>())
@@ -75,6 +75,7 @@ public class FileServiceImpl implements FileService {
         List<File> files = new ArrayList<>();
         files.add(saved);
         taskParent.setFiles(files);
+        saved.setExtension(shortExtenstion);
         saved.setPath(filePath);
         saved.getAddedInTasks().add(taskParent);
 

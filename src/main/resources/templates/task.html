@@ -56,7 +56,8 @@
                 <div class="container mt-4 mb-4">
                     <span th:if="${currentTaskFiles == null || currentTaskFiles.size() == 0}" style="color:red;">No files</span>
                     <div class="form-group" th:each="cfile : ${currentTaskFiles}">
-                        <img th:src="${cfile.path}" th:alt="${cfile.artificialName}">
+                        <iframe th:src="@{'/uploads/' + ${cfile.artificialName} + ${cfile.extension}}"
+                                th:text="${cfile.artificialName}"></iframe>
                         <a th:href="@{/tasks/{id}/delete/{fileId}(id=${currentTask.taskId}, fileId=${cfile.fileId})}">X</a>
                     </div>
                 </div>
